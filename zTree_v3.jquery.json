@@ -26,7 +26,8 @@
     }
   ],
     "bugs": "https://github.com/zTree/zTree_v3/issues",
-    "homepage": "https://github.com/zTree/zTree_v3",
+    "homepage": "http://www.ztree.me/",
+    "demo": "http://www.ztree.me/v3/demo.php",
     "docs": "http://www.ztree.me/v3/api.php",
     "dependencies": {
       "jquery": ">=1.4.4"
