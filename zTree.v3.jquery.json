@@ -1,0 +1,34 @@
+{
+    "name": "zTree.v3",
+    "title": "jQuery zTree",
+    "description": "jquery tree plugin",
+    "keywords": [
+	"tree",
+    	"ui"
+    ],
+    "version": "3.5.01",
+    "author": {
+      "name": "Zhang QiGang",
+      "email":"hunter.z@263.net",
+      "url": "https://github.com/zTree/zTree_v3"
+    },
+    "maintainers": [
+    {
+      "name": "ZhangQiGang",
+      "email":"hunter.z@263.net",
+      "url": "http://www.ztree.me/"
+    }
+    ],
+    "licenses": [
+    {
+      "type": "MIT",
+      "url": "http://www.ztree.me/v3/main.php#_license"
+    }
+  ],
+    "bugs": "https://github.com/zTree/zTree_v3/issues",
+    "homepage": "https://github.com/zTree/zTree_v3",
+    "docs": "http://www.ztree.me/v3/api.php",
+    "dependencies": {
+      "jquery": ">=1.4.4"
+    }
+}
