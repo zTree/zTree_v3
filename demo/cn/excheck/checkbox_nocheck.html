@@ -40,9 +40,25 @@
 			{ id:222, pId:22, name:"随意勾选 2-2-2"},
 			{ id:23, pId:2, name:"随意勾选 2-3"}
 		];
-		
+
+		function nocheckNode(e) {
+			var zTree = $.fn.zTree.getZTreeObj("treeDemo"),
+			nocheck = e.data.nocheck,
+			nodes = zTree.getSelectedNodes();
+			if (nodes.length == 0) {
+				alert("请先选择一个节点");
+			}
+
+			for (var i=0, l=nodes.length; i<l; i++) {
+				nodes[i].nocheck = nocheck;
+				zTree.updateNode(nodes[i]);
+			}
+		}
+
 		$(document).ready(function(){
 			$.fn.zTree.init($("#treeDemo"), setting, zNodes);
+			$("#nocheckTrue").bind("click", {nocheck: true}, nocheckNode);
+			$("#nocheckFalse").bind("click", {nocheck: false}, nocheckNode);
 		});
 		//-->
 	</SCRIPT>
@@ -61,6 +77,10 @@
 				<ul class="list">
 				<li>这个 Demo 只简单演示 nocheck 的使用方法，详细配置信息请参考 ‘Checkbox 勾选操作’</li>
 				<li class="highlight_red">setting.check.nocheckInherit 可以设置子节点自动继承父节点的 nocheck 属性，详细请参见 API 文档中的相关内容</li>
+				<li><p>试试看：<br/>
+					&nbsp;&nbsp;&nbsp;&nbsp;[ <a id="nocheckTrue" href="#" title="set checkbox to be hidden." onclick="return false;">隐藏</a> ]
+					&nbsp;&nbsp;&nbsp;&nbsp;[ <a id="nocheckFalse" href="#" title="set checkbox to be show." onclick="return false;">显示</a> ]
+				</li>
 				</ul>
 			</li>
 			<li class="title"><h2>2、treeNode 节点数据说明</h2>

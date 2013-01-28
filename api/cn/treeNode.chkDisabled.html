@@ -8,7 +8,7 @@
 			<p>1、设置节点的 checkbox / radio 是否禁用 <span class="highlight_red">[setting.check.enable = true 时有效]</span></p>
 			<p class="highlight_red">2、为了解决部分朋友生成 json 数据出现的兼容问题, 支持 "false","true" 字符串格式的数据</p>
 			<p class="highlight_red">3、请勿对已加载的节点修改此属性，禁止 或 取消禁止 请使用 setChkDisabled() 方法</p>
-			<p class="highlight_red">4、父节点被禁用后，其全部的子孙节点也会被禁用</p>
+			<p class="highlight_red">4、初始化时，如果需要子孙节点继承父节点的 chkDisabled 属性，请设置 setting.check.chkDisabledInherit 属性</p>
 			<p>默认值：false</p>
 		</div>
 	</div>

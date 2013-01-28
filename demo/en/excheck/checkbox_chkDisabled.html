@@ -15,7 +15,8 @@
 		<!--
 		var setting = {
 			check: {
-				enable: true
+				enable: true,
+				chkDisabledInherit: true
 			},
 			data: {
 				simpleData: {
@@ -47,9 +48,16 @@
 			if (nodes.length == 0) {
 				alert("Please select one node at first...");
 			}
+			if (disabled) {
+				inheritParent = $("#py").attr("checked");
+				inheritChildren = $("#sy").attr("checked");
+			} else {
+				inheritParent = $("#pn").attr("checked");
+				inheritChildren = $("#sn").attr("checked");
+			}
 
 			for (var i=0, l=nodes.length; i<l; i++) {
-				zTree.setChkDisabled(nodes[i], disabled);
+				zTree.setChkDisabled(nodes[i], disabled, inheritParent, inheritChildren);
 			}
 		}
 
@@ -76,6 +84,10 @@
 				<ul class="list">
 				<li>'setChkDisabled' method can set the node's checkbox / radio to be disabled or abled. See the API documentation for more related contents.</li>
 				<li><p>Try:<br/>
+					disabled: <input type="checkbox" id="py" class="checkbox first" /><span>affect the parent</span>
+					<input type="checkbox" id="sy" class="checkbox first" checked /><span>affect the child</span><br/>
+					unDisabled: <input type="checkbox" id="pn" class="checkbox first" checked /><span>affect the parent</span>
+					<input type="checkbox" id="sn" class="checkbox first" checked /><span>affect the child</span><br/>
 					&nbsp;&nbsp;&nbsp;&nbsp;[ <a id="disabledTrue" href="#" title="set checkbox to be disabled." onclick="return false;">be disabled</a> ]
 					&nbsp;&nbsp;&nbsp;&nbsp;[ <a id="disabledFalse" href="#" title="set checkbox to be abled." onclick="return false;">be abled</a> ]</p>
 				</li>

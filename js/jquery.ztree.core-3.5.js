@@ -1,5 +1,5 @@
 /*
- * JQuery zTree core 3.5.01
+ * JQuery zTree core 3.5.02
  * http://zTree.me/
  *
  * Copyright (c) 2010 Hunter.z
@@ -8,7 +8,7 @@
  * http://www.opensource.org/licenses/mit-license.php
  *
  * email: hunter.z@263.net
- * Date: 2012-12-21
+ * Date: 2013-01-28
  */
 (function($){
 	var settings = {}, roots = {}, caches = {},
@@ -609,6 +609,14 @@
 				treeId: setting.treeId
 			},
 			o = setting.treeObj;
+			// for can't select text
+			o.bind('selectstart', function(e){
+					var n = e.srcElement.nodeName.toLowerCase();
+					return (n === "input" || n === "textarea" );
+				}
+			).css({
+				"-moz-user-select":"-moz-none"
+			});
 			o.bind('click', eventParam, event.proxy);
 			o.bind('dblclick', eventParam, event.proxy);
 			o.bind('mouseover', eventParam, event.proxy);
@@ -654,11 +662,6 @@
 					r = proxyResult.treeEventCallback.apply(proxyResult, [e, proxyResult.node]) && r;
 				}
 			}
-			try{
-				if (x && $("input:focus").length == 0) {
-					tools.noSel(setting);
-				}
-			} catch(e) {}
 			return r;
 		}
 	},
@@ -755,14 +758,6 @@
 				curDom = curDom.parentNode;
 			}
 			return null;
-		},
-		noSel: function(setting) {
-			var r = data.getRoot(setting);
-			if (r.noSelection) {
-				try {
-					window.getSelection ? window.getSelection().removeAllRanges() : document.selection.empty();
-				} catch(e){}
-			}
 		},
 		uCanDo: function(setting, e) {
 			return true;
@@ -877,41 +872,24 @@
 				icoObj.attr({"style":"", "class":"button ico_loading"});
 			}
 
-			var isJson = (setting.async.contentType == "application/json"), tmpParam = isJson ? "{" : "", jTemp="";
+			var tmpParam = {};
 			for (i = 0, l = setting.async.autoParam.length; node && i < l; i++) {
 				var pKey = setting.async.autoParam[i].split("="), spKey = pKey;
 				if (pKey.length>1) {
 					spKey = pKey[1];
 					pKey = pKey[0];
 				}
-				if (isJson) {
-					jTemp = (typeof node[pKey] == "string") ? '"' : '';
-					tmpParam += '"' + spKey + ('":' + jTemp + node[pKey]).replace(/'/g,'\\\'') + jTemp + ',';
-				} else {
-					tmpParam += spKey + ("=" + node[pKey]).replace(/&/g,'%26') + "&";
-				}
+				tmpParam[spKey] = node[pKey];
 			}
 			if (tools.isArray(setting.async.otherParam)) {
 				for (i = 0, l = setting.async.otherParam.length; i < l; i += 2) {
-					if (isJson) {
-						jTemp = (typeof setting.async.otherParam[i + 1] == "string") ? '"' : '';
-						tmpParam += '"' + setting.async.otherParam[i] + ('":' + jTemp + setting.async.otherParam[i + 1]).replace(/'/g,'\\\'') + jTemp + ",";
-					} else {
-						tmpParam += setting.async.otherParam[i] + ("=" + setting.async.otherParam[i + 1]).replace(/&/g,'%26') + "&";
-					}
+					tmpParam[setting.async.otherParam[i]] = setting.async.otherParam[i + 1];
 				}
 			} else {
 				for (var p in setting.async.otherParam) {
-					if (isJson) {
-						jTemp = (typeof setting.async.otherParam[p] == "string") ? '"' : '';
-						tmpParam += '"' + p + ('":' + jTemp + setting.async.otherParam[p]).replace(/'/g,'\\\'') + jTemp + ",";
-					} else {
-						tmpParam += p + ("=" + setting.async.otherParam[p]).replace(/&/g,'%26') + "&";
-					}
+					tmpParam[p] = setting.async.otherParam[p];
 				}
 			}
-			if (tmpParam.length > 1) tmpParam = tmpParam.substring(0, tmpParam.length-1);
-			if (isJson) tmpParam += "}";
 
 			var _tmpV = data.getRoot(setting)._ver;
 			$.ajax({
@@ -1448,10 +1426,10 @@
 			setting.treeObj = obj;
 			setting.treeObj.empty();
 			settings[setting.treeId] = setting;
-			if ($.browser.msie && parseInt($.browser.version)<7) {
+			//For some older browser,(e.g., ie6)
+			if(typeof document.body.style.maxHeight === "undefined") {
 				setting.view.expandSpeed = "";
 			}
-
 			data.initRoot(setting);
 			var root = data.getRoot(setting),
 			childKey = setting.data.key.children;

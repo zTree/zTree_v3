@@ -15,7 +15,8 @@
 		<!--
 		var setting = {
 			check: {
-				enable: true
+				enable: true,
+				chkDisabledInherit: true
 			},
 			data: {
 				simpleData: {
@@ -43,13 +44,21 @@
 		function disabledNode(e) {
 			var zTree = $.fn.zTree.getZTreeObj("treeDemo"),
 			disabled = e.data.disabled,
-			nodes = zTree.getSelectedNodes();
+			nodes = zTree.getSelectedNodes(),
+			inheritParent = false, inheritChildren = false;
 			if (nodes.length == 0) {
 				alert("请先选择一个节点");
 			}
+			if (disabled) {
+				inheritParent = $("#py").attr("checked");
+				inheritChildren = $("#sy").attr("checked");
+			} else {
+				inheritParent = $("#pn").attr("checked");
+				inheritChildren = $("#sn").attr("checked");
+			}
 
 			for (var i=0, l=nodes.length; i<l; i++) {
-				zTree.setChkDisabled(nodes[i], disabled);
+				zTree.setChkDisabled(nodes[i], disabled, inheritParent, inheritChildren);
 			}
 		}
 
@@ -76,8 +85,12 @@
 				<ul class="list">
 				<li>setChkDisabled 方法可以设置节点 checkbox / radio 禁用 或 取消禁用，详细请参见 API 文档中的相关内容</li>
 				<li><p>试试看：<br/>
+					禁用时：<input type="checkbox" id="py" class="checkbox first"/><span>关联父</span>
+					<input type="checkbox" id="sy" class="checkbox first" checked /><span>关联子</span><br/>
+					取消禁用时：<input type="checkbox" id="pn" class="checkbox first" checked /><span>关联父</span>
+					<input type="checkbox" id="sn" class="checkbox first" checked /><span>关联子</span><br/>
 					&nbsp;&nbsp;&nbsp;&nbsp;[ <a id="disabledTrue" href="#" title="set checkbox to be disabled." onclick="return false;">禁用</a> ]
-					&nbsp;&nbsp;&nbsp;&nbsp;[ <a id="disabledFalse" href="#" title="set checkbox to be abled." onclick="return false;">取消禁用</a> ]</p>
+					&nbsp;&nbsp;&nbsp;&nbsp;[ <a id="disabledFalse" href="#" title="set checkbox to be abled." onclick="return false;">取消禁用</a> ]
 				</li>
 				</ul>
 			</li>

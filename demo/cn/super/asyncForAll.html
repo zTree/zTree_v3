@@ -24,7 +24,8 @@
 				url:"../asyncData/getNodes.php",
 				autoParam:["id", "name=n", "level=lv"],
 				otherParam:{"otherParam":"zTreeAsyncTest"},
-				dataFilter: filter
+				dataFilter: filter,
+				type: "get"
 			},
 			callback: {
 				beforeAsync: beforeAsync,

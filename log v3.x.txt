@@ -13,7 +13,23 @@
 
 </font>
 
+IE10 ajax Post 无法提交参数的bug
+http://bugs.jquery.com/ticket/12790
+
 <font color=#041594>
+*2013.01.28* v3.5.02
+   * 【增加】setting.check.chkDisabledInherit 属性，用于设置 chkDisabled 在初始化时子节点是否可以继承父节点的 chkDisabled 属性
+   * 【删除】内部 noSel 方法，使用 selectstart事件 和 "-moz-user-select"样式 处理禁止 节点文字被选择的功能
+   * 【修改】不兼容 jQuery 1.9 的bug
+   * 【修改】onDrop 的触发规则，保证异步加载模式下，可以在延迟加载结束后触发，避免 onDrop 中被拖拽的节点是已经更新后的数据。
+   * 【修改】setChkDisabled 方法，增加 inheritParent, inheritChildren 参数设置是否让父子节点继承 disabled
+   * 【修改】异步加载时 拼接参数的方法，由 string 修改为 json 对象
+   * 【修正】1-2-3 3级节点时，如果 2级节点 全部设置为 nocheck 或 chkDisabled后，勾选3级节点时，1级节点的半勾选状态错误的 bug
+   * 【修改】Demo: checkbox_nocheck.html & checkbox_chkDisabled.html;
+   * 【修改】Demo: edit_super.html，增加 showRenameBtn & showRemoveBtn 的演示
+   * 【修改】Demo: asyncForAll, 将 post 修改为 get；为了避免由于 IE10 的 bug 造成的客户端 以及 服务端崩溃
+      IE10 ajax Post 无法提交参数的bug (http://bugs.jquery.com/ticket/12790)
+
 *2012.12.21* v3.5.01
    * 【优化】clone 方法
    * 【修正】对于初始化无 children 属性的父节点进行 reAsyncChildNodes 操作时出错的 bug
@@ -144,5 +160,3 @@
    * 【修正】treeNode 节点数据的属性更加合理，并且增加了一些方法
    * 【修正】拖拽操作更加灵活方便，更容易制定自己的规则
    * 【修正】其他若干修改，详细对比请参考 url：[http://www.baby666.cn/v3/faq.php#_101 zTree v3.0 常见问题]
-
-</font>

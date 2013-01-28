@@ -19,7 +19,9 @@
 			},
 			edit: {
 				enable: true,
-				editNameSelectAll: true
+				editNameSelectAll: true,
+				showRemoveBtn: showRemoveBtn,
+				showRenameBtn: showRenameBtn
 			},
 			data: {
 				simpleData: {
@@ -85,6 +87,12 @@
 		function onRename(e, treeId, treeNode) {
 			showLog("[ "+getTime()+" onRename ]&nbsp;&nbsp;&nbsp;&nbsp; " + treeNode.name);
 		}
+		function showRemoveBtn(treeId, treeNode) {
+			return !treeNode.isFirstNode;
+		}
+		function showRenameBtn(treeId, treeNode) {
+			return !treeNode.isLastNode;
+		}
 		function showLog(str) {
 			if (!log) log = $("#log");
 			log.append("<li class='"+className+"'>"+str+"</li>");
@@ -146,8 +154,10 @@
 			<li class="title"><h2>1, 'beforeDrag / onDrag'<br/>&nbsp;&nbsp;'beforeEditName'<br/>&nbsp;&nbsp;'beforeRemove / onRemove'<br/>&nbsp;&nbsp;'beforeRename / onRename' callback function</h2>
 				<ul class="list">
 				<li>This demo shows the use of custom controls, the callback function to enhance the user experience, the operation can be compared with "Basic Edit Nodes" example.</li>
-				<li>This demo achieve  the Add nodes button.</li>
+				<li>This demo achieve the Add nodes button.</li>
 				<li>This demo achieve the confirmation when deleting node.</li>
+				<li>This demo use the 'showRenameBtn' to hide the rename button, when the treeNode's isLastNode = true</li>
+				<li>This demo use the 'showRemoveBtn' to hide the delete button, when the treeNode's isFirstNode = true</li>
 				<li class="highlight_red">Can use 'beforeEditName' callback trigger custom editing.</li>
 				<li><p><span class="highlight_red">After be familiar with these configurations, I think you can design a more flexible and rational rules!</span><br/>
 					&nbsp;&nbsp;&nbsp;&nbsp;<input type="checkbox" id="selectAll" checked /> Whether select all text, when edit node's name.<br/>

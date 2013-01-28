@@ -1,6 +1,6 @@
 <div class="apiDetail">
 <div>
-	<h2><span>Function(node, disabled)</span><span class="path">zTreeObj.</span>setChkDisabled</h2>
+	<h2><span>Function(node, disabled, inheritParent, inheritChildren)</span><span class="path">zTreeObj.</span>setChkDisabled</h2>
 	<h3>概述<span class="h3_info">[ 依赖 <span class="highlight_green">jquery.ztree.excheck</span> 扩展 js ]</span></h3>
 	<div class="desc">
 		<p></p>
@@ -21,6 +21,14 @@
 	<p>disabled = false 表示解禁 checkbox / radio</p>
 	<p class="highlight_red">省略此参数，等同于 disabled = false </p>
 	<p class="highlight_red">不影响 treeNode.nochecked = true 的节点。</p>
+	<h4 class="topLine"><b>inheritParent</b><span>Boolean</span></h4>
+	<p>inheritParent = true 表示全部父节点进行同样的操作</p>
+	<p>inheritParent = false 表示不影响父节点</p>
+	<p class="highlight_red">省略此参数，等同于 inheritParent = false </p>
+	<h4 class="topLine"><b>inheritChildren</b><span>Boolean</span></h4>
+	<p>inheritChildren = true 表示全部子节点进行同样的操作</p>
+	<p>inheritChildren = false 表示不影响子节点</p>
+	<p class="highlight_red">省略此参数，等同于 inheritChildren = false </p>
 	<h4 class="topLine"><b>返回值</b><span>无</span></h4>
 	<p>目前无任何返回值</p>
 	</div>

@@ -60,7 +60,7 @@ var apiContent = {
 			}
 		}
 		var setting_nodes =[
-			{id:1, pId:0, t: "setting", name:"var setting = {", open:true},
+			{id:1, pId:0, t:"setting", name:"var setting = {", open:true},
 			{id:11, pId:1, t:"treeId", name:"treeId : \"\",", iconSkin:"core", showAPI:true},
 			{id:12, pId:1, t:"treeObj", name:"treeObj : null,", iconSkin:"core", showAPI:true},
 			{id:121, pId:1, name:""},
@@ -118,6 +118,7 @@ var apiContent = {
 			{id:402, pId:40, t:"chkStyle", name:"chkStyle : \"checkbox\",", iconSkin:"check", showAPI:true},
 			{id:403, pId:40, t:"enable", name:"enable : false,", iconSkin:"check", showAPI:true},
 			{id:406, pId:40, t:"nocheckInherit", name:"nocheckInherit : false", iconSkin:"check", showAPI:true},
+			{id:407, pId:40, t:"chkDisabledInherit", name:"chkDisabledInherit : false", iconSkin:"check", showAPI:true},
 			{id:404, pId:40, t:"radioType", name:"radioType : \"level\"", iconSkin:"check", showAPI:true},
 			{id:41, pId:1, name:"},"},
 			{id:42, pId:1, name:""},
@@ -263,7 +264,7 @@ var apiContent = {
 			{id:423, pId:4, t:"removeChildNodes", name:"removeChildNodes (parentNode)", iconSkin:"core", showAPI:true},
 			{id:424, pId:4, t:"removeNode", name:"removeNode (node, callbackFlag)", iconSkin:"core", showAPI:true},
 			{id:425, pId:4, t:"selectNode", name:"selectNode (node, addFlag)", iconSkin:"core", showAPI:true},
-			{id:430, pId:4, t:"setChkDisabled", name:"setChkDisabled (node, disabled)", iconSkin:"check", showAPI:true},
+			{id:430, pId:4, t:"setChkDisabled", name:"setChkDisabled (node, disabled, inheritParent, inheritChildren)", iconSkin:"check", showAPI:true},
 			{id:426, pId:4, t:"setEditable", name:"setEditable (editable)", iconSkin:"edit", showAPI:true},
 			{id:434, pId:4, t:"showNode", name:"showNode (node)", iconSkin:"hide", showAPI:true},
 			{id:435, pId:4, t:"showNodes", name:"showNodes (nodes)", iconSkin:"hide", showAPI:true},
