@@ -41,7 +41,7 @@ h4 {font-size: 14px;font-weight: normal;line-height: 25px;}
 
 /* Header */
 .header {position: relative;width: 940px;margin: 0 auto;height: 160px;border: 1px solid white;background: transparent url(img/header-bg.png) repeat-x 0 -50px;}
-.header-text {padding: 40px 75px 15px 130px;font-size: 18px;line-height: 24px;color: #747d67;font-family: Helvetica, sans-serif;}
+.header-text {padding: 40px 25px 15px 120px;font-size: 18px;line-height: 24px;color: #747d67;font-family: Helvetica, sans-serif;}
 .header-text img {padding-bottom: 5px;}
 .shortcuts {white-space: nowrap;text-align: right;position: absolute;top: -45px;right: 5px;}
 .shortcuts.language {top: -85px;right:0px;}
