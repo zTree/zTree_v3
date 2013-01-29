@@ -2492,7 +2492,7 @@
 			function moveCallback() {
 				view.moveNode(setting, targetNode, node, moveType, false, isSilent);
 			}
-			if (tools.canAsync(setting, targetNode)) {
+			if (tools.canAsync(setting, targetNode) && moveType === consts.move.TYPE_INNER) {
 				view.asyncNode(setting, targetNode, isSilent, moveCallback);
 			} else {
 				moveCallback();
