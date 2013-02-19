@@ -54,8 +54,10 @@
 	_data = {
 		initHideForExCheck: function(setting, n) {
 			if (n.isHidden && setting.check && setting.check.enable) {
-				n._nocheck = !!n.nocheck
-				n.nocheck = true;
+				if(typeof n._nocheck == "undefined") {
+					n._nocheck = !!n.nocheck
+					n.nocheck = true;
+				}
 				n.check_Child_State = -1;
 				if (view.repairParentChkClassWithSelf) {
 					view.repairParentChkClassWithSelf(setting, n);
@@ -64,8 +66,10 @@
 		},
 		initShowForExCheck: function(setting, n) {
 			if (!n.isHidden && setting.check && setting.check.enable) {
-				n.nocheck = n._nocheck;
-				delete n._nocheck;
+				if(typeof n._nocheck != "undefined") {
+					n.nocheck = n._nocheck;
+					delete n._nocheck;
+				}
 				if (view.setChkClass) {
 					var checkObj = $("#" + n.tId + consts.id.CHECK);
 					view.setChkClass(setting, checkObj, n);

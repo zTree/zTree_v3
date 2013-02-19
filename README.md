@@ -1,6 +1,6 @@
 jQuery Tree Plugin ---- zTree  
 ============
-last verson :  3.5.11
+last verson :  3.5.12-beta.1
 
 
 zTree API : http://www.ztree.me/v3/api.php
