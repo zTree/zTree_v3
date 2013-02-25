@@ -1,5 +1,5 @@
 /*
- * JQuery zTree exHideNodes 3.5.02
+ * JQuery zTree exHideNodes 3.5.12
  * http://zTree.me/
  *
  * Copyright (c) 2010 Hunter.z
@@ -111,7 +111,7 @@
 			}
 		},
 		makeDOMNodeMainBefore: function(html, setting, node) {
-			html.push("<li ", (node.isHidden ? "style='display:none;' " : ""), "id='", node.tId, "' class='level", node.level,"' tabindex='0' hidefocus='true' treenode>");
+			html.push("<li ", (node.isHidden ? "style='display:none;' " : ""), "id='", node.tId, "' class='", consts.className.LEVEL, node.level,"' tabindex='0' hidefocus='true' treenode>");
 		},
 		showNode: function(setting, node, options) {
 			node.isHidden = false;

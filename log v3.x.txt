@@ -19,6 +19,7 @@
    * 【修改】在异步加载模式下，使用 moveNode 方法，且 moveType != "inner" 时，也会导致 targetNode 自动加载子节点的 bug
    * 【修改】对已经显示的节点(nochecked=true)使用 showNodes 或 showNode 方法后，导致勾选框出现的bug。
    * 【修改】对已经隐藏的节点(nochecked=false)使用 hideNodes 或 hideNode 方法后，导致勾选框消失的bug。
+   * 【修改】className 结构，提取 _consts.className.BUTTON / LEVEL / ICO_LOADING / SWITCH，便于快速修改 css 冲突。
 
 *2013.01.28* v3.5.02
    * 【增加】setting.check.chkDisabledInherit 属性，用于设置 chkDisabled 在初始化时子节点是否可以继承父节点的 chkDisabled 属性
