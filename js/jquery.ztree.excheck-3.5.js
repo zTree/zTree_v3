@@ -8,7 +8,7 @@
  * http://www.opensource.org/licenses/mit-license.php
  *
  * email: hunter.z@263.net
- * Date: 2013-01-28
+ * Date: 2013-03-11
  */
 (function($){
 	//default consts of excheck

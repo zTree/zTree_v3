@@ -9,7 +9,7 @@
  * http://www.opensource.org/licenses/mit-license.php
  *
  * email: hunter.z@263.net
- * Date: 2013-01-28
+ * Date: 2013-03-11
  */
 (function($){
 	var settings = {}, roots = {}, caches = {},
@@ -456,8 +456,9 @@
 			if (!nodes || !key) return [];
 			var childKey = setting.data.key.children,
 			result = [];
+			value = value.toLowerCase();
 			for (var i = 0, l = nodes.length; i < l; i++) {
-				if (typeof nodes[i][key] == "string" && nodes[i][key].indexOf(value)>-1) {
+				if (typeof nodes[i][key] == "string" && nodes[i][key].toLowerCase().indexOf(value)>-1) {
 					result.push(nodes[i]);
 				}
 				result = result.concat(data.getNodesByParamFuzzy(setting, nodes[i][childKey], key, value));
@@ -1658,7 +1659,7 @@
  * http://www.opensource.org/licenses/mit-license.php
  *
  * email: hunter.z@263.net
- * Date: 2013-01-28
+ * Date: 2013-03-11
  */
 (function($){
 	//default consts of excheck
@@ -2282,7 +2283,7 @@
  * http://www.opensource.org/licenses/mit-license.php
  *
  * email: hunter.z@263.net
- * Date: 2013-01-28
+ * Date: 2013-03-11
  */
 (function($){
 	//default consts of exedit

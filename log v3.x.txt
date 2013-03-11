@@ -14,12 +14,14 @@
 </font>
 
 <font color=#041594>
-*2013.02.20* v3.5.12 beta
+*2013.03.11* v3.5.12
    * 【修改】由于 jquery 1.9 中移除 event.srcElement 导致的 js 报错的bug。
    * 【修改】在异步加载模式下，使用 moveNode 方法，且 moveType != "inner" 时，也会导致 targetNode 自动加载子节点的 bug
    * 【修改】对已经显示的节点(nochecked=true)使用 showNodes 或 showNode 方法后，导致勾选框出现的bug。
    * 【修改】对已经隐藏的节点(nochecked=false)使用 hideNodes 或 hideNode 方法后，导致勾选框消失的bug。
+   * 【修改】getNodesByParamFuzzy 支持 大小写模糊。
    * 【修改】className 结构，提取 _consts.className.BUTTON / LEVEL / ICO_LOADING / SWITCH，便于快速修改 css 冲突。
+     例如：与 WordPress 产生冲突后，直接修改 core 中的 "button" 和 "level" 即可。  Issue: https://github.com/zTree/zTree_v3/issues/2
 
 *2013.01.28* v3.5.02
    * 【增加】setting.check.chkDisabledInherit 属性，用于设置 chkDisabled 在初始化时子节点是否可以继承父节点的 chkDisabled 属性
@@ -87,8 +89,8 @@
 *2012.05.13* v3.2
    * 【增加】setting.data.key.url 允许修改 treeNode.url 属性
    * 【增加】getNodesByFilter(filter, isSingle) 方法
-   * 【增加】"与其他 DOM 拖拽互动" 的 Demo (http://www.baby666.cn/v3/demo.php#_511)
-   * 【增加】"异步加载模式下全部展开" 的 Demo (http://www.baby666.cn/v3/demo.php#_512)
+   * 【增加】"与其他 DOM 拖拽互动" 的 Demo (http://www.ztree.me/v3/demo.php#_511)
+   * 【增加】"异步加载模式下全部展开" 的 Demo (http://www.ztree.me/v3/demo.php#_512)
 
    * 【修改】代码结构，将 addNodes、removeNode、removeChildNodes 方法 和 beforeRemove、onRemove 回调 转移到 core 内
    * 【修改】IE7的环境下无子节点的父节点反复展开出现多余空行的 bug
@@ -102,6 +104,8 @@
    * 【修改】onDrop 无法判断拖拽是 移动还是复制的问题
    * 【修改】未开启异步加载模式时，拖拽节点到子节点为空的父节点内时 出现异常 的 bug
    * 【修改】拖拽过程中，反复在 父节点图标上划动时，会出现停顿的 bug
+            (需要css 结构—— button -> span.button)
+
    * 【修改】拖拽操作时箭头 与 targetNode 背景之间的细节现实问题，便于用户拖拽时更容易区分 prev、next 和 inner 操作
    * 【修改】拖拽操作时IE6/7 下 在 节点<a> 右侧 10px 内会导致 targetNode = root 的 bug
    * 【修改】编辑模式下 默认的编辑按钮、删除按钮点击后，如果相应的 before 回调 return false 时会触发 onClick 回调的 bug
@@ -163,4 +167,4 @@
    * 【修正】setting 配置更加合理，并且增加了若干项配置参数
    * 【修正】treeNode 节点数据的属性更加合理，并且增加了一些方法
    * 【修正】拖拽操作更加灵活方便，更容易制定自己的规则
-   * 【修正】其他若干修改，详细对比请参考 url：[http://www.baby666.cn/v3/faq.php#_101 zTree v3.0 常见问题]
+   * 【修正】其他若干修改，详细对比请参考 url：[http://www.ztree.me/v3/faq.php#_101 zTree v3.0 常见问题]
