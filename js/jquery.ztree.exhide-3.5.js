@@ -1,5 +1,5 @@
 /*
- * JQuery zTree exHideNodes 3.5.12
+ * JQuery zTree exHideNodes 3.5.13-beta.1
  * http://zTree.me/
  *
  * Copyright (c) 2010 Hunter.z

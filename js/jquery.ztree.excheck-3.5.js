@@ -1,5 +1,5 @@
 /*
- * JQuery zTree excheck 3.5.12
+ * JQuery zTree excheck 3.5.13-beta.1
  * http://zTree.me/
  *
  * Copyright (c) 2010 Hunter.z
@@ -143,16 +143,17 @@
 		n.check_Child_State = -1;
 		n.check_Focus = false;
 		n.getCheckStatus = function() {return data.getCheckStatus(setting, n);};
+
+		if (setting.check.chkStyle == consts.radio.STYLE && setting.check.radioType == consts.radio.TYPE_ALL && n[checkedKey] ) {
+			var r = data.getRoot(setting);
+			r.radioCheckedList.push(n);
+		}
 	},
 	//add dom for check
 	_beforeA = function(setting, node, html) {
 		var checkedKey = setting.data.key.checked;
 		if (setting.check.enable) {
 			data.makeChkFlag(setting, node);
-			if (setting.check.chkStyle == consts.radio.STYLE && setting.check.radioType == consts.radio.TYPE_ALL && node[checkedKey] ) {
-				var r = data.getRoot(setting);
-				r.radioCheckedList.push(node);
-			}
 			html.push("<span ID='", node.tId, consts.id.CHECK, "' class='", view.makeChkClass(setting, node), "' treeNode", consts.id.CHECK, (node.nocheck === true?" style='display:none;'":""),"></span>");
 		}
 	},
