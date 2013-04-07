@@ -33,11 +33,14 @@
 		};
 
 		var zNodes =[
-			{ id:1, pId:0, name:"ordinary parent 1", t:"I am ordinary, just expand or collapse on me", open:true},
+			{ id:1, pId:0, name:"ordinary parent 1", t:"I am ordinary, just expand or collapse on me", open:false},
 			{ id:11, pId:1, name:"leaf node 1-1", t:"..."},
-			{ id:12, pId:1, name:"ordinary parent 2", t:"I am ordinary, just expand or collapse on me"},
-			{ id:121, pId:12, name:"leaf node 2-1", t:"..."},
-			{ id:122, pId:12, name:"leaf node 2-2", t:"..."},
+			{ id:12, pId:1, name:"ordinary parent 2", t:"I am ordinary, just expand or collapse on me", open:false},
+			{ id:121, pId:12, name:"parent node - 121", t:"...", open:true},
+			{ id:1211, pId:121, name:"parent node - 1211", t:"...", open:false},
+			{ id:1212, pId:1211, name:"leaf node - 1212", t:"..."},
+			{ id:1213, pId:121, name:"parent node - 1213", t:"...", open:false},
+			{ id:1214, pId:1213, name:"leaf node - 1214", t:"..."},
 			{ id:123, pId:12, name:"leaf node 2-3", t:"..."},
 			{ id:13, pId:1, name:"leaf node  1-3", t:"..."},
 			{ id:2, pId:0, name:"can't collapse me", t:"can't collapse me...Unless you use expandAll method.", open:true, collapse:false},
