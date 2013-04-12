@@ -1,5 +1,5 @@
 /*
- * JQuery zTree core 3.5.13-beta.4
+ * JQuery zTree core 3.5.13-beta.5
  * http://zTree.me/
  *
  * Copyright (c) 2010 Hunter.z
@@ -8,7 +8,7 @@
  * http://www.opensource.org/licenses/mit-license.php
  *
  * email: hunter.z@263.net
- * Date: 2013-04-07
+ * Date: 2013-04-12
  */
 (function($){
 	var settings = {}, roots = {}, caches = {},
@@ -183,7 +183,7 @@
 		.unbind(c.COLLAPSE)
 		.unbind(c.ASYNC_SUCCESS)
 		.unbind(c.ASYNC_ERROR);
-	},	
+	},
 	//default event proxy of core
 	_eventProxy = function(event) {
 		var target = event.target,
@@ -229,7 +229,7 @@
 				case "switchNode" :
 					if (!node.isParent) {
 						nodeEventType = "";
-					} else if (tools.eqs(event.type, "click") 
+					} else if (tools.eqs(event.type, "click")
 						|| (tools.eqs(event.type, "dblclick") && tools.apply(setting.view.dblClickExpand, [setting.treeId, node], setting.view.dblClickExpand))) {
 						nodeEventCallback = handler.onSwitchNode;
 					} else {
@@ -741,7 +741,7 @@
 		},
 		clone: function (obj){
 			if (obj === null) return null;
-			var o = obj.constructor === Array ? [] : {};
+			var o = tools.isArray(obj) ? [] : {};
 			for(var i in obj){
 				o[i] = (obj[i] instanceof Date) ? new Date(obj[i].getTime()) : (typeof obj[i] === "object" ? arguments.callee(obj[i]) : obj[i]);
 			}
@@ -752,6 +752,17 @@
 		},
 		isArray: function(arr) {
 			return Object.prototype.toString.apply(arr) === "[object Array]";
+		},
+		$: function(node, exp, setting) {
+			if (!!exp && typeof exp != "string") {
+				setting = exp;
+				exp = "";
+			}
+			if (typeof node == "string") {
+				return $(node, setting ? setting.treeObj.get(0).ownerDocument : null);
+			} else {
+				return $("#" + node.tId + exp, setting ? setting.treeObj : null);
+			}
 		},
 		getMDom: function (setting, curDom, targetExpr) {
 			if (!curDom) return null;
@@ -782,9 +793,9 @@
 				newNodes = data.transformTozTreeFormat(setting, newNodes);
 			}
 			if (parentNode) {
-				var target_switchObj = $("#" + parentNode.tId + consts.id.SWITCH),
-				target_icoObj = $("#" + parentNode.tId + consts.id.ICON),
-				target_ulObj = $("#" + parentNode.tId + consts.id.UL);
+				var target_switchObj = $$(parentNode, consts.id.SWITCH, setting),
+				target_icoObj = $$(parentNode, consts.id.ICON, setting),
+				target_ulObj = $$(parentNode, consts.id.UL, setting);
 
 				if (!parentNode.open) {
 					view.replaceSwitchClass(parentNode, target_switchObj, consts.folder.CLOSE);
@@ -826,7 +837,7 @@
 					childHtml = view.appendNodes(setting, level + 1, node[childKey], node, initFlag, openFlag && node.open);
 				}
 				if (openFlag) {
-					
+
 					view.makeDOMNodeMainBefore(html, setting, node);
 					view.makeDOMNodeLine(html, setting, node);
 					data.getBeforeA(setting, node, html);
@@ -847,13 +858,12 @@
 		},
 		appendParentULDom: function(setting, node) {
 			var html = [],
-			nObj = $("#" + node.tId);
-
+			nObj = $$(node, setting);
 			if (!nObj.get(0) && !!node.parentTId) {
 				view.appendParentULDom(setting, node.getParentNode());
-				nObj = $("#" + node.tId);
+				nObj = $$(node, setting);
 			}
-			var ulObj = $("#" + node.tId + consts.id.UL);
+			var ulObj = $$(node, consts.id.UL, setting);
 			if (!ulObj.get(0)) {
 				var childKey = setting.data.key.children,
 				childHtml = view.appendNodes(setting, node.level+1, node[childKey], node, false, true);
@@ -874,7 +884,7 @@
 			}
 			if (node) {
 				node.isAjaxing = true;
-				var icoObj = $("#" + node.tId + consts.id.ICON);
+				var icoObj = $$(node, consts.id.ICON, setting);
 				icoObj.attr({"style":"", "class":consts.className.BUTTON + " " + consts.className.ICO_LOADING});
 			}
 
@@ -950,7 +960,7 @@
 			var list = data.getRoot(setting).curSelectedList;
 			for (var i=0, j=list.length-1; j>=i; j--) {
 				if (!node || node === list[j]) {
-					$("#" + list[j].tId + consts.id.A).removeClass(consts.node.CURSELECTED);
+					$$(list[j], consts.id.A, setting).removeClass(consts.node.CURSELECTED);
 					if (node) {
 						data.removeSelectedNode(setting, node);
 						break;
@@ -975,13 +985,13 @@
 			if (!nodes || nodes.length == 0) return;
 			var root = data.getRoot(setting),
 			childKey = setting.data.key.children,
-			openFlag = !parentNode || parentNode.open || !!$("#" + parentNode[childKey][0].tId).get(0);
+			openFlag = !parentNode || parentNode.open || !!$$(parentNode[childKey][0], setting).get(0);
 			root.createdNodes = [];
 			var zTreeHtml = view.appendNodes(setting, level, nodes, parentNode, true, openFlag);
 			if (!parentNode) {
 				setting.treeObj.append(zTreeHtml.join(''));
 			} else {
-				var ulObj = $("#" + parentNode.tId + consts.id.UL);
+				var ulObj = $$(parentNode, consts.id.UL, setting);
 				if (ulObj.get(0)) {
 					ulObj.append(zTreeHtml.join(''));
 				}
@@ -1015,7 +1025,7 @@
 				};
 				root.expandTriggerFlag = false;
 			}
-			if (!node.open && node.isParent && ((!$("#" + node.tId + consts.id.UL).get(0)) || (node[childKey] && node[childKey].length>0 && !$("#" + node[childKey][0].tId).get(0)))) {
+			if (!node.open && node.isParent && ((!$$(node, consts.id.UL, setting).get(0)) || (node[childKey] && node[childKey].length>0 && !$$(node[childKey][0], setting).get(0)))) {
 				view.appendParentULDom(setting, node);
 				view.createNodeCallback(setting);
 			}
@@ -1023,9 +1033,9 @@
 				tools.apply(callback, []);
 				return;
 			}
-			var ulObj = $("#" + node.tId + consts.id.UL),
-			switchObj = $("#" + node.tId + consts.id.SWITCH),
-			icoObj = $("#" + node.tId + consts.id.ICON);
+			var ulObj = $$(node, consts.id.UL, setting),
+			switchObj = $$(node, consts.id.SWITCH, setting),
+			icoObj = $$(node, consts.id.ICON, setting);
 
 			if (node.isParent) {
 				node.open = !node.open;
@@ -1204,13 +1214,13 @@
 			if (!setting.data.keep.parent) {
 				node.isParent = false;
 				node.open = false;
-				var tmp_switchObj = $("#" + node.tId + consts.id.SWITCH),
-				tmp_icoObj = $("#" + node.tId + consts.id.ICON);
+				var tmp_switchObj = $$(node, consts.id.SWITCH, setting),
+				tmp_icoObj = $$(node, consts.id.ICON, setting);
 				view.replaceSwitchClass(node, tmp_switchObj, consts.folder.DOCU);
 				view.replaceIcoClass(node, tmp_icoObj, consts.folder.DOCU);
-				$("#" + node.tId + consts.id.UL).remove();
+				$$(node, consts.id.UL, setting).remove();
 			} else {
-				$("#" + node.tId + consts.id.UL).empty();
+				$$(node, consts.id.UL, setting).empty();
 			}
 		},
 		setFirstNode: function(setting, parentNode) {
@@ -1238,8 +1248,8 @@
 			if (!data.getNodeCache(setting, node.tId)) {
 				return;
 			}
-                        
-			$("#" + node.tId).remove();
+
+			$$(node, setting).remove();
 			data.removeNodeCache(setting, node);
 			data.removeSelectedNode(setting, node);
 
@@ -1251,7 +1261,7 @@
 			}
 			view.setFirstNode(setting, parentNode);
 			view.setLastNode(setting, parentNode);
-                                                
+
 			var tmp_ulObj,tmp_switchObj,tmp_icoObj,
 			childLength = parentNode[childKey].length;
 
@@ -1260,9 +1270,9 @@
 				//old parentNode has no child nodes
 				parentNode.isParent = false;
 				parentNode.open = false;
-				tmp_ulObj = $("#" + parentNode.tId + consts.id.UL);
-				tmp_switchObj = $("#" + parentNode.tId + consts.id.SWITCH);
-				tmp_icoObj = $("#" + parentNode.tId + consts.id.ICON);
+				tmp_ulObj = $$(parentNode, consts.id.UL, setting);
+				tmp_switchObj = $$(parentNode, consts.id.SWITCH, setting);
+				tmp_icoObj = $$(parentNode, consts.id.ICON, setting);
 				view.replaceSwitchClass(parentNode, tmp_switchObj, consts.folder.DOCU);
 				view.replaceIcoClass(parentNode, tmp_icoObj, consts.folder.DOCU);
 				tmp_ulObj.css("display", "none");
@@ -1270,15 +1280,15 @@
 			} else if (setting.view.showLine && childLength > 0) {
 				//old parentNode has child nodes
 				var newLast = parentNode[childKey][childLength - 1];
-				tmp_ulObj = $("#" + newLast.tId + consts.id.UL);
-				tmp_switchObj = $("#" + newLast.tId + consts.id.SWITCH);
-				tmp_icoObj = $("#" + newLast.tId + consts.id.ICON);
+				tmp_ulObj = $$(newLast, consts.id.UL, setting);
+				tmp_switchObj = $$(newLast, consts.id.SWITCH, setting);
+				tmp_icoObj = $$(newLast, consts.id.ICON, setting);
 				if (parentNode == root) {
 					if (parentNode[childKey].length == 1) {
 						//node was root, and ztree has only one root after move node
 						view.replaceSwitchClass(newLast, tmp_switchObj, consts.line.ROOT);
 					} else {
-						var tmp_first_switchObj = $("#" + parentNode[childKey][0].tId + consts.id.SWITCH);
+						var tmp_first_switchObj = $$(parentNode[childKey][0], consts.id.SWITCH, setting);
 						view.replaceSwitchClass(parentNode[childKey][0], tmp_first_switchObj, consts.line.ROOTS);
 						view.replaceSwitchClass(newLast, tmp_switchObj, consts.line.BOTTOM);
 					}
@@ -1332,11 +1342,11 @@
 			if (!addFlag) {
 				view.cancelPreSelectedNode(setting);
 			}
-			$("#" + node.tId + consts.id.A).addClass(consts.node.CURSELECTED);
+			$$(node, consts.id.A, setting).addClass(consts.node.CURSELECTED);
 			data.addSelectedNode(setting, node);
 		},
 		setNodeFontCss: function(setting, treeNode) {
-			var aObj = $("#" + treeNode.tId + consts.id.A),
+			var aObj = $$(treeNode, consts.id.A, setting),
 			fontCss = view.makeNodeFontCss(setting, treeNode);
 			if (fontCss) {
 				aObj.css(fontCss);
@@ -1344,9 +1354,9 @@
 		},
 		setNodeLineIcos: function(setting, node) {
 			if (!node) return;
-			var switchObj = $("#" + node.tId + consts.id.SWITCH),
-			ulObj = $("#" + node.tId + consts.id.UL),
-			icoObj = $("#" + node.tId + consts.id.ICON),
+			var switchObj = $$(node, consts.id.SWITCH, setting),
+			ulObj = $$(node, consts.id.UL, setting),
+			icoObj = $$(node, consts.id.ICON, setting),
 			ulLine = view.makeUlLineClass(setting, node);
 			if (ulLine.length==0) {
 				ulObj.removeClass(consts.line.LINE);
@@ -1365,7 +1375,7 @@
 		},
 		setNodeName: function(setting, node) {
 			var title = data.getNodeTitle(setting, node),
-			nObj = $("#" + node.tId + consts.id.SPAN);
+			nObj = $$(node, consts.id.SPAN, setting);
 			nObj.empty();
 			if (setting.view.nameIsHTML) {
 				nObj.html(data.getNodeName(setting, node));
@@ -1373,16 +1383,16 @@
 				nObj.text(data.getNodeName(setting, node));
 			}
 			if (tools.apply(setting.view.showTitle, [setting.treeId, node], setting.view.showTitle)) {
-				var aObj = $("#" + node.tId + consts.id.A);
+				var aObj = $$(node, consts.id.A, setting);
 				aObj.attr("title", !title ? "" : title);
 			}
 		},
-		setNodeTarget: function(node) {
-			var aObj = $("#" + node.tId + consts.id.A);
+		setNodeTarget: function(setting, node) {
+			var aObj = $$(node, consts.id.A, setting);
 			aObj.attr("target", view.makeNodeTarget(node));
 		},
 		setNodeUrl: function(setting, node) {
-			var aObj = $("#" + node.tId + consts.id.A),
+			var aObj = $$(node, consts.id.A, setting),
 			url = view.makeNodeUrl(setting, node);
 			if (url == null || url.length == 0) {
 				aObj.removeAttr("href");
@@ -1451,7 +1461,7 @@
 			event.bindTree(setting);
 			event.unbindEvent(setting);
 			event.bindEvent(setting);
-			
+
 			var zTreeTools = {
 				setting : setting,
 				addNodes : function(parentNode, newNodes, isSilent) {
@@ -1471,14 +1481,14 @@
 					return xNewNodes;
 				},
 				cancelSelectedNode : function(node) {
-					view.cancelPreSelectedNode(this.setting, node);
+					view.cancelPreSelectedNode(setting, node);
 				},
 				destroy : function() {
-					view.destroy(this.setting);
+					view.destroy(setting);
 				},
 				expandAll : function(expandFlag) {
 					expandFlag = !!expandFlag;
-					view.expandCollapseSonNode(this.setting, null, expandFlag, true);
+					view.expandCollapseSonNode(setting, null, expandFlag, true);
 					return expandFlag;
 				},
 				expandNode : function(node, expandFlag, sonSign, focus, callbackFlag) {
@@ -1494,71 +1504,71 @@
 						return null;
 					}
 					if (expandFlag && node.parentTId) {
-						view.expandCollapseParentNode(this.setting, node.getParentNode(), expandFlag, false);
+						view.expandCollapseParentNode(setting, node.getParentNode(), expandFlag, false);
 					}
 					if (expandFlag === node.open && !sonSign) {
 						return null;
 					}
-					
+
 					data.getRoot(setting).expandTriggerFlag = callbackFlag;
 					if (sonSign) {
-						view.expandCollapseSonNode(this.setting, node, expandFlag, true, function() {
-							if (focus !== false) {try{$("#" + node.tId).focus().blur();}catch(e){}}
+						view.expandCollapseSonNode(setting, node, expandFlag, true, function() {
+							if (focus !== false) {try{$$(node, setting).focus().blur();}catch(e){}}
 						});
 					} else {
 						node.open = !expandFlag;
 						view.switchNode(this.setting, node);
-						if (focus !== false) {try{$("#" + node.tId).focus().blur();}catch(e){}}
+						if (focus !== false) {try{$$(node, setting).focus().blur();}catch(e){}}
 					}
 					return expandFlag;
 				},
 				getNodes : function() {
-					return data.getNodes(this.setting);
+					return data.getNodes(setting);
 				},
 				getNodeByParam : function(key, value, parentNode) {
 					if (!key) return null;
-					return data.getNodeByParam(this.setting, parentNode?parentNode[this.setting.data.key.children]:data.getNodes(this.setting), key, value);
+					return data.getNodeByParam(setting, parentNode?parentNode[setting.data.key.children]:data.getNodes(setting), key, value);
 				},
 				getNodeByTId : function(tId) {
-					return data.getNodeCache(this.setting, tId);
+					return data.getNodeCache(setting, tId);
 				},
 				getNodesByParam : function(key, value, parentNode) {
 					if (!key) return null;
-					return data.getNodesByParam(this.setting, parentNode?parentNode[this.setting.data.key.children]:data.getNodes(this.setting), key, value);
+					return data.getNodesByParam(setting, parentNode?parentNode[setting.data.key.children]:data.getNodes(setting), key, value);
 				},
 				getNodesByParamFuzzy : function(key, value, parentNode) {
 					if (!key) return null;
-					return data.getNodesByParamFuzzy(this.setting, parentNode?parentNode[this.setting.data.key.children]:data.getNodes(this.setting), key, value);
+					return data.getNodesByParamFuzzy(setting, parentNode?parentNode[setting.data.key.children]:data.getNodes(setting), key, value);
 				},
 				getNodesByFilter: function(filter, isSingle, parentNode, invokeParam) {
 					isSingle = !!isSingle;
 					if (!filter || (typeof filter != "function")) return (isSingle ? null : []);
-					return data.getNodesByFilter(this.setting, parentNode?parentNode[this.setting.data.key.children]:data.getNodes(this.setting), filter, isSingle, invokeParam);
+					return data.getNodesByFilter(setting, parentNode?parentNode[setting.data.key.children]:data.getNodes(setting), filter, isSingle, invokeParam);
 				},
 				getNodeIndex : function(node) {
 					if (!node) return null;
 					var childKey = setting.data.key.children,
-					parentNode = (node.parentTId) ? node.getParentNode() : data.getRoot(this.setting);
+					parentNode = (node.parentTId) ? node.getParentNode() : data.getRoot(setting);
 					for (var i=0, l = parentNode[childKey].length; i < l; i++) {
 						if (parentNode[childKey][i] == node) return i;
 					}
 					return -1;
 				},
 				getSelectedNodes : function() {
-					var r = [], list = data.getRoot(this.setting).curSelectedList;
+					var r = [], list = data.getRoot(setting).curSelectedList;
 					for (var i=0, l=list.length; i<l; i++) {
 						r.push(list[i]);
 					}
 					return r;
 				},
 				isSelectedNode : function(node) {
-					return data.isSelectedNode(this.setting, node);
+					return data.isSelectedNode(setting, node);
 				},
 				reAsyncChildNodes : function(parentNode, reloadType, isSilent) {
 					if (!this.setting.async.enable) return;
 					var isRoot = !parentNode;
 					if (isRoot) {
-						parentNode = data.getRoot(this.setting);
+						parentNode = data.getRoot(setting);
 					}
 					if (reloadType=="refresh") {
 						var childKey = this.setting.data.key.children;
@@ -1570,7 +1580,7 @@
 						if (isRoot) {
 							this.setting.treeObj.empty();
 						} else {
-							var ulObj = $("#" + parentNode.tId + consts.id.UL);
+							var ulObj = $$(parentNode, consts.id.UL, setting);
 							ulObj.empty();
 						}
 					}
@@ -1578,12 +1588,12 @@
 				},
 				refresh : function() {
 					this.setting.treeObj.empty();
-					var root = data.getRoot(this.setting),
-					nodes = root[this.setting.data.key.children]
-					data.initRoot(this.setting);
-					root[this.setting.data.key.children] = nodes
-					data.initCache(this.setting);
-					view.createNodes(this.setting, 0, root[this.setting.data.key.children]);
+					var root = data.getRoot(setting),
+					nodes = root[setting.data.key.children]
+					data.initRoot(setting);
+					root[setting.data.key.children] = nodes
+					data.initCache(setting);
+					view.createNodes(setting, 0, root[setting.data.key.children]);
 				},
 				removeChildNodes : function(node) {
 					if (!node) return null;
@@ -1603,33 +1613,33 @@
 				},
 				selectNode : function(node, addFlag) {
 					if (!node) return;
-					if (tools.uCanDo(this.setting)) {
+					if (tools.uCanDo(setting)) {
 						addFlag = setting.view.selectedMulti && addFlag;
 						if (node.parentTId) {
-							view.expandCollapseParentNode(this.setting, node.getParentNode(), true, false, function() {
-								try{$("#" + node.tId).focus().blur();}catch(e){}
+							view.expandCollapseParentNode(setting, node.getParentNode(), true, false, function() {
+								try{$$(node, setting).focus().blur();}catch(e){}
 							});
 						} else {
-							try{$("#" + node.tId).focus().blur();}catch(e){}
+							try{$$(node, setting).focus().blur();}catch(e){}
 						}
-						view.selectNode(this.setting, node, addFlag);
+						view.selectNode(setting, node, addFlag);
 					}
 				},
 				transformTozTreeNodes : function(simpleNodes) {
-					return data.transformTozTreeFormat(this.setting, simpleNodes);
+					return data.transformTozTreeFormat(setting, simpleNodes);
 				},
 				transformToArray : function(nodes) {
-					return data.transformToArrayFormat(this.setting, nodes);
+					return data.transformToArrayFormat(setting, nodes);
 				},
 				updateNode : function(node, checkTypeFlag) {
 					if (!node) return;
-					var nObj = $("#" + node.tId);
-					if (nObj.get(0) && tools.uCanDo(this.setting)) {
-						view.setNodeName(this.setting, node);
-						view.setNodeTarget(node);
-						view.setNodeUrl(this.setting, node);
-						view.setNodeLineIcos(this.setting, node);
-						view.setNodeFontCss(this.setting, node);
+					var nObj = $$(node, setting);
+					if (nObj.get(0) && tools.uCanDo(setting)) {
+						view.setNodeName(setting, node);
+						view.setNodeTarget(setting, node);
+						view.setNodeUrl(setting, node);
+						view.setNodeLineIcos(setting, node);
+						view.setNodeFontCss(setting, node);
 					}
 				}
 			}
@@ -1646,5 +1656,6 @@
 	};
 
 	var zt = $.fn.zTree,
+	$$ = tools.$,
 	consts = zt.consts;
 })(jQuery);

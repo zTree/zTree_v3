@@ -1,5 +1,5 @@
 /*
- * JQuery zTree excheck 3.5.13-beta.4
+ * JQuery zTree excheck 3.5.13-beta.5
  * http://zTree.me/
  *
  * Copyright (c) 2010 Hunter.z
@@ -8,7 +8,7 @@
  * http://www.opensource.org/licenses/mit-license.php
  *
  * email: hunter.z@263.net
- * Date: 2013-04-07
+ * Date: 2013-04-12
  */
 (function($){
 	//default consts of excheck
@@ -160,7 +160,7 @@
 	//update zTreeObj, add method of check
 	_zTreeTools = function(setting, zTreeTools) {
 		zTreeTools.checkNode = function(node, checked, checkTypeFlag, callbackFlag) {
-			var checkedKey = this.setting.data.key.checked;
+			var checkedKey = setting.data.key.checked;
 			if (node.chkDisabled === true) return;
 			if (checked !== true && checked !== false) {
 				checked = !node[checkedKey];
@@ -169,15 +169,15 @@
 			
 			if (node[checkedKey] === checked && !checkTypeFlag) {
 				return;
-			} else if (callbackFlag && tools.apply(this.setting.callback.beforeCheck, [this.setting.treeId, node], true) == false) {
+			} else if (callbackFlag && tools.apply(this.setting.callback.beforeCheck, [setting.treeId, node], true) == false) {
 				return;
 			}
-			if (tools.uCanDo(this.setting) && this.setting.check.enable && node.nocheck !== true) {
+			if (tools.uCanDo(this.setting) && setting.check.enable && node.nocheck !== true) {
 				node[checkedKey] = checked;
-				var checkObj = $("#" + node.tId + consts.id.CHECK);
-				if (checkTypeFlag || this.setting.check.chkStyle === consts.radio.STYLE) view.checkNodeRelation(this.setting, node);
-				view.setChkClass(this.setting, checkObj, node);
-				view.repairParentChkClassWithSelf(this.setting, node);
+				var checkObj = $$(node, consts.id.CHECK, setting);
+				if (checkTypeFlag || setting.check.chkStyle === consts.radio.STYLE) view.checkNodeRelation(setting, node);
+				view.setChkClass(setting, checkObj, node);
+				view.repairParentChkClassWithSelf(setting, node);
 				if (callbackFlag) {
 					setting.treeObj.trigger(consts.event.CHECK, [null, setting.treeId, node]);
 				}
@@ -185,38 +185,38 @@
 		}
 
 		zTreeTools.checkAllNodes = function(checked) {
-			view.repairAllChk(this.setting, !!checked);
+			view.repairAllChk(setting, !!checked);
 		}
 
 		zTreeTools.getCheckedNodes = function(checked) {
-			var childKey = this.setting.data.key.children;
+			var childKey = setting.data.key.children;
 			checked = (checked !== false);
-			return data.getTreeCheckedNodes(this.setting, data.getRoot(setting)[childKey], checked);
+			return data.getTreeCheckedNodes(setting, data.getRoot(setting)[childKey], checked);
 		}
 
 		zTreeTools.getChangeCheckedNodes = function() {
-			var childKey = this.setting.data.key.children;
-			return data.getTreeChangeCheckedNodes(this.setting, data.getRoot(setting)[childKey]);
+			var childKey = setting.data.key.children;
+			return data.getTreeChangeCheckedNodes(setting, data.getRoot(setting)[childKey]);
 		}
 
 		zTreeTools.setChkDisabled = function(node, disabled, inheritParent, inheritChildren) {
 			disabled = !!disabled;
 			inheritParent = !!inheritParent;
 			inheritChildren = !!inheritChildren;
-			view.repairSonChkDisabled(this.setting, node, disabled, inheritChildren);
-			view.repairParentChkDisabled(this.setting, node.getParentNode(), disabled, inheritParent);
+			view.repairSonChkDisabled(setting, node, disabled, inheritChildren);
+			view.repairParentChkDisabled(setting, node.getParentNode(), disabled, inheritParent);
 		}
 
 		var _updateNode = zTreeTools.updateNode;
 		zTreeTools.updateNode = function(node, checkTypeFlag) {
 			if (_updateNode) _updateNode.apply(zTreeTools, arguments);
-			if (!node || !this.setting.check.enable) return;
-			var nObj = $("#" + node.tId);
-			if (nObj.get(0) && tools.uCanDo(this.setting)) {
-				var checkObj = $("#" + node.tId + consts.id.CHECK);
-				if (checkTypeFlag == true || this.setting.check.chkStyle === consts.radio.STYLE) view.checkNodeRelation(this.setting, node);
-				view.setChkClass(this.setting, checkObj, node);
-				view.repairParentChkClassWithSelf(this.setting, node);
+			if (!node || !setting.check.enable) return;
+			var nObj = $$(node, setting);
+			if (nObj.get(0) && tools.uCanDo(setting)) {
+				var checkObj = $$(node, consts.id.CHECK, setting);
+				if (checkTypeFlag == true || setting.check.chkStyle === consts.radio.STYLE) view.checkNodeRelation(setting, node);
+				view.setChkClass(setting, checkObj, node);
+				view.repairParentChkClassWithSelf(setting, node);
 			}
 		}
 	},
@@ -336,7 +336,7 @@
 			if (tools.apply(setting.callback.beforeCheck, [setting.treeId, node], true) == false) return true;
 			node[checkedKey] = !node[checkedKey];
 			view.checkNodeRelation(setting, node);
-			var checkObj = $("#" + node.tId + consts.id.CHECK);
+			var checkObj = $$(node, consts.id.CHECK, setting);
 			view.setChkClass(setting, checkObj, node);
 			view.repairParentChkClassWithSelf(setting, node);
 			setting.treeObj.trigger(consts.event.CHECK, [event, setting.treeId, node]);
@@ -345,7 +345,7 @@
 		onMouseoverCheck: function(event, node) {
 			if (node.chkDisabled === true) return false;
 			var setting = data.getSetting(event.data.treeId),
-			checkObj = $("#" + node.tId + consts.id.CHECK);
+			checkObj = $$(node, consts.id.CHECK, setting);
 			node.check_Focus = true;
 			view.setChkClass(setting, checkObj, node);
 			return true;
@@ -353,7 +353,7 @@
 		onMouseoutCheck: function(event, node) {
 			if (node.chkDisabled === true) return false;
 			var setting = data.getSetting(event.data.treeId),
-			checkObj = $("#" + node.tId + consts.id.CHECK);
+			checkObj = $$(node, consts.id.CHECK, setting);
 			node.check_Focus = false;
 			view.setChkClass(setting, checkObj, node);
 			return true;
@@ -379,7 +379,7 @@
 							pNode[checkedKey] = false;
 							checkedList.splice(i, 1);
 
-							view.setChkClass(setting, $("#" + pNode.tId + consts.id.CHECK), pNode);
+							view.setChkClass(setting, $$(pNode, consts.id.CHECK, setting), pNode);
 							if (pNode.parentTId != node.parentTId) {
 								view.repairParentChkClassWithSelf(setting, pNode);
 							}
@@ -391,7 +391,7 @@
 							pNode = parentNode[childKey][i];
 							if (pNode[checkedKey] && pNode != node) {
 								pNode[checkedKey] = false;
-								view.setChkClass(setting, $("#" + pNode.tId + consts.id.CHECK), pNode);
+								view.setChkClass(setting, $$(pNode, consts.id.CHECK, setting), pNode);
 							}
 						}
 					}
@@ -454,7 +454,7 @@
 			if (!node) return;
 			data.makeChkFlag(setting, node);
 			if (node.nocheck !== true) {
-				var checkObj = $("#" + node.tId + consts.id.CHECK);
+				var checkObj = $$(node, consts.id.CHECK, setting);
 				view.setChkClass(setting, checkObj, node);
 			}
 		},
@@ -508,7 +508,7 @@
 		setParentNodeCheckBox: function(setting, node, value, srcNode) {
 			var childKey = setting.data.key.children,
 			checkedKey = setting.data.key.checked,
-			checkObj = $("#" + node.tId + consts.id.CHECK);
+			checkObj = $$(node, consts.id.CHECK, setting);
 			if (!srcNode) srcNode = node;
 			data.makeChkFlag(setting, node);
 			if (node.nocheck !== true && node.chkDisabled !== true) {
@@ -539,7 +539,7 @@
 			if (!node) return;
 			var childKey = setting.data.key.children,
 			checkedKey = setting.data.key.checked,
-			checkObj = $("#" + node.tId + consts.id.CHECK);
+			checkObj = $$(node, consts.id.CHECK, setting);
 			if (!srcNode) srcNode = node;
 
 			var hasDisable = false;
@@ -584,7 +584,8 @@
 	consts = zt.consts,
 	view = zt._z.view,
 	data = zt._z.data,
-	event = zt._z.event;
+	event = zt._z.event,
+	$$ = tools.$;
 
 	data.exSetting(_setting);
 	data.addInitBind(_bindEvent);

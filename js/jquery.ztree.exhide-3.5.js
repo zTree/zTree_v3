@@ -1,5 +1,5 @@
 /*
- * JQuery zTree exHideNodes 3.5.13-beta.4
+ * JQuery zTree exHideNodes 3.5.13-beta.5
  * http://zTree.me/
  *
  * Copyright (c) 2010 Hunter.z
@@ -8,7 +8,7 @@
  * http://www.opensource.org/licenses/mit-license.php
  *
  * email: hunter.z@263.net
- * Date: 2013-04-07
+ * Date: 2013-04-12
  */
 (function($){
 	//default init node of exLib
@@ -71,7 +71,7 @@
 					delete n._nocheck;
 				}
 				if (view.setChkClass) {
-					var checkObj = $("#" + n.tId + consts.id.CHECK);
+					var checkObj = $$(n, consts.id.CHECK, setting);
 					view.setChkClass(setting, checkObj, n);
 				}
 				if (view.repairParentChkClassWithSelf) {
@@ -116,7 +116,7 @@
 		showNode: function(setting, node, options) {
 			node.isHidden = false;
 			data.initShowForExCheck(setting, node);
-			$("#" + node.tId).show();
+			$$(node, setting).show();
 		},
 		showNodes: function(setting, nodes, options) {
 			if (!nodes || nodes.length == 0) {
@@ -143,7 +143,7 @@
 			node.isLastNode = false;
 			data.initHideForExCheck(setting, node);
 			view.cancelPreSelectedNode(setting, node);
-			$("#" + node.tId).hide();
+			$$(node, setting).hide();
 		},
 		hideNodes: function(setting, nodes, options) {
 			if (!nodes || nodes.length == 0) {
@@ -271,7 +271,8 @@
 	consts = zt.consts,
 	view = zt._z.view,
 	data = zt._z.data,
-	event = zt._z.event;
+	event = zt._z.event,
+	$$ = tools.$;
 
 	data.addInitNode(_initNode);
 	data.addBeforeA(_beforeA);
