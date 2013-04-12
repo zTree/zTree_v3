@@ -1,4 +1,4 @@
-﻿=ZTree v3.x (JQuery Tree插件) 更新日志=
+=ZTree v3.x (JQuery Tree插件) 更新日志=
 
 <font color="red">为了更好的优化及扩展zTree, 因此决定升级为v3.x，并且对之前的v2.x不兼容，会有很多结构上的修改，对此深感无奈与抱歉，请大家谅解。</font>
 <font color="red">
