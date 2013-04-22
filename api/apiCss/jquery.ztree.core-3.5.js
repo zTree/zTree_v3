@@ -1,5 +1,5 @@
 /*
- * JQuery zTree core 3.5.13-beta.5
+ * JQuery zTree core 3.5.13-beta.6
  * http://zTree.me/
  *
  * Copyright (c) 2010 Hunter.z
@@ -8,7 +8,7 @@
  * http://www.opensource.org/licenses/mit-license.php
  *
  * email: hunter.z@263.net
- * Date: 2013-04-12
+ * Date: 2013-04-22
  */
 (function(o){var E,F,G,H,I,J,r={},K={},s={},L={treeId:"",treeObj:null,view:{addDiyDom:null,autoCancelSelected:!0,dblClickExpand:!0,expandSpeed:"fast",fontCss:{},nameIsHTML:!1,selectedMulti:!0,showIcon:!0,showLine:!0,showTitle:!0},data:{key:{children:"children",name:"name",title:"",url:"url"},simpleData:{enable:!1,idKey:"id",pIdKey:"pId",rootPId:null},keep:{parent:!1,leaf:!1}},async:{enable:!1,contentType:"application/x-www-form-urlencoded",type:"post",dataType:"text",url:"",autoParam:[],otherParam:[],
 dataFilter:null},callback:{beforeAsync:null,beforeClick:null,beforeDblClick:null,beforeRightClick:null,beforeMouseDown:null,beforeMouseUp:null,beforeExpand:null,beforeCollapse:null,beforeRemove:null,onAsyncError:null,onAsyncSuccess:null,onNodeCreated:null,onClick:null,onDblClick:null,onRightClick:null,onMouseDown:null,onMouseUp:null,onExpand:null,onCollapse:null,onRemove:null}},t=[function(b){var a=b.treeObj,c=e.event;a.bind(c.NODECREATED,function(a,c,g){j.apply(b.callback.onNodeCreated,[a,c,g])});

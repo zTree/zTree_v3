@@ -73,9 +73,9 @@
 		function onRemove(e, treeId, treeNode) {
 			showLog("[ "+getTime()+" onRemove ]&nbsp;&nbsp;&nbsp;&nbsp; " + treeNode.name);
 		}
-		function beforeRename(treeId, treeNode, newName) {
+		function beforeRename(treeId, treeNode, newName, isCancel) {
 			className = (className === "dark" ? "":"dark");
-			showLog("[ "+getTime()+" beforeRename ]&nbsp;&nbsp;&nbsp;&nbsp; " + treeNode.name);
+			showLog((isCancel ? "<span style='color:red'>":"") + "[ "+getTime()+" beforeRename ]&nbsp;&nbsp;&nbsp;&nbsp; " + treeNode.name + (isCancel ? "</span>":""));
 			if (newName.length == 0) {
 				alert("Node name can not be empty.");
 				var zTree = $.fn.zTree.getZTreeObj("treeDemo");
@@ -84,8 +84,8 @@
 			}
 			return true;
 		}
-		function onRename(e, treeId, treeNode) {
-			showLog("[ "+getTime()+" onRename ]&nbsp;&nbsp;&nbsp;&nbsp; " + treeNode.name);
+		function onRename(e, treeId, treeNode, isCancel) {
+			showLog((isCancel ? "<span style='color:red'>":"") + "[ "+getTime()+" onRename ]&nbsp;&nbsp;&nbsp;&nbsp; " + treeNode.name + (isCancel ? "</span>":""));
 		}
 		function showRemoveBtn(treeId, treeNode) {
 			return !treeNode.isFirstNode;
@@ -161,7 +161,7 @@
 				<li class="highlight_red">Can use 'beforeEditName' callback trigger custom editing.</li>
 				<li><p><span class="highlight_red">After be familiar with these configurations, I think you can design a more flexible and rational rules!</span><br/>
 					&nbsp;&nbsp;&nbsp;&nbsp;<input type="checkbox" id="selectAll" checked /> Whether select all text, when edit node's name.<br/>
-					remove / rename log:<br/>
+					remove / rename log:&nbsp;&nbsp;<span style="color:red">RED</span> is cancel edit (v3.5.13+)<br/>
 					<ul id="log" class="log"></ul></p>
 				</li>
 				</ul>
