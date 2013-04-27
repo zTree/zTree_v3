@@ -1,4 +1,4 @@
-=ZTree v3.x (JQuery Tree插件) 更新日志=
+﻿=ZTree v3.x (JQuery Tree插件) 更新日志=
 
 <font color="red">为了更好的优化及扩展zTree, 因此决定升级为v3.x，并且对之前的v2.x不兼容，会有很多结构上的修改，对此深感无奈与抱歉，请大家谅解。</font>
 <font color="red">
@@ -14,13 +14,14 @@
 </font>
 
 <font color=#041594>
-*2013.04.22* v3.5.13-beta.6
+*2013.04.27* v3.5.13-beta.8
    * 【增加】beforeRename & onRename 增加 isCancel 参数，可以监控用户 ESC 取消编辑的事件
 
    * 【修改】初始化时 radioType="all", 父节点未展开 且 子节点有被勾选，点击其他 radio 时，不会取消勾选该子节点的bug。
    * 【修改】多棵树拖拽时，拖拽无效后会导致目标书已选择的节点清空的 bug。
    * 【修改】一次性加载全部数据，如果父节点 A 未展开，但下一级的父节点 A1 设置了 open=true 的时候，使用 expandAll 方法导致 A1 的下一级父节点出现重复的 bug
    * 【修改】增加对 iframe 的支持，可以只在主页面加载 zTree 的 js，在 iframe 内创建树 [https://github.com/zTree/zTree_v3/issues/7 Issue Info]
+   * 【修改】引入 exhide 扩展包 导致页面上同时加载多棵树时，根节点 的 连接线图标出现异常 的 bug [http://tieba.baidu.com/p/2277416574]
 
 *2013.03.11* v3.5.12
    * 【修改】由于 jquery 1.9 中移除 event.srcElement 导致的 js 报错的bug。

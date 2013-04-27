@@ -1,5 +1,5 @@
 /*
- * JQuery zTree exHideNodes 3.5.13-beta.6
+ * JQuery zTree exHideNodes 3.5.13-beta.8
  * http://zTree.me/
  *
  * Copyright (c) 2010 Hunter.z
@@ -8,7 +8,7 @@
  * http://www.opensource.org/licenses/mit-license.php
  *
  * email: hunter.z@263.net
- * Date: 2013-04-22
+ * Date: 2013-04-27
  */
 (function($){
 	//default init node of exLib
@@ -283,7 +283,7 @@
 	data.tmpHideParent = -1;
 	data.initNode = function(setting, level, node, parentNode, isFirstNode, isLastNode, openFlag) {
 		if (data.tmpHideParent !== parentNode) {
-			data.tmpHideParent = parentNode;
+			data.tmpHideParent = parentNode == null ? -1 : parentNode;
 			var tmpPNode = (parentNode) ? parentNode: data.getRoot(setting),
 			children = tmpPNode[setting.data.key.children];
 			data.tmpHideFirstNode = view.setFirstNodeForHide(setting, children);
