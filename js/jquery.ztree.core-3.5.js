@@ -1,5 +1,5 @@
 /*
- * JQuery zTree core 3.5.13-beta.8
+ * JQuery zTree core 3.5.13-beta.9
  * http://zTree.me/
  *
  * Copyright (c) 2010 Hunter.z
@@ -492,6 +492,9 @@
 		},
 		getRoot: function(setting) {
 			return setting ? roots[setting.treeId] : null;
+		},
+		getRoots: function() {
+			return roots;
 		},
 		getSetting: function(treeId) {
 			return settings[treeId];
@@ -1511,7 +1514,7 @@
 					}
 
 					data.getRoot(setting).expandTriggerFlag = callbackFlag;
-					if (sonSign) {
+					if (!tools.canAsync(setting, node) && sonSign) {
 						view.expandCollapseSonNode(setting, node, expandFlag, true, function() {
 							if (focus !== false) {try{$$(node, setting).focus().blur();}catch(e){}}
 						});
