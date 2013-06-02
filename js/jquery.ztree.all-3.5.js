@@ -1,6 +1,6 @@
 
 /*
- * JQuery zTree core 3.5.13-beta.9
+ * JQuery zTree core 3.5.13
  * http://zTree.me/
  *
  * Copyright (c) 2010 Hunter.z
@@ -9,7 +9,7 @@
  * http://www.opensource.org/licenses/mit-license.php
  *
  * email: hunter.z@263.net
- * Date: 2013-04-27
+ * Date: 2013-06-02
  */
 (function($){
 	var settings = {}, roots = {}, caches = {},
@@ -202,12 +202,12 @@
 			treeEventType = "contextmenu";
 		} else if (tools.eqs(event.type, "click")) {
 			if (tools.eqs(target.tagName, "span") && target.getAttribute("treeNode"+ consts.id.SWITCH) !== null) {
-				tId = ($(target).parent("li").get(0) || $(target).parentsUntil("li").parent().get(0)).id;
+				tId = tools.getNodeMainDom(target).id;
 				nodeEventType = "switchNode";
 			} else {
 				tmp = tools.getMDom(setting, target, [{tagName:"a", attrName:"treeNode"+consts.id.A}]);
 				if (tmp) {
-					tId = ($(tmp).parent("li").get(0) || $(tmp).parentsUntil("li").parent().get(0)).id;
+					tId = tools.getNodeMainDom(tmp).id;
 					nodeEventType = "clickNode";
 				}
 			}
@@ -215,13 +215,13 @@
 			treeEventType = "dblclick";
 			tmp = tools.getMDom(setting, target, [{tagName:"a", attrName:"treeNode"+consts.id.A}]);
 			if (tmp) {
-				tId = ($(tmp).parent("li").get(0) || $(tmp).parentsUntil("li").parent().get(0)).id;
+				tId = tools.getNodeMainDom(tmp).id;
 				nodeEventType = "switchNode";
 			}
 		}
 		if (treeEventType.length > 0 && tId.length == 0) {
 			tmp = tools.getMDom(setting, target, [{tagName:"a", attrName:"treeNode"+consts.id.A}]);
-			if (tmp) {tId = ($(tmp).parent("li").get(0) || $(tmp).parentsUntil("li").parent().get(0)).id;}
+			if (tmp) {tId = tools.getNodeMainDom(tmp).id;}
 		}
 		// event to node
 		if (tId.length>0) {
@@ -339,8 +339,12 @@
 		addInitNode: function(initNode) {
 			_init.nodes.push(initNode);
 		},
-		addInitProxy: function(initProxy) {
-			_init.proxys.push(initProxy);
+		addInitProxy: function(initProxy, isFirst) {
+			if (!!isFirst) {
+				_init.proxys.splice(0,0,initProxy);
+			} else {
+				_init.proxys.push(initProxy);
+			}
 		},
 		addInitRoot: function(initRoot) {
 			_init.roots.push(initRoot);
@@ -779,6 +783,9 @@
 				curDom = curDom.parentNode;
 			}
 			return null;
+		},
+		getNodeMainDom:function(target) {
+			return ($(target).parent("li").get(0) || $(target).parentsUntil("li").parent().get(0));
 		},
 		uCanDo: function(setting, e) {
 			return true;
@@ -1664,7 +1671,7 @@
 	consts = zt.consts;
 })(jQuery);
 /*
- * JQuery zTree excheck 3.5.13-beta.9
+ * JQuery zTree excheck 3.5.13
  * http://zTree.me/
  *
  * Copyright (c) 2010 Hunter.z
@@ -1673,7 +1680,7 @@
  * http://www.opensource.org/licenses/mit-license.php
  *
  * email: hunter.z@263.net
- * Date: 2013-04-27
+ * Date: 2013-06-02
  */
 (function($){
 	//default consts of excheck
@@ -1754,17 +1761,17 @@
 
 		if (tools.eqs(e.type, "mouseover")) {
 			if (setting.check.enable && tools.eqs(target.tagName, "span") && target.getAttribute("treeNode"+ consts.id.CHECK) !== null) {
-				tId = target.parentNode.id;
+				tId = tools.getNodeMainDom(target).id;
 				nodeEventType = "mouseoverCheck";
 			}
 		} else if (tools.eqs(e.type, "mouseout")) {
 			if (setting.check.enable && tools.eqs(target.tagName, "span") && target.getAttribute("treeNode"+ consts.id.CHECK) !== null) {
-				tId = target.parentNode.id;
+				tId = tools.getNodeMainDom(target).id;
 				nodeEventType = "mouseoutCheck";
 			}
 		} else if (tools.eqs(e.type, "click")) {
 			if (setting.check.enable && tools.eqs(target.tagName, "span") && target.getAttribute("treeNode"+ consts.id.CHECK) !== null) {
-				tId = target.parentNode.id;
+				tId = tools.getNodeMainDom(target).id;
 				nodeEventType = "checkNode";
 			}
 		}
@@ -1783,7 +1790,7 @@
 			}
 		}
 		var proxyResult = {
-			stop: false,
+			stop: nodeEventType === "checkNode",
 			node: node,
 			nodeEventType: nodeEventType,
 			nodeEventCallback: nodeEventCallback,
@@ -1831,7 +1838,7 @@
 				checked = !node[checkedKey];
 			}
 			callbackFlag = !!callbackFlag;
-			
+
 			if (node[checkedKey] === checked && !checkTypeFlag) {
 				return;
 			} else if (callbackFlag && tools.apply(this.setting.callback.beforeCheck, [setting.treeId, node], true) == false) {
@@ -2215,7 +2222,7 @@
 					if (sNode.chkDisabled === true) hasDisable = true;
 				}
 			}
-			
+
 			if (node != data.getRoot(setting) && node.chkDisabled !== true) {
 				if (hasDisable && node.nocheck !== true) {
 					data.makeChkFlag(setting, node);
@@ -2257,7 +2264,7 @@
 	data.addInitUnBind(_unbindEvent);
 	data.addInitCache(_initCache);
 	data.addInitNode(_initNode);
-	data.addInitProxy(_eventProxy);
+	data.addInitProxy(_eventProxy, true);
 	data.addInitRoot(_initRoot);
 	data.addBeforeA(_beforeA);
 	data.addZTreeTools(_zTreeTools);
@@ -2290,7 +2297,7 @@
 	}
 })(jQuery);
 /*
- * JQuery zTree exedit 3.5.13-beta.9
+ * JQuery zTree exedit 3.5.13
  * http://zTree.me/
  *
  * Copyright (c) 2010 Hunter.z
@@ -2299,7 +2306,7 @@
  * http://www.opensource.org/licenses/mit-license.php
  *
  * email: hunter.z@263.net
- * Date: 2013-04-27
+ * Date: 2013-06-02
  */
 (function($){
 	//default consts of exedit
@@ -2418,7 +2425,7 @@
 		if (tools.eqs(e.type, "mouseover")) {
 			tmp = tools.getMDom(setting, target, [{tagName:"a", attrName:"treeNode"+consts.id.A}]);
 			if (tmp) {
-				tId = tmp.parentNode.id;
+				tId = tools.getNodeMainDom(tmp).id;
 				nodeEventType = "hoverOverNode";
 			}
 		} else if (tools.eqs(e.type, "mouseout")) {
@@ -2430,7 +2437,7 @@
 		} else if (tools.eqs(e.type, "mousedown")) {
 			tmp = tools.getMDom(setting, target, [{tagName:"a", attrName:"treeNode"+consts.id.A}]);
 			if (tmp) {
-				tId = tmp.parentNode.id;
+				tId = tools.getNodeMainDom(tmp).id;
 				nodeEventType = "mousedownNode";
 			}
 		}
