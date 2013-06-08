@@ -761,7 +761,7 @@
 					var obj = iframeList.get(i),
 					r = tools.getAbs(obj),
 					dragMask = $$("<div id='zTreeMask_" + i + "' class='zTreeMask' style='top:" + r[1] + "px; left:" + r[0] + "px; width:" + obj.offsetWidth + "px; height:" + obj.offsetHeight + "px;'></div>", setting);
-					dragMask.appendTo(body);
+					dragMask.appendTo($(setting.treeObj.get(0).ownerDocument.body));
 					root.dragMaskList.push(dragMask);
 				}
 			}
