@@ -1,5 +1,5 @@
 /*
- * JQuery zTree exedit 3.5.13
+ * JQuery zTree exedit 3.5.14-beta.1
  * http://zTree.me/
  *
  * Copyright (c) 2010 Hunter.z
@@ -8,7 +8,7 @@
  * http://www.opensource.org/licenses/mit-license.php
  *
  * email: hunter.z@263.net
- * Date: 2013-06-02
+ * Date: 2013-06-12
  */
 (function($){
 	//default consts of exedit
@@ -720,8 +720,10 @@
 	//method of tools for zTree
 	_tools = {
 		getAbs: function (obj) {
-			var oRect = obj.getBoundingClientRect();
-			return [oRect.left,oRect.top]
+			var oRect = obj.getBoundingClientRect(),
+			scrollTop = document.body.scrollTop+document.documentElement.scrollTop,
+			scrollLeft = document.body.scrollLeft+document.documentElement.scrollLeft;
+			return [oRect.left+scrollLeft,oRect.top+scrollTop];
 		},
 		inputFocus: function(inputObj) {
 			if (inputObj.get(0)) {
@@ -761,7 +763,7 @@
 					var obj = iframeList.get(i),
 					r = tools.getAbs(obj),
 					dragMask = $$("<div id='zTreeMask_" + i + "' class='zTreeMask' style='top:" + r[1] + "px; left:" + r[0] + "px; width:" + obj.offsetWidth + "px; height:" + obj.offsetHeight + "px;'></div>", setting);
-					dragMask.appendTo(body);
+					dragMask.appendTo($$("body", setting));
 					root.dragMaskList.push(dragMask);
 				}
 			}

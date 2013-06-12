@@ -1,5 +1,5 @@
 /*
- * JQuery zTree core 3.5.13
+ * JQuery zTree core 3.5.14-beta.1
  * http://zTree.me/
  *
  * Copyright (c) 2010 Hunter.z
@@ -8,7 +8,7 @@
  * http://www.opensource.org/licenses/mit-license.php
  *
  * email: hunter.z@263.net
- * Date: 2013-06-02
+ * Date: 2013-06-12
  */
 (function($){
 	var settings = {}, roots = {}, caches = {},
@@ -874,12 +874,13 @@
 				nObj = $$(node, setting);
 			}
 			var ulObj = $$(node, consts.id.UL, setting);
-			if (!ulObj.get(0)) {
-				var childKey = setting.data.key.children,
-				childHtml = view.appendNodes(setting, node.level+1, node[childKey], node, false, true);
-				view.makeUlHtml(setting, node, html, childHtml.join(''));
-				nObj.append(html.join(''));
+			if (ulObj.get(0)) {
+				ulObj.remove();
 			}
+			var childKey = setting.data.key.children,
+			childHtml = view.appendNodes(setting, node.level+1, node[childKey], node, false, true);
+			view.makeUlHtml(setting, node, html, childHtml.join(''));
+			nObj.append(html.join(''));
 		},
 		asyncNode: function(setting, node, isSilent, callback) {
 			var i, l;
