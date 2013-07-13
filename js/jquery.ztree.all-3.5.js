@@ -1,6 +1,6 @@
 
 /*
- * JQuery zTree core 3.5.14
+ * JQuery zTree core v3.5.15-beta.1
  * http://zTree.me/
  *
  * Copyright (c) 2010 Hunter.z
@@ -9,7 +9,7 @@
  * http://www.opensource.org/licenses/mit-license.php
  *
  * email: hunter.z@263.net
- * Date: 2013-06-28
+ * Date: 2013-07-13
  */
 (function($){
 	var settings = {}, roots = {}, caches = {},
@@ -1672,7 +1672,7 @@
 	consts = zt.consts;
 })(jQuery);
 /*
- * JQuery zTree excheck 3.5.14
+ * JQuery zTree excheck v3.5.15-beta.1
  * http://zTree.me/
  *
  * Copyright (c) 2010 Hunter.z
@@ -1681,7 +1681,7 @@
  * http://www.opensource.org/licenses/mit-license.php
  *
  * email: hunter.z@263.net
- * Date: 2013-06-28
+ * Date: 2013-07-13
  */
 (function($){
 	//default consts of excheck
@@ -2298,7 +2298,7 @@
 	}
 })(jQuery);
 /*
- * JQuery zTree exedit 3.5.14
+ * JQuery zTree exedit v3.5.15-beta.1
  * http://zTree.me/
  *
  * Copyright (c) 2010 Hunter.z
@@ -2307,7 +2307,7 @@
  * http://www.opensource.org/licenses/mit-license.php
  *
  * email: hunter.z@263.net
- * Date: 2013-06-28
+ * Date: 2013-07-13
  */
 (function($){
 	//default consts of exedit
@@ -2475,11 +2475,9 @@
 	//update zTreeObj, add method of edit
 	_zTreeTools = function(setting, zTreeTools) {
 		zTreeTools.cancelEditName = function(newName) {
-			var root = data.getRoot(setting),
-			nameKey = setting.data.key.name,
-			node = root.curEditNode;
+			var root = data.getRoot(setting);
 			if (!root.curEditNode) return;
-			view.cancelCurEditNode(setting, newName?newName:node[nameKey]);
+			view.cancelCurEditNode(setting, newName?newName:null, true);
 		}
 		zTreeTools.copyNode = function(targetNode, node, moveType, isSilent) {
 			if (!node) return null;
@@ -3123,19 +3121,18 @@
 				tools.apply(setting.view.addHoverDom, [setting.treeId, node]);
 			}
 		},
-		cancelCurEditNode: function (setting, forceName) {
+		cancelCurEditNode: function (setting, forceName, isCancel) {
 			var root = data.getRoot(setting),
 			nameKey = setting.data.key.name,
 			node = root.curEditNode;
 
 			if (node) {
 				var inputObj = root.curEditInput,
-				newName = forceName ? forceName:inputObj.val(),
-				isCancel = !!forceName;
+				newName = forceName ? forceName:(isCancel ? node[nameKey]: inputObj.val());
 				if (tools.apply(setting.callback.beforeRename, [setting.treeId, node, newName, isCancel], true) === false) {
 					return false;
 				} else {
-					node[nameKey] = newName ? newName:inputObj.val();
+					node[nameKey] = newName;
 					setting.treeObj.trigger(consts.event.RENAME, [setting.treeId, node, isCancel]);
 				}
 				var aObj = $$(node, consts.id.A, setting);
@@ -3180,7 +3177,7 @@
 					view.editNodeBlur = true;
 					view.cancelCurEditNode(setting);
 				} else if (event.keyCode=="27") {
-					view.cancelCurEditNode(setting, node[nameKey]);
+					view.cancelCurEditNode(setting, null, true);
 				}
 			}).bind('click', function(event) {
 				return false;
@@ -3478,6 +3475,10 @@
 		var root = data.getRoot(setting);
 		if (e && (tools.eqs(e.type, "mouseover") || tools.eqs(e.type, "mouseout") || tools.eqs(e.type, "mousedown") || tools.eqs(e.type, "mouseup"))) {
 			return true;
+		}
+		if (root.curEditNode) {
+			view.editNodeBlur = false;
+			root.curEditInput.focus();
 		}
 		return (!root.curEditNode) && (_uCanDo ? _uCanDo.apply(view, arguments) : true);
 	}
