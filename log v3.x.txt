@@ -14,13 +14,11 @@
 </font>
 
 <font color=#041594>
-遗留问题 iframe-shim：http://tieba.baidu.com/p/2335038886
-需要检查 http://tieba.baidu.com/p/2372557947
-修改后联系 mmeroad http://ztreeapi.iteye.com/blog/1881286#comments
 
 *2013.07.13* v3.5.15
    * 【修改】 使用 cancelEditName 方法时，beforeRename & onRename 的 isCancel 始终为 false 的bug
    * 【修改】 编辑状态， beforeRename 回调 return false 时，提示信息导致 input 失去焦点后， 当树再次得到焦点时，让 input 自动获取焦点
+   * 【修改】 判断拖拽到节点的 <a> 标签中自定义的无 id 组件判断错误的bug
    * 【修改】 async_edit.html demo 中 添加按钮 显示的 bug
 
 *2013.06.28* v3.5.14
@@ -195,4 +193,3 @@
    * 【修正】treeNode 节点数据的属性更加合理，并且增加了一些方法
    * 【修正】拖拽操作更加灵活方便，更容易制定自己的规则
    * 【修正】其他若干修改，详细对比请参考 url：[http://www.ztree.me/v3/faq.php#_101 zTree v3.0 常见问题]
-

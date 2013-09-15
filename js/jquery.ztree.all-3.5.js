@@ -1,6 +1,6 @@
 
 /*
- * JQuery zTree core v3.5.15-beta.1
+ * JQuery zTree core v3.5.15-beta.2
  * http://zTree.me/
  *
  * Copyright (c) 2010 Hunter.z
@@ -9,7 +9,7 @@
  * http://www.opensource.org/licenses/mit-license.php
  *
  * email: hunter.z@263.net
- * Date: 2013-07-13
+ * Date: 2013-09-15
  */
 (function($){
 	var settings = {}, roots = {}, caches = {},
@@ -786,6 +786,9 @@
 		},
 		getNodeMainDom:function(target) {
 			return ($(target).parent("li").get(0) || $(target).parentsUntil("li").parent().get(0));
+		},
+		isChildOrSelf: function(dom, parentId) {
+			return ( $(dom).closest("#" + parentId).length> 0 );
 		},
 		uCanDo: function(setting, e) {
 			return true;
@@ -1672,7 +1675,7 @@
 	consts = zt.consts;
 })(jQuery);
 /*
- * JQuery zTree excheck v3.5.15-beta.1
+ * JQuery zTree excheck v3.5.15-beta.2
  * http://zTree.me/
  *
  * Copyright (c) 2010 Hunter.z
@@ -1681,7 +1684,7 @@
  * http://www.opensource.org/licenses/mit-license.php
  *
  * email: hunter.z@263.net
- * Date: 2013-07-13
+ * Date: 2013-09-15
  */
 (function($){
 	//default consts of excheck
@@ -2298,7 +2301,7 @@
 	}
 })(jQuery);
 /*
- * JQuery zTree exedit v3.5.15-beta.1
+ * JQuery zTree exedit v3.5.15-beta.2
  * http://zTree.me/
  *
  * Copyright (c) 2010 Hunter.z
@@ -2307,7 +2310,7 @@
  * http://www.opensource.org/licenses/mit-license.php
  *
  * email: hunter.z@263.net
- * Date: 2013-07-13
+ * Date: 2013-09-15
  */
 (function($){
 	//default consts of exedit
@@ -2743,7 +2746,7 @@
 					isTreeLeft = (isLeft && targetSetting.treeObj.scrollLeft() <= 0),
 					isTreeRight = (isRight && (targetSetting.treeObj.scrollLeft() + targetSetting.treeObj.width()+10) >= scrollWidth);
 
-					if (event.target.id && targetSetting.treeObj.find("#" + event.target.id).length > 0) {
+					if (event.target && tools.isChildOrSelf(event.target, targetSetting.treeId)) {
 						//get node <li> dom
 						var targetObj = event.target;
 						while (targetObj && targetObj.tagName && !tools.eqs(targetObj.tagName, "li") && targetObj.id != targetSetting.treeId) {
@@ -2762,18 +2765,15 @@
 								break;
 							}
 						}
-						if (canMove) {
-							if (event.target.id &&
-								(event.target.id == (targetObj.id + consts.id.A) || $(event.target).parents("#" + targetObj.id + consts.id.A).length > 0)) {
-								tmpTarget = $(targetObj);
-								tmpTargetNodeId = targetObj.id;
-							}
+						if (canMove && event.target && tools.isChildOrSelf(event.target, targetObj.id + consts.id.A)) {
+							tmpTarget = $(targetObj);
+							tmpTargetNodeId = targetObj.id;
 						}
 					}
 
 					//the mouse must be in zTree
 					tmpNode = nodes[0];
-					if (isTreeInner && (event.target.id == targetSetting.treeId || $(event.target).parents("#" + targetSetting.treeId).length>0)) {
+					if (isTreeInner && tools.isChildOrSelf(event.target, targetSetting.treeId)) {
 						//judge mouse move in root of ztree
 						if (!tmpTarget && (event.target.id == targetSetting.treeId || isTreeTop || isTreeBottom || isTreeLeft || isTreeRight) && (isOtherTree || (!isOtherTree && tmpNode.parentTId))) {
 							tmpTarget = targetSetting.treeObj;
