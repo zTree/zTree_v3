@@ -41,7 +41,7 @@
 	<h3>Examples of function</h3>
 	<h4>1. Expand the first selected node. (and expand this node's child nodes)</h4>
 	<pre xmlns=""><code>var treeObj = $.fn.zTree.getZTreeObj("tree");
-var nodes = treeObj.getSelectedNode();
+var nodes = treeObj.getSelectedNodes();
 if (nodes.length>0) {
 	treeObj.expandNode(nodes[0], true, true, true);
 }

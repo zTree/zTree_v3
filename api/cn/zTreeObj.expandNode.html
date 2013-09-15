@@ -41,7 +41,7 @@
 	<h3>function 举例</h3>
 	<h4>1. 展开当前选择的第一个节点（包括其全部子节点）</h4>
 	<pre xmlns=""><code>var treeObj = $.fn.zTree.getZTreeObj("tree");
-var nodes = treeObj.getSelectedNode();
+var nodes = treeObj.getSelectedNodes();
 if (nodes.length>0) {
 	treeObj.expandNode(nodes[0], true, true, true);
 }
