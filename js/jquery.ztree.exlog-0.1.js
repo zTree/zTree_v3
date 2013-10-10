@@ -43,6 +43,15 @@
 		}
 		return nodes;
 	},
+	//get top parent node
+	$.fn.zTree.getTopParentNode = function(node)
+	{
+		while(node && node.getParentNode() != null)
+		{
+			node = node.getParentNode();
+		}
+		return node;
+	},
 	//expand level
 	$.fn.zTree.expandLevel = function(level)
 	{
