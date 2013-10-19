@@ -15,12 +15,15 @@
 
 <font color=#041594>
 
-*2013.10.07* v3.5.15
+*2013.10.19* v3.5.15
+   * 【增加】setting.view.txtSelectedEnable 属性，满足部分项目中客户对于可以选择节点文本信息的强烈欲望。
+
    * 【修改】 exhide 扩展包导致操作子节点后 isLastNode 属性异常 的bug
    * 【修改】 使用 cancelEditName 方法时，beforeRename & onRename 的 isCancel 始终为 false 的bug
    * 【修改】 编辑状态， beforeRename 回调 return false 时，提示信息导致 input 失去焦点后， 当树再次得到焦点时，让 input 自动获取焦点
    * 【修改】 判断拖拽到节点的 <a> 标签中自定义的无 id 组件判断错误的bug
    * 【修改】 async_edit.html demo 中 添加按钮 显示的 bug
+   * 【修改】 当没有开启异步加载模式下，对于没有子节点的父节点，即使设置 open=true 在初始化时也不会设置为展开状态的bug （对于异步加载模式下依然会强行设置为折叠状态）
 
 *2013.06.28* v3.5.14
    * 【修改】 拖拽节点时 iframe 遮罩异常的bug

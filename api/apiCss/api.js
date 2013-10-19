@@ -181,7 +181,8 @@ var apiContent = {
 			{id:7008, pId:70, t:"selectedMulti", name:"selectedMulti : true,", iconSkin:"core", showAPI:true},
 			{id:7009, pId:70, t:"showIcon", name:"showIcon : true,", iconSkin:"core", showAPI:true},
 			{id:7010, pId:70, t:"showLine", name:"showLine : true,", iconSkin:"core", showAPI:true},
-			{id:7011, pId:70, t:"showTitle", name:"showTitle : true", iconSkin:"core", showAPI:true},
+			{id:7011, pId:70, t:"showTitle", name:"showTitle : true,", iconSkin:"core", showAPI:true},
+			{id:7012, pId:70, t:"txtSelectedEnable", name:"txtSelectedEnable : false", iconSkin:"core", showAPI:true},
 			{id:71, pId:1, name:"}"},
 
 			{id:2, pId:0, name:"}"}

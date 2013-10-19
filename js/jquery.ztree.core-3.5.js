@@ -1,5 +1,5 @@
 /*
- * JQuery zTree core v3.5.15-beta.3
+ * JQuery zTree core v3.5.15
  * http://zTree.me/
  *
  * Copyright (c) 2010 Hunter.z
@@ -8,7 +8,7 @@
  * http://www.opensource.org/licenses/mit-license.php
  *
  * email: hunter.z@263.net
- * Date: 2013-10-07
+ * Date: 2013-10-15
  */
 (function($){
 	var settings = {}, roots = {}, caches = {},
@@ -66,7 +66,8 @@
 			selectedMulti: true,
 			showIcon: true,
 			showLine: true,
-			showTitle: true
+			showTitle: true,
+			txtSelectedEnable: false
 		},
 		data: {
 			key: {
@@ -274,15 +275,13 @@
 		n.level = level;
 		n.tId = setting.treeId + "_" + (++r.zId);
 		n.parentTId = parentNode ? parentNode.tId : null;
+		n.open = (typeof n.open == "string") ? tools.eqs(n.open, "true") : !!n.open;
 		if (n[childKey] && n[childKey].length > 0) {
-			if (typeof n.open == "string") n.open = tools.eqs(n.open, "true");
-			n.open = !!n.open;
 			n.isParent = true;
 			n.zAsync = true;
 		} else {
-			n.open = false;
-			if (typeof n.isParent == "string") n.isParent = tools.eqs(n.isParent, "true");
-			n.isParent = !!n.isParent;
+			n.isParent = (typeof n.isParent == "string") ? tools.eqs(n.isParent, "true") : !!n.isParent;
+			n.open = (n.isParent && !setting.async.enable) ? n.open : false;
 			n.zAsync = !n.isParent;
 		}
 		n.isFirstNode = isFirstNode;
@@ -623,13 +622,16 @@
 				treeId: setting.treeId
 			},
 			o = setting.treeObj;
-			// for can't select text
-			o.bind('selectstart', function(e){
+			if (!setting.view.txtSelectedEnable) {
+				// for can't select text
+				o.bind('selectstart', function(e){
+					var node
 					var n = e.originalEvent.srcElement.nodeName.toLowerCase();
 					return (n === "input" || n === "textarea" );
-			}).css({
-				"-moz-user-select":"-moz-none"
-			});
+				}).css({
+					"-moz-user-select":"-moz-none"
+				});
+			}
 			o.bind('click', eventParam, event.proxy);
 			o.bind('dblclick', eventParam, event.proxy);
 			o.bind('mouseover', eventParam, event.proxy);

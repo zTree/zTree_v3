@@ -9,6 +9,7 @@
 			<p class="highlight_red">1、初始化节点数据时，如果设定 treeNode.open = true，则会直接展开此节点</p>
 			<p class="highlight_red">2、叶子节点 treeNode.open = false</p>
 			<p class="highlight_red">3、为了解决部分朋友生成 json 数据出现的兼容问题, 支持 "false","true" 字符串格式的数据</p>
+			<p class="highlight_red">4、非异步加载模式下，无子节点的父节点设置 open=true 后，可显示为展开状态，但异步加载模式下不会生效。（v3.5.15+） </p>
 			<p>默认值：false</p>
 		</div>
 	</div>
