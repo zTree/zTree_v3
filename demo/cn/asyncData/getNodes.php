@@ -30,7 +30,7 @@ else $pName = $pName.".";
 for ($i=1; $i<5; $i++) {
 	$nId = $pId.$i;
 	$nName = $pName."n".$i;
-	echo "{ id:'".$nId."',	name:'".$nName."',	open:true, isParent:".(( $pLevel < "2" && ($i%2)!=0)?"true":"false").($pCheck==""?"":((($pLevel < "2" && ($i%2)!=0)?", halfCheck:true":"").($i==3?", checked:true":"")))."}";
+	echo "{ id:'".$nId."',	name:'".$nName."',	isParent:".(( $pLevel < "2" && ($i%2)!=0)?"true":"false").($pCheck==""?"":((($pLevel < "2" && ($i%2)!=0)?", halfCheck:true":"").($i==3?", checked:true":"")))."}";
 	if ($i<4) {
 		echo ",";
 	}
