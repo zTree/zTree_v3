@@ -1,5 +1,5 @@
 /*
- * JQuery zTree exedit v3.5.16-beta.1
+ * JQuery zTree exedit v3.5.16-beta.2
  * http://zTree.me/
  *
  * Copyright (c) 2010 Hunter.z
