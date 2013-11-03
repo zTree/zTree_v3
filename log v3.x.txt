@@ -13,7 +13,9 @@
 
 </font>
 
-<font color=#041594>
+
+*2013.11.03* v3.5.16-beta.1
+   * 【修改】使用 destory 方法销毁树以后，依然可以从 getZTreeObj 方法中获取到 zTree 对象的 bug。
 
 *2013.10.19* v3.5.15
    * 【增加】setting.view.txtSelectedEnable 属性，满足部分项目中客户对于可以选择节点文本信息的强烈欲望。
