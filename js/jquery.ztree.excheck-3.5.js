@@ -71,7 +71,18 @@
 		var o = setting.treeObj,
 		c = consts.event;
 		o.bind(c.CHECK, function (event, srcEvent, treeId, node) {
-			tools.apply(setting.callback.onCheck, [!!srcEvent?srcEvent : event, treeId, node]);
+			/**
+			 * 20131121 xh
+			 * 	问题：树的oncheck事件处理函数会接收一个event参数，但是event.type是"click"而不是"ztree_check"。
+			 * 		在3.2版本中event.type是"ztree_check"。
+			 * 	原因：3.2版本触发事件的写法是：tools.apply(setting.callback.onCheck, [event, treeId, node]);
+			 * 		  3.5版本将其改成了：tools.apply(setting.callback.onCheck, [!!srcEvent?srcEvent : event, treeId, node]);
+			 * 		当有srcEvent时，会将srcEvent传给事件处理函数，而srcEvent是原生的点击事件，其type为"click"
+			 * 	解决办法：既然是oncheck事件，那么event.type为"click"不合适。较好的做法是将srcEvent记录在event对象中，然后将event传给事件处理函数。
+			 * 		这样事件处理函数即可得到srcEvent，又可以得到event，并且event.type
+			 */
+			event.srcEvent = srcEvent;
+			tools.apply(setting.callback.onCheck, [event, treeId, node]);
 		});
 	},
 	_unbindEvent = function(setting) {
