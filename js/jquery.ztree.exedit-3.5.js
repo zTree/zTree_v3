@@ -17,7 +17,8 @@
 			DRAG: "ztree_drag",
 			DROP: "ztree_drop",
 			REMOVE: "ztree_remove",
-			RENAME: "ztree_rename"
+			RENAME: "ztree_rename",
+			DRAGMOVE:"ztree_dragmove" //20131120 xh:扩展ztree，增加onDragMove事件
 		},
 		id: {
 			EDIT: "_edit",
@@ -69,6 +70,7 @@
 			beforeEditName:null,
 			beforeRename:null,
 			onDrag:null,
+			onDragMove:null,  //20131120 xh:扩展ztree，增加onDragMove事件
 			onDrop:null,
 			onRename:null
 		}
@@ -105,6 +107,12 @@
 		o.bind(c.DROP, function (event, srcEvent, treeId, treeNodes, targetNode, moveType, isCopy) {
 			tools.apply(setting.callback.onDrop, [srcEvent, treeId, treeNodes, targetNode, moveType, isCopy]);
 		});
+		
+		//20131120 xh:扩展ztree，支持onDragMove事件
+		o.unbind(c.DRAGMOVE);
+		o.bind(c.DRAGMOVE,function(event,srcEvent){
+			tools.apply(setting.callback.onDragMove,[srcEvent]);
+		})
 	},
 	_unbindEvent = function(setting) {
 		var o = setting.treeObj;
@@ -591,6 +599,13 @@
 					}
 					preTmpTargetNodeId = tmpTargetNodeId;
 					preTmpMoveType = moveType;
+					
+					/**
+					 * 20131120 xh
+					 * 拖拽的过程中需要触发dragmove事件，因为可能外部接受拖拽的地方需要做处理，一个实际的例子
+					 * 就是从控件树上拖拽控件到设计器上，设计器上需要有光标提示。
+					 */
+					setting.treeObj.trigger(consts.event.DRAGMOVE, [event]);
 				}
 				return false;
 			}
