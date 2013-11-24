@@ -1,12 +1,12 @@
 <div class="apiDetail">
 <div>
-	<h2><span>Function(event, treeId, treeNodes)</span><span class="path">setting.callback.</span>onDrag</h2>
+	<h2><span>Function(event, treeId, treeNodes)</span><span class="path">setting.callback.</span>onDragMove</h2>
 	<h3>Overview<span class="h3_info">[ depends on <span class="highlight_green">jquery.ztree.exedit</span> js ]</span></h3>
 	<div class="desc">
 		<p></p>
 		<div class="longdesc">
-			<p>Used to capture the drag event when drag node.</p>
-			<p class="highlight_red">If you set 'setting.callback.beforeDrag',and return false, zTree will stop drag, and will not trigger the 'onDragMove' & 'onDrag' callback.</p>
+			<p>Used to capture the drag-move event when drag & drop node.</p>
+			<p class="highlight_red">Mainly used to capture the DOM which the nodes was drag in. </p>
 			<p>Default: null</p>
 		</div>
 	</div>
@@ -20,13 +20,13 @@
 	<p>A collection of the nodes which will be dragged</p>
 	</div>
 	<h3>Examples of setting & function</h3>
-	<h4>1. When drag nodes, alert the number of dragged nodes.</h4>
-	<pre xmlns=""><code>function zTreeOnDrag(event, treeId, treeNodes) {
-    alert(treeNodes.length);
+	<h4>1. When drag nodes, output the target dom.</h4>
+	<pre xmlns=""><code>function zTreeOnDragMove(event, treeId, treeNodes) {
+	console.log(event.target);
 };
 var setting = {
 	callback: {
-		onDrag: zTreeOnDrag
+		onDragMove: zTreeOnDragMove
 	}
 };
 ......</code></pre>

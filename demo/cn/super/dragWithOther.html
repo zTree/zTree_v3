@@ -32,6 +32,22 @@
 			innerTree: function(treeId, treeNodes, targetNode) {
 				return targetNode!=null && targetNode.isParent && targetNode.tId == treeNodes[0].parentTId;
 			},
+			dragMove: function(e, treeId, treeNodes) {
+				var p = null, pId = 'dom_' + treeNodes[0].pId;
+				if (e.target.id == pId) {
+					p = $(e.target);
+				} else {
+					p = $(e.target).parent('#' + pId);
+					if (!p.get(0)) {
+						p = null;
+					}
+				}
+
+				$('.domBtnDiv .active').removeClass('active');
+				if (p) {
+					p.addClass('active');
+				}
+			},
 			dropTree2Dom: function(e, treeId, treeNodes, targetNode, moveType) {
 				var domId = "dom_" + treeNodes[0].getParentNode().id;
 				if (moveType == null && (domId == e.target.id || $(e.target).parents("#" + domId).length > 0)) {
@@ -171,6 +187,7 @@
 			callback: {
 				beforeDrag: MoveTest.dragTree2Dom,
 				onDrop: MoveTest.dropTree2Dom,
+				onDragMove: MoveTest.dragMove,
 				onMouseUp: MoveTest.dom2Tree
 			},
 			view: {
@@ -201,6 +218,7 @@
 .domBtn {display:inline-block;cursor:pointer;padding:2px;margin:2px 10px;border:1px gray solid;background-color:#FFE6B0}
 .domBtn_Disabled {display:inline-block;cursor:default;padding:2px;margin:2px 10px;border:1px gray solid;background-color:#DFDFDF;color:#999999}
 .dom_tmp {position:absolute;font-size:12px;}
+.active {background-color: #93C3CF}
 	</style>
 </HEAD>
 
@@ -215,7 +233,7 @@
 		<ul class="info">
 			<li class="title"><h2>实现方法说明</h2>
 				<ul class="list">
-				<li>zTree v3.2 版本修正了 onDrag/onDrop 中的 event 对象，因此可以较容易的控制将节点拖拽到其他 DOM </li>
+				<li>zTree v3.2 版本修正了 onDrag/onDrop 中的 event 对象; v3.5.16 版本增加了 onDragMove; 因此可以较容易的控制将节点拖拽到其他 DOM </li>
 				<li class="highlight_red">将其他 DOM 拖拽到 zTree 需要自己制作相关的拖拽代码</li>
 				<li class="highlight_red">这仅仅是一个最简单的演示，如果需要更炫的效果，需要制作更复杂的代码</li>
 				</ul>

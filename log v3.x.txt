@@ -13,8 +13,13 @@
 
 </font>
 
-*2013.11.03* v3.5.16-beta.2
+
+*2013.11.24* v3.5.16-beta.3
+   * 【增加】onDragMove 回调，便于控制 zTree 节点与其他 DOM 的拖拽操作。（感谢 yumi301）
+
    * 【修改】使用 destory 方法销毁树以后，依然可以从 getZTreeObj 方法中获取到 zTree 对象的 bug。
+   * 【修改】onCheck 回调的 event，恢复为 zTree 自身的 event 事件，同时利用 srcEvent 传递原始 event 对象。（感谢 yumi301）
+
 
 *2013.10.19* v3.5.15
    * 【增加】setting.view.txtSelectedEnable 属性，满足部分项目中客户对于可以选择节点文本信息的强烈欲望。

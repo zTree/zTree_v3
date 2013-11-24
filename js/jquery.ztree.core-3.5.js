@@ -1,5 +1,5 @@
 /*
- * JQuery zTree core v3.5.16-beta.2
+ * JQuery zTree core v3.5.16-beta.3
  * http://zTree.me/
  *
  * Copyright (c) 2010 Hunter.z
@@ -8,7 +8,7 @@
  * http://www.opensource.org/licenses/mit-license.php
  *
  * email: hunter.z@263.net
- * Date: 2013-11-03
+ * Date: 2013-11-24
  */
 (function($){
 	var settings = {}, roots = {}, caches = {},

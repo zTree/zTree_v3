@@ -58,7 +58,7 @@ var apiContent = {
 				onNodeCreated: this.onNodeCreated,
 				beforeClick: this.beforeClick
 			}
-		}
+		};
 		var setting_nodes =[
 			{id:1, pId:0, t:"setting", name:"var setting = {", open:true},
 			{id:11, pId:1, t:"treeId", name:"treeId : \"\",", iconSkin:"core", showAPI:true},
@@ -99,8 +99,9 @@ var apiContent = {
 			{id:3017, pId:30, t:"onCheck", name:"onCheck : null,", iconSkin:"check", showAPI:true},
 			{id:3018, pId:30, t:"onClick", name:"onClick : null,", iconSkin:"core", showAPI:true},
 			{id:3019, pId:30, t:"onCollapse", name:"onCollapse : null,", iconSkin:"core", showAPI:true},
-			{id:3019, pId:30, t:"onDblClick", name:"onDblClick : null,", iconSkin:"core", showAPI:true},
+			{id:3029, pId:30, t:"onDblClick", name:"onDblClick : null,", iconSkin:"core", showAPI:true},
 			{id:3020, pId:30, t:"onDrag", name:"onDrag : null,", iconSkin:"edit", showAPI:true},
+			{id:3030, pId:30, t:"onDragMove", name:"onDragMove : null,", iconSkin:"edit", showAPI:true},
 			{id:3021, pId:30, t:"onDrop", name:"onDrop : null,", iconSkin:"edit", showAPI:true},
 			{id:3022, pId:30, t:"onExpand", name:"onExpand : null,", iconSkin:"core", showAPI:true},
 			{id:3023, pId:30, t:"onMouseDown", name:"onMouseDown : null,", iconSkin:"core", showAPI:true},

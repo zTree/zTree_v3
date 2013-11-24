@@ -1,5 +1,5 @@
 /*
- * JQuery zTree exedit v3.5.16-beta.2
+ * JQuery zTree exedit v3.5.16-beta.3
  * http://zTree.me/
  *
  * Copyright (c) 2010 Hunter.z
@@ -8,7 +8,7 @@
  * http://www.opensource.org/licenses/mit-license.php
  *
  * email: hunter.z@263.net
- * Date: 2013-11-03
+ * Date: 2013-11-24
  */
 (function($){
 	//default consts of exedit
@@ -18,7 +18,7 @@
 			DROP: "ztree_drop",
 			REMOVE: "ztree_remove",
 			RENAME: "ztree_rename",
-			DRAGMOVE:"ztree_dragmove" //20131120 xh:扩展ztree，增加onDragMove事件
+			DRAGMOVE:"ztree_dragmove"
 		},
 		id: {
 			EDIT: "_edit",
@@ -70,7 +70,7 @@
 			beforeEditName:null,
 			beforeRename:null,
 			onDrag:null,
-			onDragMove:null,  //20131120 xh:扩展ztree，增加onDragMove事件
+			onDragMove:null,
 			onDrop:null,
 			onRename:null
 		}
@@ -104,15 +104,13 @@
 			tools.apply(setting.callback.onDrag, [srcEvent, treeId, treeNodes]);
 		});
 
+		o.bind(c.DRAGMOVE,function(event, srcEvent, treeId, treeNodes){
+			tools.apply(setting.callback.onDragMove,[srcEvent, treeId, treeNodes]);
+		});
+
 		o.bind(c.DROP, function (event, srcEvent, treeId, treeNodes, targetNode, moveType, isCopy) {
 			tools.apply(setting.callback.onDrop, [srcEvent, treeId, treeNodes, targetNode, moveType, isCopy]);
 		});
-		
-		//20131120 xh:扩展ztree，支持onDragMove事件
-		o.unbind(c.DRAGMOVE);
-		o.bind(c.DRAGMOVE,function(event,srcEvent){
-			tools.apply(setting.callback.onDragMove,[srcEvent]);
-		})
 	},
 	_unbindEvent = function(setting) {
 		var o = setting.treeObj;
@@ -120,6 +118,7 @@
 		o.unbind(c.RENAME);
 		o.unbind(c.REMOVE);
 		o.unbind(c.DRAG);
+		o.unbind(c.DRAGMOVE);
 		o.unbind(c.DROP);
 	},
 	//default event proxy of exedit
@@ -599,13 +598,8 @@
 					}
 					preTmpTargetNodeId = tmpTargetNodeId;
 					preTmpMoveType = moveType;
-					
-					/**
-					 * 20131120 xh
-					 * 拖拽的过程中需要触发dragmove事件，因为可能外部接受拖拽的地方需要做处理，一个实际的例子
-					 * 就是从控件树上拖拽控件到设计器上，设计器上需要有光标提示。
-					 */
-					setting.treeObj.trigger(consts.event.DRAGMOVE, [event]);
+
+					setting.treeObj.trigger(consts.event.DRAGMOVE, [event, setting.treeId, nodes]);
 				}
 				return false;
 			}
