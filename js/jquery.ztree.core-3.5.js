@@ -1,5 +1,5 @@
 /*
- * JQuery zTree core v3.5.16-beta.3
+ * JQuery zTree core v3.5.16-beta.4
  * http://zTree.me/
  *
  * Copyright (c) 2010 Hunter.z
@@ -8,7 +8,7 @@
  * http://www.opensource.org/licenses/mit-license.php
  *
  * email: hunter.z@263.net
- * Date: 2013-11-24
+ * Date: 2013-12-13
  */
 (function($){
 	var settings = {}, roots = {}, caches = {},
@@ -697,7 +697,7 @@
 		},
 		onClickNode: function (event, node) {
 			var setting = data.getSetting(event.data.treeId),
-			clickFlag = ( (setting.view.autoCancelSelected && event.ctrlKey) && data.isSelectedNode(setting, node)) ? 0 : (setting.view.autoCancelSelected && event.ctrlKey && setting.view.selectedMulti) ? 2 : 1;
+			clickFlag = ( (setting.view.autoCancelSelected && (event.ctrlKey || event.metaKey)) && data.isSelectedNode(setting, node)) ? 0 : (setting.view.autoCancelSelected && (event.ctrlKey || event.metaKey) && setting.view.selectedMulti) ? 2 : 1;
 			if (tools.apply(setting.callback.beforeClick, [setting.treeId, node, clickFlag], true) == false) return true;
 			if (clickFlag === 0) {
 				view.cancelPreSelectedNode(setting, node);

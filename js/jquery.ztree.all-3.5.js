@@ -1,6 +1,6 @@
 
 /*
- * JQuery zTree core v3.5.16-beta.3
+ * JQuery zTree core v3.5.16-beta.4
  * http://zTree.me/
  *
  * Copyright (c) 2010 Hunter.z
@@ -9,7 +9,7 @@
  * http://www.opensource.org/licenses/mit-license.php
  *
  * email: hunter.z@263.net
- * Date: 2013-11-24
+ * Date: 2013-12-13
  */
 (function($){
 	var settings = {}, roots = {}, caches = {},
@@ -698,7 +698,7 @@
 		},
 		onClickNode: function (event, node) {
 			var setting = data.getSetting(event.data.treeId),
-			clickFlag = ( (setting.view.autoCancelSelected && event.ctrlKey) && data.isSelectedNode(setting, node)) ? 0 : (setting.view.autoCancelSelected && event.ctrlKey && setting.view.selectedMulti) ? 2 : 1;
+			clickFlag = ( (setting.view.autoCancelSelected && (event.ctrlKey || event.metaKey)) && data.isSelectedNode(setting, node)) ? 0 : (setting.view.autoCancelSelected && (event.ctrlKey || event.metaKey) && setting.view.selectedMulti) ? 2 : 1;
 			if (tools.apply(setting.callback.beforeClick, [setting.treeId, node, clickFlag], true) == false) return true;
 			if (clickFlag === 0) {
 				view.cancelPreSelectedNode(setting, node);
@@ -1678,7 +1678,7 @@
 	consts = zt.consts;
 })(jQuery);
 /*
- * JQuery zTree excheck v3.5.16-beta.3
+ * JQuery zTree excheck v3.5.16-beta.4
  * http://zTree.me/
  *
  * Copyright (c) 2010 Hunter.z
@@ -1687,7 +1687,7 @@
  * http://www.opensource.org/licenses/mit-license.php
  *
  * email: hunter.z@263.net
- * Date: 2013-11-24
+ * Date: 2013-12-13
  */
 (function($){
 	//default consts of excheck
@@ -2305,7 +2305,7 @@
 	}
 })(jQuery);
 /*
- * JQuery zTree exedit v3.5.16-beta.3
+ * JQuery zTree exedit v3.5.16-beta.4
  * http://zTree.me/
  *
  * Copyright (c) 2010 Hunter.z
@@ -2314,7 +2314,7 @@
  * http://www.opensource.org/licenses/mit-license.php
  *
  * email: hunter.z@263.net
- * Date: 2013-11-24
+ * Date: 2013-12-13
  */
 (function($){
 	//default consts of exedit
@@ -2815,7 +2815,7 @@
 					var dY = 0;
 					if (tmpTarget && tmpTarget.attr("id")!=targetSetting.treeId) {
 						var tmpTargetNode = tmpTargetNodeId == null ? null: data.getNodeCache(targetSetting, tmpTargetNodeId),
-						isCopy = (event.ctrlKey && setting.edit.drag.isMove && setting.edit.drag.isCopy) || (!setting.edit.drag.isMove && setting.edit.drag.isCopy),
+						isCopy = ((event.ctrlKey || event.metaKey) && setting.edit.drag.isMove && setting.edit.drag.isCopy) || (!setting.edit.drag.isMove && setting.edit.drag.isCopy),
 						isPrev = !!(preNode && tmpTargetNodeId === preNode.tId),
 						isNext = !!(nextNode && tmpTargetNodeId === nextNode.tId),
 						isInner = (tmpNode.parentTId && tmpNode.parentTId == tmpTargetNodeId),
@@ -2945,7 +2945,7 @@
 				if (curNode) curNode.remove();
 				if (tmpArrow) tmpArrow.remove();
 
-				var isCopy = (event.ctrlKey && setting.edit.drag.isMove && setting.edit.drag.isCopy) || (!setting.edit.drag.isMove && setting.edit.drag.isCopy);
+				var isCopy = ((event.ctrlKey || event.metaKey) && setting.edit.drag.isMove && setting.edit.drag.isCopy) || (!setting.edit.drag.isMove && setting.edit.drag.isCopy);
 				if (!isCopy && tmpTarget && tmpTargetNodeId && nodes[0].parentTId && tmpTargetNodeId==nodes[0].parentTId && moveType == consts.move.TYPE_INNER) {
 					tmpTarget = null;
 				}
