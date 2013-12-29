@@ -1,5 +1,5 @@
 /*
- * JQuery zTree exedit v3.5.16-beta.4
+ * JQuery zTree exedit v3.5.16-beta.5
  * http://zTree.me/
  *
  * Copyright (c) 2010 Hunter.z
@@ -8,7 +8,7 @@
  * http://www.opensource.org/licenses/mit-license.php
  *
  * email: hunter.z@263.net
- * Date: 2013-12-13
+ * Date: 2013-12-29
  */
 (function($){
 	//default consts of exedit
@@ -183,13 +183,13 @@
 	//update zTreeObj, add method of edit
 	_zTreeTools = function(setting, zTreeTools) {
 		zTreeTools.cancelEditName = function(newName) {
-			var root = data.getRoot(setting);
+			var root = data.getRoot(this.setting);
 			if (!root.curEditNode) return;
-			view.cancelCurEditNode(setting, newName?newName:null, true);
+			view.cancelCurEditNode(this.setting, newName?newName:null, true);
 		}
 		zTreeTools.copyNode = function(targetNode, node, moveType, isSilent) {
 			if (!node) return null;
-			if (targetNode && !targetNode.isParent && setting.data.keep.leaf && moveType === consts.move.TYPE_INNER) return null;
+			if (targetNode && !targetNode.isParent && this.setting.data.keep.leaf && moveType === consts.move.TYPE_INNER) return null;
 			var newNode = tools.clone(node);
 			if (!targetNode) {
 				targetNode = null;
@@ -197,46 +197,46 @@
 			}
 			if (moveType == consts.move.TYPE_INNER) {
 				function copyCallback() {
-					view.addNodes(setting, targetNode, [newNode], isSilent);
+					view.addNodes(this.setting, targetNode, [newNode], isSilent);
 				}
 
-				if (tools.canAsync(setting, targetNode)) {
-					view.asyncNode(setting, targetNode, isSilent, copyCallback);
+				if (tools.canAsync(this.setting, targetNode)) {
+					view.asyncNode(this.setting, targetNode, isSilent, copyCallback);
 				} else {
 					copyCallback();
 				}
 			} else {
-				view.addNodes(setting, targetNode.parentNode, [newNode], isSilent);
-				view.moveNode(setting, targetNode, newNode, moveType, false, isSilent);
+				view.addNodes(this.setting, targetNode.parentNode, [newNode], isSilent);
+				view.moveNode(this.setting, targetNode, newNode, moveType, false, isSilent);
 			}
 			return newNode;
 		}
 		zTreeTools.editName = function(node) {
-			if (!node || !node.tId || node !== data.getNodeCache(setting, node.tId)) return;
-			if (node.parentTId) view.expandCollapseParentNode(setting, node.getParentNode(), true);
-			view.editNode(setting, node)
+			if (!node || !node.tId || node !== data.getNodeCache(this.setting, node.tId)) return;
+			if (node.parentTId) view.expandCollapseParentNode(this.setting, node.getParentNode(), true);
+			view.editNode(this.setting, node)
 		}
 		zTreeTools.moveNode = function(targetNode, node, moveType, isSilent) {
 			if (!node) return node;
-			if (targetNode && !targetNode.isParent && setting.data.keep.leaf && moveType === consts.move.TYPE_INNER) {
+			if (targetNode && !targetNode.isParent && this.setting.data.keep.leaf && moveType === consts.move.TYPE_INNER) {
 				return null;
-			} else if (targetNode && ((node.parentTId == targetNode.tId && moveType == consts.move.TYPE_INNER) || $$(node, setting).find("#" + targetNode.tId).length > 0)) {
+			} else if (targetNode && ((node.parentTId == targetNode.tId && moveType == consts.move.TYPE_INNER) || $$(node, this.setting).find("#" + targetNode.tId).length > 0)) {
 				return null;
 			} else if (!targetNode) {
 				targetNode = null;
 			}
 			function moveCallback() {
-				view.moveNode(setting, targetNode, node, moveType, false, isSilent);
+				view.moveNode(this.setting, targetNode, node, moveType, false, isSilent);
 			}
-			if (tools.canAsync(setting, targetNode) && moveType === consts.move.TYPE_INNER) {
-				view.asyncNode(setting, targetNode, isSilent, moveCallback);
+			if (tools.canAsync(this.setting, targetNode) && moveType === consts.move.TYPE_INNER) {
+				view.asyncNode(this.setting, targetNode, isSilent, moveCallback);
 			} else {
 				moveCallback();
 			}
 			return node;
 		}
 		zTreeTools.setEditable = function(editable) {
-			setting.edit.enable = editable;
+			this.setting.edit.enable = editable;
 			return this.refresh();
 		}
 	},
@@ -385,6 +385,10 @@
 						tmpNode.editNameFlag = false;
 						view.selectNode(setting, tmpNode, i>0);
 						view.removeTreeDom(setting, tmpNode);
+
+						if (i > setting.edit.drag.maxShowNodeNum-1) {
+							continue;
+						}
 
 						tmpDom = $$("<li id='"+ tmpNode.tId +"_tmp'></li>", setting);
 						tmpDom.append($$(tmpNode, consts.id.A, setting).clone());

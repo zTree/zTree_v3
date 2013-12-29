@@ -1,6 +1,6 @@
 
 /*
- * JQuery zTree core v3.5.16-beta.4
+ * JQuery zTree core v3.5.16-beta.5
  * http://zTree.me/
  *
  * Copyright (c) 2010 Hunter.z
@@ -9,7 +9,7 @@
  * http://www.opensource.org/licenses/mit-license.php
  *
  * email: hunter.z@263.net
- * Date: 2013-12-13
+ * Date: 2013-12-29
  */
 (function($){
 	var settings = {}, roots = {}, caches = {},
@@ -1678,7 +1678,7 @@
 	consts = zt.consts;
 })(jQuery);
 /*
- * JQuery zTree excheck v3.5.16-beta.4
+ * JQuery zTree excheck v3.5.16-beta.5
  * http://zTree.me/
  *
  * Copyright (c) 2010 Hunter.z
@@ -1687,7 +1687,7 @@
  * http://www.opensource.org/licenses/mit-license.php
  *
  * email: hunter.z@263.net
- * Date: 2013-12-13
+ * Date: 2013-12-29
  */
 (function($){
 	//default consts of excheck
@@ -1840,7 +1840,7 @@
 	//update zTreeObj, add method of check
 	_zTreeTools = function(setting, zTreeTools) {
 		zTreeTools.checkNode = function(node, checked, checkTypeFlag, callbackFlag) {
-			var checkedKey = setting.data.key.checked;
+			var checkedKey = this.setting.data.key.checked;
 			if (node.chkDisabled === true) return;
 			if (checked !== true && checked !== false) {
 				checked = !node[checkedKey];
@@ -1849,54 +1849,54 @@
 
 			if (node[checkedKey] === checked && !checkTypeFlag) {
 				return;
-			} else if (callbackFlag && tools.apply(this.setting.callback.beforeCheck, [setting.treeId, node], true) == false) {
+			} else if (callbackFlag && tools.apply(this.setting.callback.beforeCheck, [this.setting.treeId, node], true) == false) {
 				return;
 			}
-			if (tools.uCanDo(this.setting) && setting.check.enable && node.nocheck !== true) {
+			if (tools.uCanDo(this.setting) && this.setting.check.enable && node.nocheck !== true) {
 				node[checkedKey] = checked;
-				var checkObj = $$(node, consts.id.CHECK, setting);
-				if (checkTypeFlag || setting.check.chkStyle === consts.radio.STYLE) view.checkNodeRelation(setting, node);
-				view.setChkClass(setting, checkObj, node);
-				view.repairParentChkClassWithSelf(setting, node);
+				var checkObj = $$(node, consts.id.CHECK, this.setting);
+				if (checkTypeFlag || this.setting.check.chkStyle === consts.radio.STYLE) view.checkNodeRelation(this.setting, node);
+				view.setChkClass(this.setting, checkObj, node);
+				view.repairParentChkClassWithSelf(this.setting, node);
 				if (callbackFlag) {
-					setting.treeObj.trigger(consts.event.CHECK, [null, setting.treeId, node]);
+					this.setting.treeObj.trigger(consts.event.CHECK, [null, this.setting.treeId, node]);
 				}
 			}
 		}
 
 		zTreeTools.checkAllNodes = function(checked) {
-			view.repairAllChk(setting, !!checked);
+			view.repairAllChk(this.setting, !!checked);
 		}
 
 		zTreeTools.getCheckedNodes = function(checked) {
-			var childKey = setting.data.key.children;
+			var childKey = this.setting.data.key.children;
 			checked = (checked !== false);
-			return data.getTreeCheckedNodes(setting, data.getRoot(setting)[childKey], checked);
+			return data.getTreeCheckedNodes(this.setting, data.getRoot(this.setting)[childKey], checked);
 		}
 
 		zTreeTools.getChangeCheckedNodes = function() {
-			var childKey = setting.data.key.children;
-			return data.getTreeChangeCheckedNodes(setting, data.getRoot(setting)[childKey]);
+			var childKey = this.setting.data.key.children;
+			return data.getTreeChangeCheckedNodes(this.setting, data.getRoot(this.setting)[childKey]);
 		}
 
 		zTreeTools.setChkDisabled = function(node, disabled, inheritParent, inheritChildren) {
 			disabled = !!disabled;
 			inheritParent = !!inheritParent;
 			inheritChildren = !!inheritChildren;
-			view.repairSonChkDisabled(setting, node, disabled, inheritChildren);
-			view.repairParentChkDisabled(setting, node.getParentNode(), disabled, inheritParent);
+			view.repairSonChkDisabled(this.setting, node, disabled, inheritChildren);
+			view.repairParentChkDisabled(this.setting, node.getParentNode(), disabled, inheritParent);
 		}
 
 		var _updateNode = zTreeTools.updateNode;
 		zTreeTools.updateNode = function(node, checkTypeFlag) {
 			if (_updateNode) _updateNode.apply(zTreeTools, arguments);
-			if (!node || !setting.check.enable) return;
-			var nObj = $$(node, setting);
-			if (nObj.get(0) && tools.uCanDo(setting)) {
-				var checkObj = $$(node, consts.id.CHECK, setting);
-				if (checkTypeFlag == true || setting.check.chkStyle === consts.radio.STYLE) view.checkNodeRelation(setting, node);
-				view.setChkClass(setting, checkObj, node);
-				view.repairParentChkClassWithSelf(setting, node);
+			if (!node || !this.setting.check.enable) return;
+			var nObj = $$(node, this.setting);
+			if (nObj.get(0) && tools.uCanDo(this.setting)) {
+				var checkObj = $$(node, consts.id.CHECK, this.setting);
+				if (checkTypeFlag == true || this.setting.check.chkStyle === consts.radio.STYLE) view.checkNodeRelation(this.setting, node);
+				view.setChkClass(this.setting, checkObj, node);
+				view.repairParentChkClassWithSelf(this.setting, node);
 			}
 		}
 	},
@@ -2305,7 +2305,7 @@
 	}
 })(jQuery);
 /*
- * JQuery zTree exedit v3.5.16-beta.4
+ * JQuery zTree exedit v3.5.16-beta.5
  * http://zTree.me/
  *
  * Copyright (c) 2010 Hunter.z
@@ -2314,7 +2314,7 @@
  * http://www.opensource.org/licenses/mit-license.php
  *
  * email: hunter.z@263.net
- * Date: 2013-12-13
+ * Date: 2013-12-29
  */
 (function($){
 	//default consts of exedit
@@ -2489,13 +2489,13 @@
 	//update zTreeObj, add method of edit
 	_zTreeTools = function(setting, zTreeTools) {
 		zTreeTools.cancelEditName = function(newName) {
-			var root = data.getRoot(setting);
+			var root = data.getRoot(this.setting);
 			if (!root.curEditNode) return;
-			view.cancelCurEditNode(setting, newName?newName:null, true);
+			view.cancelCurEditNode(this.setting, newName?newName:null, true);
 		}
 		zTreeTools.copyNode = function(targetNode, node, moveType, isSilent) {
 			if (!node) return null;
-			if (targetNode && !targetNode.isParent && setting.data.keep.leaf && moveType === consts.move.TYPE_INNER) return null;
+			if (targetNode && !targetNode.isParent && this.setting.data.keep.leaf && moveType === consts.move.TYPE_INNER) return null;
 			var newNode = tools.clone(node);
 			if (!targetNode) {
 				targetNode = null;
@@ -2503,46 +2503,46 @@
 			}
 			if (moveType == consts.move.TYPE_INNER) {
 				function copyCallback() {
-					view.addNodes(setting, targetNode, [newNode], isSilent);
+					view.addNodes(this.setting, targetNode, [newNode], isSilent);
 				}
 
-				if (tools.canAsync(setting, targetNode)) {
-					view.asyncNode(setting, targetNode, isSilent, copyCallback);
+				if (tools.canAsync(this.setting, targetNode)) {
+					view.asyncNode(this.setting, targetNode, isSilent, copyCallback);
 				} else {
 					copyCallback();
 				}
 			} else {
-				view.addNodes(setting, targetNode.parentNode, [newNode], isSilent);
-				view.moveNode(setting, targetNode, newNode, moveType, false, isSilent);
+				view.addNodes(this.setting, targetNode.parentNode, [newNode], isSilent);
+				view.moveNode(this.setting, targetNode, newNode, moveType, false, isSilent);
 			}
 			return newNode;
 		}
 		zTreeTools.editName = function(node) {
-			if (!node || !node.tId || node !== data.getNodeCache(setting, node.tId)) return;
-			if (node.parentTId) view.expandCollapseParentNode(setting, node.getParentNode(), true);
-			view.editNode(setting, node)
+			if (!node || !node.tId || node !== data.getNodeCache(this.setting, node.tId)) return;
+			if (node.parentTId) view.expandCollapseParentNode(this.setting, node.getParentNode(), true);
+			view.editNode(this.setting, node)
 		}
 		zTreeTools.moveNode = function(targetNode, node, moveType, isSilent) {
 			if (!node) return node;
-			if (targetNode && !targetNode.isParent && setting.data.keep.leaf && moveType === consts.move.TYPE_INNER) {
+			if (targetNode && !targetNode.isParent && this.setting.data.keep.leaf && moveType === consts.move.TYPE_INNER) {
 				return null;
-			} else if (targetNode && ((node.parentTId == targetNode.tId && moveType == consts.move.TYPE_INNER) || $$(node, setting).find("#" + targetNode.tId).length > 0)) {
+			} else if (targetNode && ((node.parentTId == targetNode.tId && moveType == consts.move.TYPE_INNER) || $$(node, this.setting).find("#" + targetNode.tId).length > 0)) {
 				return null;
 			} else if (!targetNode) {
 				targetNode = null;
 			}
 			function moveCallback() {
-				view.moveNode(setting, targetNode, node, moveType, false, isSilent);
+				view.moveNode(this.setting, targetNode, node, moveType, false, isSilent);
 			}
-			if (tools.canAsync(setting, targetNode) && moveType === consts.move.TYPE_INNER) {
-				view.asyncNode(setting, targetNode, isSilent, moveCallback);
+			if (tools.canAsync(this.setting, targetNode) && moveType === consts.move.TYPE_INNER) {
+				view.asyncNode(this.setting, targetNode, isSilent, moveCallback);
 			} else {
 				moveCallback();
 			}
 			return node;
 		}
 		zTreeTools.setEditable = function(editable) {
-			setting.edit.enable = editable;
+			this.setting.edit.enable = editable;
 			return this.refresh();
 		}
 	},
@@ -2691,6 +2691,10 @@
 						tmpNode.editNameFlag = false;
 						view.selectNode(setting, tmpNode, i>0);
 						view.removeTreeDom(setting, tmpNode);
+
+						if (i > setting.edit.drag.maxShowNodeNum-1) {
+							continue;
+						}
 
 						tmpDom = $$("<li id='"+ tmpNode.tId +"_tmp'></li>", setting);
 						tmpDom.append($$(tmpNode, consts.id.A, setting).clone());
