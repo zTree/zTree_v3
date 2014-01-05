@@ -1,5 +1,5 @@
 /*
- * JQuery zTree exedit v3.5.16-beta.5
+ * JQuery zTree exedit v3.5.16-beta.7
  * http://zTree.me/
  *
  * Copyright (c) 2010 Hunter.z
@@ -8,7 +8,7 @@
  * http://www.opensource.org/licenses/mit-license.php
  *
  * email: hunter.z@263.net
- * Date: 2013-12-29
+ * Date: 2014-01-05
  */
 (function($){
 	//default consts of exedit
@@ -190,14 +190,15 @@
 		zTreeTools.copyNode = function(targetNode, node, moveType, isSilent) {
 			if (!node) return null;
 			if (targetNode && !targetNode.isParent && this.setting.data.keep.leaf && moveType === consts.move.TYPE_INNER) return null;
-			var newNode = tools.clone(node);
+			var _this = this,
+				newNode = tools.clone(node);
 			if (!targetNode) {
 				targetNode = null;
 				moveType = consts.move.TYPE_INNER;
 			}
 			if (moveType == consts.move.TYPE_INNER) {
 				function copyCallback() {
-					view.addNodes(this.setting, targetNode, [newNode], isSilent);
+					view.addNodes(_this.setting, targetNode, [newNode], isSilent);
 				}
 
 				if (tools.canAsync(this.setting, targetNode)) {
@@ -225,8 +226,9 @@
 			} else if (!targetNode) {
 				targetNode = null;
 			}
+			var _this = this;
 			function moveCallback() {
-				view.moveNode(this.setting, targetNode, node, moveType, false, isSilent);
+				view.moveNode(_this.setting, targetNode, node, moveType, false, isSilent);
 			}
 			if (tools.canAsync(this.setting, targetNode) && moveType === consts.move.TYPE_INNER) {
 				view.asyncNode(this.setting, targetNode, isSilent, moveCallback);
