@@ -1,0 +1,23 @@
+{
+  "name": "zTree.v3",
+  "description": "jquery tree plugin",
+  "version": "3.5.15",
+  "homepage": "http://www.ztree.me/",
+  "license": "MIT",
+  "copyright": "Zhang QiGang",
+  "main": "dist/jquery.ztree.all-3.5.min.js",
+  "dependencies": {
+    "jquery": ">=1.4.4"
+  },
+  "devDependencies": {
+    "css": "*",
+		"js": "*"
+  },
+  "ignore": [
+    "api",
+    "demo",
+    "zTree.v3.jquery.json",
+    "QUI 框架介绍.txt",
+    "log v3.x.txt"
+  ]
+} 
