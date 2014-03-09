@@ -1,5 +1,5 @@
 /*
- * JQuery zTree exedit v3.5.16-beta.8
+ * JQuery zTree exedit v3.5.16
  * http://zTree.me/
  *
  * Copyright (c) 2010 Hunter.z
@@ -8,7 +8,7 @@
  * http://www.opensource.org/licenses/mit-license.php
  *
  * email: hunter.z@263.net
- * Date: 2014-01-07
+ * Date: 2014-03-09
  */
 (function($){
 	//default consts of exedit
@@ -16,7 +16,6 @@
 		event: {
 			DRAG: "ztree_drag",
 			DROP: "ztree_drop",
-			REMOVE: "ztree_remove",
 			RENAME: "ztree_rename",
 			DRAGMOVE:"ztree_dragmove"
 		},
@@ -96,10 +95,6 @@
 			tools.apply(setting.callback.onRename, [event, treeId, treeNode, isCancel]);
 		});
 
-		o.bind(c.REMOVE, function (event, treeId, treeNode) {
-			tools.apply(setting.callback.onRemove, [event, treeId, treeNode]);
-		});
-
 		o.bind(c.DRAG, function (event, srcEvent, treeId, treeNodes) {
 			tools.apply(setting.callback.onDrag, [srcEvent, treeId, treeNodes]);
 		});
@@ -116,7 +111,6 @@
 		var o = setting.treeObj;
 		var c = consts.event;
 		o.unbind(c.RENAME);
-		o.unbind(c.REMOVE);
 		o.unbind(c.DRAG);
 		o.unbind(c.DRAGMOVE);
 		o.unbind(c.DROP);

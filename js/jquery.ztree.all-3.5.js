@@ -1,6 +1,6 @@
 
 /*
- * JQuery zTree core v3.5.16-beta.8
+ * JQuery zTree core v3.5.16
  * http://zTree.me/
  *
  * Copyright (c) 2010 Hunter.z
@@ -9,7 +9,7 @@
  * http://www.opensource.org/licenses/mit-license.php
  *
  * email: hunter.z@263.net
- * Date: 2014-01-07
+ * Date: 2014-03-09
  */
 (function($){
 	var settings = {}, roots = {}, caches = {},
@@ -27,7 +27,8 @@
 			EXPAND: "ztree_expand",
 			COLLAPSE: "ztree_collapse",
 			ASYNC_SUCCESS: "ztree_async_success",
-			ASYNC_ERROR: "ztree_async_error"
+			ASYNC_ERROR: "ztree_async_error",
+			REMOVE: "ztree_remove"
 		},
 		id: {
 			A: "_a",
@@ -175,6 +176,10 @@
 		o.bind(c.ASYNC_ERROR, function (event, treeId, node, XMLHttpRequest, textStatus, errorThrown) {
 			tools.apply(setting.callback.onAsyncError, [event, treeId, node, XMLHttpRequest, textStatus, errorThrown]);
 		});
+
+		o.bind(c.REMOVE, function (event, treeId, treeNode) {
+			tools.apply(setting.callback.onRemove, [event, treeId, treeNode]);
+		});
 	},
 	_unbindEvent = function(setting) {
 		var o = setting.treeObj,
@@ -184,7 +189,8 @@
 		.unbind(c.EXPAND)
 		.unbind(c.COLLAPSE)
 		.unbind(c.ASYNC_SUCCESS)
-		.unbind(c.ASYNC_ERROR);
+		.unbind(c.ASYNC_ERROR)
+		.unbind(c.REMOVE);
 	},
 	//default event proxy of core
 	_eventProxy = function(event) {
@@ -1678,7 +1684,7 @@
 	consts = zt.consts;
 })(jQuery);
 /*
- * JQuery zTree excheck v3.5.16-beta.8
+ * JQuery zTree excheck v3.5.16
  * http://zTree.me/
  *
  * Copyright (c) 2010 Hunter.z
@@ -1687,7 +1693,7 @@
  * http://www.opensource.org/licenses/mit-license.php
  *
  * email: hunter.z@263.net
- * Date: 2014-01-07
+ * Date: 2014-03-09
  */
 (function($){
 	//default consts of excheck
@@ -2307,7 +2313,7 @@
 	}
 })(jQuery);
 /*
- * JQuery zTree exedit v3.5.16-beta.8
+ * JQuery zTree exedit v3.5.16
  * http://zTree.me/
  *
  * Copyright (c) 2010 Hunter.z
@@ -2316,7 +2322,7 @@
  * http://www.opensource.org/licenses/mit-license.php
  *
  * email: hunter.z@263.net
- * Date: 2014-01-07
+ * Date: 2014-03-09
  */
 (function($){
 	//default consts of exedit
@@ -2324,7 +2330,6 @@
 		event: {
 			DRAG: "ztree_drag",
 			DROP: "ztree_drop",
-			REMOVE: "ztree_remove",
 			RENAME: "ztree_rename",
 			DRAGMOVE:"ztree_dragmove"
 		},
@@ -2404,10 +2409,6 @@
 			tools.apply(setting.callback.onRename, [event, treeId, treeNode, isCancel]);
 		});
 
-		o.bind(c.REMOVE, function (event, treeId, treeNode) {
-			tools.apply(setting.callback.onRemove, [event, treeId, treeNode]);
-		});
-
 		o.bind(c.DRAG, function (event, srcEvent, treeId, treeNodes) {
 			tools.apply(setting.callback.onDrag, [srcEvent, treeId, treeNodes]);
 		});
@@ -2424,7 +2425,6 @@
 		var o = setting.treeObj;
 		var c = consts.event;
 		o.unbind(c.RENAME);
-		o.unbind(c.REMOVE);
 		o.unbind(c.DRAG);
 		o.unbind(c.DRAGMOVE);
 		o.unbind(c.DROP);

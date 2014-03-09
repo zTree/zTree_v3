@@ -5,16 +5,15 @@
 
 具体修改内容可参考：
 
-   * [http://www.ztree.me/v3/api.php zTree v3.0 API 文档]
+   * [http://www.ztree.me/v3/api.php zTree v3.x API 文档]
 
-   * [http://www.ztree.me/v3/demo.php#_101 zTree v3.0 Demo 演示]
+   * [http://www.ztree.me/v3/demo.php#_101 zTree v3.x Demo 演示]
 
-   * [http://www.ztree.me/v3/faq.php#_101 zTree v3.0 常见问题]
+   * [http://www.ztree.me/v3/faq.php#_101 zTree v3.x 常见问题]
 
 </font>
 
-
-*2014.01.07* v3.5.16-beta.8
+*2014.03.09* v3.5.16
    * 【增加】onDragMove 回调，便于控制 zTree 节点与其他 DOM 的拖拽操作。（感谢 yumi301）
    * 【增加】针对 Mac 系统 Cmd 键的支持， Cmd 键 + 左键 也可以多选节点
 
@@ -22,6 +21,7 @@
    * 【修改】onCheck 回调的 event，恢复为 zTree 自身的 event 事件，同时利用 srcEvent 传递原始 event 对象。（感谢 yumi301）
    * 【修改】拖拽多个节点时，超出 maxShowNodeNum 设置个数的节点会失去 被选择状态的 bug
    * 【修改】excheck & exedit 扩展包的 zTree 方法中 setting 数据错误导致 checkNode、updateNode 等方法操作 radio 失效的 bug
+   * 【修改】不加载 exedit 扩展包时，使用 removeNode 方法无法触发 beforeRemove 和 onRemove 回调的 bug
 
 *2013.10.19* v3.5.15
    * 【增加】setting.view.txtSelectedEnable 属性，满足部分项目中客户对于可以选择节点文本信息的强烈欲望。
