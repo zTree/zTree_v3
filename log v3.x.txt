@@ -5,11 +5,11 @@
 
 具体修改内容可参考：
 
-   * [http://www.ztree.me/v3/api.php zTree v3.0 API 文档]
+   * [http://www.ztree.me/v3/api.php zTree v3.x API 文档]
 
-   * [http://www.ztree.me/v3/demo.php#_101 zTree v3.0 Demo 演示]
+   * [http://www.ztree.me/v3/demo.php#_101 zTree v3.x Demo 演示]
 
-   * [http://www.ztree.me/v3/faq.php#_101 zTree v3.0 常见问题]
+   * [http://www.ztree.me/v3/faq.php#_101 zTree v3.x 常见问题]
 
 </font>
 
