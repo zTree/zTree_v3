@@ -13,9 +13,9 @@
 
 </font>
 
-
-*2014.03.28* v3.5.17-beta.1
+*2014.05.08* v3.5.17-beta.2
    * 【修改】excheck 扩展中 removeClass 与 jQueryUI 1.9 冲突的问题，目前放弃 removeClass 方法
+   * 【修改】优化 exhide 扩展包初始化效率，避免数据多时 ie8 假死的 bug（感谢：https://github.com/sarxos）
 
 *2014.03.09* v3.5.16
    * 【增加】onDragMove 回调，便于控制 zTree 节点与其他 DOM 的拖拽操作。（感谢 yumi301）
