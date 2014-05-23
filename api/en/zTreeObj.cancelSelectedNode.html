@@ -26,7 +26,7 @@ treeObj.cancelSelectedNode();
 </code></pre>
 	<h4>2. Cancel the first node of the selected nodes</h4>
 	<pre xmlns=""><code>var treeObj = $.fn.zTree.getZTreeObj("tree");
-var nodes = treeObj.getSelectedNode();
+var nodes = treeObj.getSelectedNodes();
 if (nodes.length>0) { 
 	treeObj.cancelSelectedNode(nodes[0]);
 }
