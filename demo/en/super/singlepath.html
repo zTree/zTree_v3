@@ -69,42 +69,59 @@
 			}
 
 		}
-		function singlePath(newNode) {
-			if (newNode === curExpandNode) return;
-			if (curExpandNode && curExpandNode.open==true) {
-				var zTree = $.fn.zTree.getZTreeObj("treeDemo");
-				if (newNode.parentTId === curExpandNode.parentTId) {
-					zTree.expandNode(curExpandNode, false);
-				} else {
-					var newParents = [];
-					while (newNode) {
-						newNode = newNode.getParentNode();
-						if (newNode === curExpandNode) {
-							newParents = null;
-							break;
-						} else if (newNode) {
-							newParents.push(newNode);
-						}
-					}
-					if (newParents!=null) {
-						var oldNode = curExpandNode;
-						var oldParents = [];
-						while (oldNode) {
-							oldNode = oldNode.getParentNode();
-							if (oldNode) {
-								oldParents.push(oldNode);
-							}
-						}
-						if (newParents.length>0) {
-							zTree.expandNode(oldParents[Math.abs(oldParents.length-newParents.length)-1], false);
-						} else {
-							zTree.expandNode(oldParents[oldParents.length-1], false);
-						}
-					}
-				}
-			}
-			curExpandNode = newNode;
-		}
+        function singlePath(newNode) {
+            if (newNode === curExpandNode) return;
+
+            var zTree = $.fn.zTree.getZTreeObj("treeDemo"),
+                    rootNodes, tmpRoot, tmpTId, i, j, n;
+
+            if (!curExpandNode) { //very first expand: check if roots are already opened
+                //by default and close if not my root
+                tmpRoot = newNode; //just in case, don't break any original code
+                while (tmpRoot) {
+                    tmpTId = tmpRoot.tId; //will be my root when while() ends
+                    tmpRoot = tmpRoot.getParentNode();
+                }
+                rootNodes = zTree.getNodes();
+                for (i=0, j=rootNodes.length; i<j; i++) {
+                    n = rootNodes[i];
+                    if (n.tId != tmpTId) {
+                        zTree.expandNode(n, false);
+                    }
+                }
+            } else if (curExpandNode && curExpandNode.open) {
+                if (newNode.parentTId === curExpandNode.parentTId) {
+                    zTree.expandNode(curExpandNode, false);
+                } else {
+                    var newParents = [];
+                    while (newNode) {
+                        newNode = newNode.getParentNode();
+                        if (newNode === curExpandNode) {
+                            newParents = null;
+                            break;
+                        } else if (newNode) {
+                            newParents.push(newNode);
+                        }
+                    }
+                    if (newParents!=null) {
+                        var oldNode = curExpandNode;
+                        var oldParents = [];
+                        while (oldNode) {
+                            oldNode = oldNode.getParentNode();
+                            if (oldNode) {
+                                oldParents.push(oldNode);
+                            }
+                        }
+                        if (newParents.length>0) {
+                            zTree.expandNode(oldParents[Math.abs(oldParents.length-newParents.length)-1], false);
+                        } else {
+                            zTree.expandNode(oldParents[oldParents.length-1], false);
+                        }
+                    }
+                }
+            }
+            curExpandNode = newNode;
+        }
 
 		function onExpand(event, treeId, treeNode) {
 			curExpandNode = treeNode;
