@@ -8,7 +8,7 @@
  * http://www.opensource.org/licenses/mit-license.php
  *
  * email: hunter.z@263.net
- * Date: 2014-05-08
+ * Date: 2015-02-15
  */
 (function($){
 	var settings = {}, roots = {}, caches = {},
