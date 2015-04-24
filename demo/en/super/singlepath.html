@@ -75,10 +75,11 @@
             var zTree = $.fn.zTree.getZTreeObj("treeDemo"),
                     rootNodes, tmpRoot, tmpTId, i, j, n;
 
-            if (!curExpandNode) {
-                tmpRoot = newNode;
+            if (!curExpandNode) { //very first expand: check if roots are already opened
+                //by default and close if not my root
+                tmpRoot = newNode; //just in case, don't break any original code
                 while (tmpRoot) {
-                    tmpTId = tmpRoot.tId;
+                    tmpTId = tmpRoot.tId; //will be my root when while() ends
                     tmpRoot = tmpRoot.getParentNode();
                 }
                 rootNodes = zTree.getNodes();
