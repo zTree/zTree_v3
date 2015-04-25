@@ -5,13 +5,18 @@
 	<div class="desc">
 		<p></p>
 		<div class="longdesc">
-			<p>The method which used to create zTree.</p>
-			<p>1. The web page need to use W3C markup. For example: &lt;!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"&nbsp;&nbsp; &nbsp;"http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd"&gt;</p>
-			<p>2. Need to load jquery-1.4.2.js or other higher versions.</p>
-			<p>3. Need to load jquery-ztree.core-3.0.js. If you need to use the edit mode or checkbox / radio mode, you need to load jquery-ztree.exedit-3.0.js and jquery-ztree.excheck-3.0.js.</p>
-			<p>4. Need to load zTreeStyle.css and image files</p>
-			<p>5. If you need to use custom icons, please refer to the appropriate Demo.</p>
-			<p>6. Note: You need to set zTree container's class name to "ztree". If you need to change, don't forget to modify the css file. If you need other special styles, can modify the css file to their own needs.</p>
+			<p>This method is used to create a zTree.</p>
+			<p>1. The web page must use the W3C DTD. For example: &lt;!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"&nbsp;&nbsp; &nbsp;"http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd"&gt;</p>
+			<p>2. Needs jquery-1.4.2.js or better.</p>
+			<p>3. Needs jquery-ztree.core-3.0.js or better.
+                            If you are using edit mode or checkbox / radio mode, 
+                            make sure you load jquery-ztree.exedit-3.0.js and jquery-ztree.excheck-3.0.js.</p>
+			<p>4. Needs zTreeStyle.css and image files</p>
+			<p>5. If you plan to use custom icons, please refer to the Demo, 
+                            or see the help on iconSkin.</p>
+			<p>6. Note: You need to set zTree container's class name to "ztree". 
+                            If you need to change it, don't forget to modify the css file. 
+                            If you need other special styles, you can modify the css file.</p>
 		</div>
 	</div>
 	<h3>Function Parameter Descriptions</h3>
@@ -22,9 +27,10 @@
 	<p>zTree's configuration data, please refer to "setting details" in the API Document.</p>
 	<h4 class="topLine"><b>zNodes</b><span>Array(JSON) / JSON</span></h4>
 	<p>zTree's node data, please refer to "treeNode data details" in the API Document.</p>
-	<p class="highlight_red">1. zTree v3.x support to add single node, that is, if only to add one node, you can use JSON without using Array.</p>
-	<p class="highlight_red">2. If you need asynchronous load root nodes, can be set to null or [ ]</p>
-	<p class="highlight_red">3. If you use simple data mode, please refer to "setting.data.simpleData" in the API Document.</p>
+	<p class="highlight_red">1. zTree v3.x support to add single node, that is, if only to add one node, 
+                you can use JSON without using Array.</p>
+	<p class="highlight_red">2. If you are planning on using asynchronous loading of root nodes, set it to null or [ ]</p>
+	<p class="highlight_red">3. If you are using simple data mode, please refer to "setting.data.simpleData" in the API Document.</p>
 	<h4 class="topLine"><b>Return </b><span>JSON</span></h4>
 	<p>zTree object</p>
 	<p>This object can provide the methods of operate the zTree</p>
