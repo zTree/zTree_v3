@@ -5,14 +5,17 @@
 	<div class="desc">
 		<p></p>
 		<div class="longdesc">
-			<p>Required automatically submit the parameters about the properties of the parent node, when the asynchronous load. It is valid when <span class="highlight_red">[setting.async.enable = true]</span></p>
+			<p>During asynchronous loading, a request is sent to the server, which contains the identify of the parent node, 
+                            so it can retrieve the children.
+                            This attribute is an array of strings, which is the identity parameter (or parameters).
+                            It applies when <span class="highlight_red">[setting.async.enable = true]</span></p>
 			<p>Default：[ ]</p>
 		</div>
 	</div>
 	<h3>Array(String) Format</h3>
 	<div class="desc">
-	<p>1. Just save the attribute name of node to the array. For example: ["id", "name"]</p>
-	<p>2. You can change the parameter name. For example: server only accepts "zId" -- ["id=zId"]</p>
+	<p>1. Put the attribute name(s) of node to the array. For example: ["id", "name"]</p>
+	<p>2. You can rename the parameter name as sent to the server. For example: server only accepts "zId" -- ["id=zId"]</p>
 	</div>
 	<h3>Examples of setting</h3>
 	<h4>1. set auto commit 'id' attribute</h4>
@@ -23,9 +26,9 @@
 		autoParam: ["id"]
 	}
 };
-If have the parent node: {id:1, name:"test"}, When asynchronously load this parent node's child nodes, will be submitted parameters: id=1
+If we have a parent node: {id:1, name:"test"}, When we are asynchronously loading this parent node's children, it will be submitted to the server with parameters: id=1
 ......</code></pre>
-	<h4>2. set auto commit 'id' attribute, but parameter name is 'zId'</h4>
+	<h4>2. set auto commit 'id' attribute, but the parameter name expected by the server is 'zId'</h4>
 	<pre xmlns=""><code>var setting = {
 	async: {
 		enable: true,
@@ -33,7 +36,7 @@ If have the parent node: {id:1, name:"test"}, When asynchronously load this pare
 		autoParam: ["id=zId"]
 	}
 };
-If have the parent node: {id:1, name:"test"}, When asynchronously load this parent node's child nodes, will be submitted parameters: zId=1
+If we have a parent node: {id:1, name:"test"}, When we are asynchronously loading this parent node's children, it will be submitted to the server with parameters: zId=1
 ......</code></pre>
 </div>
 </div>
