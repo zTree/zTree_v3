@@ -16,7 +16,7 @@
 	<h4><b>event</b><span>js event Object</span></h4>
 	<p>event Object</p>
 	<h4 class="topLine"><b>treeId</b><span>String</span></h4>
-	<p>zTree unique identifier: <b class="highlight_red">treeId</b>, easy for users to control.</p>
+	<p>zTree unique identifier: <b class="highlight_red">treeId</b>.</p>
 	<h4 class="topLine"><b>treeNode</b><span>JSON</span></h4>
 	<p>JSON data object of the parent node</p>
 	<p class="highlight_red">When load root nodes, treeNode = null</p>
@@ -29,12 +29,12 @@
 	</div>
 	<h3>Examples of setting & function</h3>
 	<h4>1. When execute ajax make error, alert message.</h4>
-	<pre xmlns=""><code>function zTreeOnAsyncError(event, treeId, treeNode, XMLHttpRequest, textStatus, errorThrown) {
+	<pre xmlns=""><code>function myOnAsyncError(event, treeId, treeNode, XMLHttpRequest, textStatus, errorThrown) {
     alert(XMLHttpRequest);
 };
 var setting = {
 	callback: {
-		onAsyncError: zTreeOnAsyncError
+		onAsyncErrorfunction myOnAsyncError
 	}
 };
 ......</code></pre>

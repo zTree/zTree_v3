@@ -15,7 +15,7 @@
 	<h4><b>event</b><span>js event Object</span></h4>
 	<p>event Object</p>
 	<h4 class="topLine"><b>treeId</b><span>String</span></h4>
-	<p>zTree unique identifier: <b class="highlight_red">treeId</b>, easy for users to control.</p>
+	<p>zTree unique identifier: <b class="highlight_red">treeId</b>.</p>
 	<h4 class="topLine"><b>treeNode</b><span>JSON</span></h4>
 	<p>JSON data object of the node which is clicked</p>
 	<h4 class="topLine"><b>clickFlag</b><span>Number</span></h4>
@@ -36,12 +36,12 @@
 	</div>
 	<h3>Examples of setting & function</h3>
 	<h4>1. When click node, alert info about 'tId' and 'name'.</h4>
-	<pre xmlns=""><code>function zTreeOnClick(event, treeId, treeNode) {
+	<pre xmlns=""><code>function myOnClick(event, treeId, treeNode) {
     alert(treeNode.tId + ", " + treeNode.name);
 };
 var setting = {
 	callback: {
-		onClick: zTreeOnClick
+		onClickfunction myOnClick
 	}
 };
 ......</code></pre>

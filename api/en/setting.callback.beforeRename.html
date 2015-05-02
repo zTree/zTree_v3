@@ -5,7 +5,7 @@
 	<div class="desc">
 		<p></p>
 		<div class="longdesc">
-			<p>Used to capture the event before rename(when input DOM blur or press Enter Key), zTree based on return value to determine whether to allow to rename node.</p>
+			<p>Specify callback function to be called before rename(when input DOM blur or press Enter Key), The return value controls the  allow to rename node.</p>
 			<p class="highlight_red">When node is editing name, press the ESC key to restore the original name and stop edit name.</p>
 			<p class="highlight_red">From v3.5.13, zTree will trigger this callback when user cancel edit name. please see 'isCancel' parameter.</p>
 			<p>Default: null</p>
@@ -14,9 +14,9 @@
 	<h3>Function Parameter Descriptions</h3>
 	<div class="desc">
 	<h4><b>treeId</b><span>String</span></h4>
-	<p>zTree unique identifier: <b class="highlight_red">treeId</b>, easy for users to control.</p>
+	<p>zTree unique identifier: <b class="highlight_red">treeId</b>.</p>
 	<h4 class="topLine"><b>treeNode</b><span>JSON</span></h4>
-	<p>JSON data object of the node which will be rename.</p>
+	<p>JSON data object of the node to be rename.</p>
 	<h4 class="topLine"><b>newName</b><span>String</span></h4>
 	<p>the new name</p>
 	<h4 class="topLine"><b>isCancel</b><span>Boolean</span></h4>
@@ -30,7 +30,7 @@
 	</div>
 	<h3>Examples of setting & function</h3>
 	<h4>1. the length of the new name can't less than 5</h4>
-	<pre xmlns=""><code>function zTreeBeforeRename(treeId, treeNode, newName, isCancel) {
+	<pre xmlns=""><code>function myBeforeRename(treeId, treeNode, newName, isCancel) {
 	return newName.length > 5;
 }
 var setting = {
@@ -38,7 +38,7 @@ var setting = {
 		enable: true
 	},
 	callback: {
-		beforeRename: zTreeBeforeRename
+		beforeRenamefunction myBeforeRename
 	}
 };
 ......</code></pre>

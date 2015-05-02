@@ -5,14 +5,14 @@
 	<div class="desc">
 		<p></p>
 		<div class="longdesc">
-			<p>Used to capture the event when drag node to collapsed parent node, zTree based on return value to determine whether to auto expand parent node.</p>
+			<p>Callback executed before drag node to collapsed parent node, The return value controls the auto expand behaviour of the parent node.</p>
 			<p>Default: null</p>
 		</div>
 	</div>
 	<h3>Function Parameter Descriptions</h3>
 	<div class="desc">
 	<h4><b>treeId</b><span>String</span></h4>
-	<p>zTree unique identifier: <b class="highlight_red">treeId</b>, the tree is what the treeNode(parent node) is belong to, easy for users to control.</p>
+	<p>zTree unique identifier: <b class="highlight_red">treeId</b>, the tree is what the treeNode(parent node) is belong to.</p>
 	<h4 class="topLine"><b>treeNode</b><span>JSON</span></h4>
 	<p>JSON data object of the parent node which will be auto expanded</p>
 	<h4 class="topLine"><b>Return </b><span>Boolean</span></h4>
@@ -21,7 +21,7 @@
 	</div>
 	<h3>Examples of setting & function</h3>
 	<h4>1. disable to auto expand parent node.</h4>
-	<pre xmlns=""><code>function zTreeBeforeDragOpen(treeId, treeNode) {
+	<pre xmlns=""><code>function myBeforeDragOpen(treeId, treeNode) {
     return false;
 };
 var setting = {
@@ -29,7 +29,7 @@ var setting = {
 		enable: true
 	},
 	callback: {
-		beforeDragOpen: zTreeBeforeDragOpen
+		beforeDragOpenfunction myBeforeDragOpen
 	}
 };
 ......</code></pre>

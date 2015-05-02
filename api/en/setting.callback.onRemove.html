@@ -5,7 +5,7 @@
 	<div class="desc">
 		<p></p>
 		<div class="longdesc">
-			<p>Used to capture the event when remove node.</p>
+			<p>Callback for remove node.</p>
 			<p class="highlight_red">If you set 'setting.callback.beforeRemove',and return false, zTree will not remove node, and will not trigger the 'onRemove' callback.</p>
 			<p>Default: null</p>
 		</div>
@@ -15,18 +15,18 @@
 	<h4><b>event</b><span>js event Object</span></h4>
 	<p>event Object</p>
 	<h4 class="topLine"><b>treeId</b><span>String</span></h4>
-	<p>zTree unique identifier: <b class="highlight_red">treeId</b>, easy for users to control.</p>
+	<p>zTree unique identifier: <b class="highlight_red">treeId</b>.</p>
 	<h4 class="topLine"><b>treeNode</b><span>JSON</span></h4>
 	<p>JSON data object of the node which was removed.</p>
 	</div>
 	<h3>Examples of setting & function</h3>
 	<h4>1. When remove node, alert info about 'tId' and 'name'.</h4>
-	<pre xmlns=""><code>function zTreeOnRemove(event, treeId, treeNode) {
+	<pre xmlns=""><code>function myOnRemove(event, treeId, treeNode) {
 	alert(treeNode.tId + ", " + treeNode.name);
 }
 var setting = {
 	callback: {
-		onRemove: zTreeOnRemove
+		onRemovefunction myOnRemove
 	}
 };
 ......</code></pre>

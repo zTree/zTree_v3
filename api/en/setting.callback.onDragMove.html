@@ -15,18 +15,18 @@
 	<h4><b>event</b><span>js event Object</span></h4>
 	<p>event Object</p>
 	<h4 class="topLine"><b>treeId</b><span>String</span></h4>
-	<p>zTree unique identifier: <b class="highlight_red">treeId</b>, the tree is what the treeNodes are belong to, easy for users to control.</p>
+	<p>zTree unique identifier: <b class="highlight_red">treeId</b>, the id of the containing tree.</p>
 	<h4 class="topLine"><b>treeNodes</b><span>Array(JSON)</span></h4>
 	<p>A collection of the nodes which will be dragged</p>
 	</div>
 	<h3>Examples of setting & function</h3>
 	<h4>1. When drag nodes, output the target dom.</h4>
-	<pre xmlns=""><code>function zTreeOnDragMove(event, treeId, treeNodes) {
+	<pre xmlns=""><code>function myOnDragMove(event, treeId, treeNodes) {
 	console.log(event.target);
 };
 var setting = {
 	callback: {
-		onDragMove: zTreeOnDragMove
+		onDragMovefunction myOnDragMove
 	}
 };
 ......</code></pre>

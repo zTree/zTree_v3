@@ -5,14 +5,14 @@
 	<div class="desc">
 		<p></p>
 		<div class="longdesc">
-			<p>Used to capture the right click event before the 'onRightClick' callback, zTree based on return value to determine whether to trigger the 'onRightClick' callback.</p>
+			<p>Used to capture the right click event before the 'onRightClick' callback, The return value controls the 'onRightClick' callback.</p>
 			<p>Default: null</p>
 		</div>
 	</div>
 	<h3>Function Parameter Descriptions</h3>
 	<div class="desc">
 	<h4><b>treeId</b><span>String</span></h4>
-	<p>zTree unique identifier: <b class="highlight_red">treeId</b>, easy for users to control.</p>
+	<p>zTree unique identifier: <b class="highlight_red">treeId</b>.</p>
 	<h4 class="topLine"><b>treeNode</b><span>JSON</span></h4>
 	<p>JSON data object of the node which is mouse right clicked</p>
 	<p class="highlight_red">If the DOM which mouse right clicked isn't a node, it will return null.</p>
@@ -22,12 +22,12 @@
 	</div>
 	<h3>Examples of setting & function</h3>
 	<h4>1. disable to trigger the 'onRightClick' callback</h4>
-	<pre xmlns=""><code>function zTreeBeforeRightClick(treeId, treeNode) {
+	<pre xmlns=""><code>function myBeforeRightClick(treeId, treeNode) {
     return false;
 };
 var setting = {
 	callback: {
-		beforeRightClick: zTreeBeforeRightClick
+		beforeRightClickfunction myBeforeRightClick
 	}
 };
 ......</code></pre>
