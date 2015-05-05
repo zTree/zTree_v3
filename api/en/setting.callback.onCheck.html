@@ -15,18 +15,18 @@
 	<h4><b>event</b><span>js event Object</span></h4>
 	<p>event Object</p>
 	<h4 class="topLine"><b>treeId</b><span>String</span></h4>
-	<p>zTree unique identifier: <b class="highlight_red">treeId</b>, easy for users to control.</p>
+	<p>zTree unique identifier: <b class="highlight_red">treeId</b>.</p>
 	<h4 class="topLine"><b>treeNode</b><span>JSON</span></h4>
 	<p>JSON data object of the node which is checked or unchecked</p>
 	</div>
 	<h3>Examples of setting & function</h3>
 	<h4>1. When check or uncheck the checkbox and radio, alert info about 'tId' and 'name' and 'checked'.</h4>
-	<pre xmlns=""><code>function zTreeOnCheck(event, treeId, treeNode) {
+	<pre xmlns=""><code>function myOnCheck(event, treeId, treeNode) {
     alert(treeNode.tId + ", " + treeNode.name + "," + treeNode.checked);
 };
 var setting = {
 	callback: {
-		onCheck: zTreeOnCheck
+		onCheckfunction myOnCheck
 	}
 };
 ......</code></pre>
