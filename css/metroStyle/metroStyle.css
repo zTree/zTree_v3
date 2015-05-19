@@ -53,16 +53,16 @@ website:    http://code.google.com/p/jquerytree/
 .ztree li span.button.chk.radio_true_disable {background-position: -68px -89px;}
 
 .ztree li span.button.switch {width:21px; height:21px}
-.ztree li span.button.root_open{background-position:-126px -63px}
-.ztree li span.button.root_close{background-position:-105px -63px}
+.ztree li span.button.root_open{background-position:-105px -63px}
+.ztree li span.button.root_close{background-position:-126px -63px}
 .ztree li span.button.roots_open{background-position: -105px 0;}
 .ztree li span.button.roots_close{background-position: -126px 0;}
 .ztree li span.button.center_open{background-position: -105px -21px;}
 .ztree li span.button.center_close{background-position: -126px -21px;}
 .ztree li span.button.bottom_open{background-position: -105px -42px;}
 .ztree li span.button.bottom_close{background-position: -126px -42px;}
-.ztree li span.button.noline_open{background-position: -126px -84px;}
-.ztree li span.button.noline_close{background-position: -105px -84px;}
+.ztree li span.button.noline_open{background-position: -105px -84px;}
+.ztree li span.button.noline_close{background-position: -126px -84px;}
 .ztree li span.button.root_docu{ background:none;}
 .ztree li span.button.roots_docu{background-position: -84px 0;}
 .ztree li span.button.center_docu{background-position: -84px -21px;}
