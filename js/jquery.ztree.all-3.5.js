@@ -1,6 +1,6 @@
 
 /*
- * JQuery zTree core v3.5.17
+ * JQuery zTree core v3.5.18
  * http://zTree.me/
  *
  * Copyright (c) 2010 Hunter.z
@@ -9,7 +9,7 @@
  * http://www.opensource.org/licenses/mit-license.php
  *
  * email: hunter.z@263.net
- * Date: 2015-02-15
+ * Date: 2015-05-25
  */
 (function($){
 	var settings = {}, roots = {}, caches = {},
@@ -28,7 +28,9 @@
 			COLLAPSE: "ztree_collapse",
 			ASYNC_SUCCESS: "ztree_async_success",
 			ASYNC_ERROR: "ztree_async_error",
-			REMOVE: "ztree_remove"
+			REMOVE: "ztree_remove",
+			SELECTED: "ztree_selected",
+			UNSELECTED: "ztree_unselected"
 		},
 		id: {
 			A: "_a",
@@ -180,6 +182,13 @@
 		o.bind(c.REMOVE, function (event, treeId, treeNode) {
 			tools.apply(setting.callback.onRemove, [event, treeId, treeNode]);
 		});
+
+		o.bind(c.SELECTED, function (event, srcEvent, treeId, node) {
+			tools.apply(setting.callback.onSelected, [srcEvent, treeId, node]);
+		});
+		o.bind(c.UNSELECTED, function (event, srcEvent, treeId, node) {
+			tools.apply(setting.callback.onUnSelected, [srcEvent, treeId, node]);
+		});
 	},
 	_unbindEvent = function(setting) {
 		var o = setting.treeObj,
@@ -190,7 +199,9 @@
 		.unbind(c.COLLAPSE)
 		.unbind(c.ASYNC_SUCCESS)
 		.unbind(c.ASYNC_ERROR)
-		.unbind(c.REMOVE);
+		.unbind(c.REMOVE)
+		.unbind(c.SELECTED)
+		.unbind(c.UNSELECTED);
 	},
 	//default event proxy of core
 	_eventProxy = function(event) {
@@ -980,18 +991,23 @@
 			});
 			return true;
 		},
-		cancelPreSelectedNode: function (setting, node) {
-			var list = data.getRoot(setting).curSelectedList;
-			for (var i=0, j=list.length-1; j>=i; j--) {
-				if (!node || node === list[j]) {
-					$$(list[j], consts.id.A, setting).removeClass(consts.node.CURSELECTED);
+		cancelPreSelectedNode: function (setting, node, excludeNode) {
+			var list = data.getRoot(setting).curSelectedList,
+				i, n;
+			for (i=list.length-1; i>=0; i--) {
+				n = list[i];
+				if (node === n || (!node && (!excludeNode || excludeNode !== n))) {
+					$$(n, consts.id.A, setting).removeClass(consts.node.CURSELECTED);
 					if (node) {
 						data.removeSelectedNode(setting, node);
+						setting.treeObj.trigger(consts.event.UNSELECTED, [event, setting.treeId, n]);
 						break;
+					} else {
+						list.splice(i, 1);
+						setting.treeObj.trigger(consts.event.UNSELECTED, [event, setting.treeId, n]);
 					}
 				}
 			}
-			if (!node) data.getRoot(setting).curSelectedList = [];
 		},
 		createNodeCallback: function(setting) {
 			if (!!setting.callback.onNodeCreated || !!setting.view.addDiyDom) {
@@ -1122,6 +1138,19 @@
 			}
 			data.getRoot(setting).expandTriggerFlag = expandTriggerFlag;
 			view.expandCollapseNode(setting, node, expandFlag, animateFlag, callback );
+		},
+		isSelectedNode: function (setting, node) {
+			if (!node) {
+				return false;
+			}
+			var list = data.getRoot(setting).curSelectedList,
+				i;
+			for (i=list.length-1; i>=0; i--) {
+				if (node === list[i]) {
+					return true;
+				}
+			}
+			return false;
 		},
 		makeDOMNodeIcon: function(html, setting, node) {
 			var nameStr = data.getNodeName(setting, node),
@@ -1365,10 +1394,11 @@
 		},
 		selectNode: function(setting, node, addFlag) {
 			if (!addFlag) {
-				view.cancelPreSelectedNode(setting);
+				view.cancelPreSelectedNode(setting, null, node);
 			}
 			$$(node, consts.id.A, setting).addClass(consts.node.CURSELECTED);
 			data.addSelectedNode(setting, node);
+			setting.treeObj.trigger(consts.event.SELECTED, [event, setting.treeId, node]);
 		},
 		setNodeFontCss: function(setting, treeNode) {
 			var aObj = $$(treeNode, consts.id.A, setting),
@@ -1685,7 +1715,7 @@
 	consts = zt.consts;
 })(jQuery);
 /*
- * JQuery zTree excheck v3.5.17
+ * JQuery zTree excheck v3.5.18
  * http://zTree.me/
  *
  * Copyright (c) 2010 Hunter.z
@@ -1694,7 +1724,7 @@
  * http://www.opensource.org/licenses/mit-license.php
  *
  * email: hunter.z@263.net
- * Date: 2015-02-15
+ * Date: 2015-05-25
  */
 (function($){
 	//default consts of excheck
@@ -2313,7 +2343,7 @@
 	}
 })(jQuery);
 /*
- * JQuery zTree exedit v3.5.17
+ * JQuery zTree exedit v3.5.18
  * http://zTree.me/
  *
  * Copyright (c) 2010 Hunter.z
@@ -2322,7 +2352,7 @@
  * http://www.opensource.org/licenses/mit-license.php
  *
  * email: hunter.z@263.net
- * Date: 2015-02-15
+ * Date: 2015-05-25
  */
 (function($){
 	//default consts of exedit
