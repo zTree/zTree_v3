@@ -13,6 +13,11 @@
 
 </font>
 
+*2015.06.18* v3.5.18
+   * 【增加】metro 风格 demo
+   * 【增加】awesome 风格 demo
+   * 【增加】回调 onSelected / onUnSelected
+
 *2015.02.15* v3.5.17
    * 【修改】excheck 扩展中 removeClass 与 jQueryUI 1.9 冲突的问题，目前放弃 removeClass 方法
    * 【修改】优化 exhide 扩展包初始化效率，避免数据多时 ie8 假死的 bug（感谢：https://github.com/sarxos）
