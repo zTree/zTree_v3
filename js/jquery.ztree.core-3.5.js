@@ -8,7 +8,7 @@
  * http://www.opensource.org/licenses/mit-license.php
  *
  * email: hunter.z@263.net
- * Date: 2015-06-18
+ * Date: 2015-08-13
  */
 (function($){
 	var settings = {}, roots = {}, caches = {},
@@ -77,7 +77,8 @@
 				children: "children",
 				name: "name",
 				title: "",
-				url: "url"
+				url: "url",
+				icon: "icon"
 			},
 			simpleData: {
 				enable: false,
@@ -1204,7 +1205,7 @@
 		makeNodeIcoStyle: function(setting, node) {
 			var icoStyle = [];
 			if (!node.isAjaxing) {
-				var icon = (node.isParent && node.iconOpen && node.iconClose) ? (node.open ? node.iconOpen : node.iconClose) : node.icon;
+				var icon = (node.isParent && node.iconOpen && node.iconClose) ? (node.open ? node.iconOpen : node.iconClose) : node[setting.data.key.icon];
 				if (icon) icoStyle.push("background:url(", icon, ") 0 0 no-repeat;");
 				if (setting.view.showIcon == false || !tools.apply(setting.view.showIcon, [setting.treeId, node], true)) {
 					icoStyle.push("width:0px;height:0px;");

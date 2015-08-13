@@ -13,7 +13,8 @@
 
 </font>
 
-*2015.06.18* v3.5.18
+*2015.08.13* v3.5.18
+   * 【增加】Allow nodes to specify their own icon using an 'icon' property of the 'setting.data.key'
    * 【增加】metro 风格 demo
    * 【增加】awesome 风格 demo
    * 【增加】回调 onSelected / onUnSelected
