@@ -13,7 +13,8 @@
 
 </font>
 
-*2015.08.13* v3.5.18
+*2015.08.26* v3.5.18
+   * 【修改】onSelected/onUnSelected 回调参数，由 (event, treeId, node) 修改为 （treeId, node）；另外 删除 已选择的节点时，也会触发 onUnSelected 回调
    * 【增加】Allow nodes to specify their own icon using an 'icon' property of the 'setting.data.key'
    * 【增加】metro 风格 demo
    * 【增加】awesome 风格 demo
