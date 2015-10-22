@@ -1,6 +1,6 @@
 <div class="apiDetail">
 <div>
-	<h2><span>Function(parentNode, newNodes, isSilent)</span><span class="path">zTreeObj.</span>addNodes</h2>
+	<h2><span>Function(parentNode, [index], newNodes, isSilent)</span><span class="path">zTreeObj.</span>addNodes</h2>
 	<h3>概述<span class="h3_info">[ 依赖 <span class="highlight_green">jquery.ztree.core</span> 扩展 js ]</span></h3>
 	<div class="desc">
 		<p></p>
@@ -15,6 +15,11 @@
 	<h4><b>parentNode</b><span>JSON</span></h4>
 	<p>指定的父节点，如果增加根节点，请设置 parentNode 为 null 即可。</p>
 	<p class="highlight_red">请务必保证此节点数据对象 是 zTree 内部的数据对象</p>
+	<h4><b>[index]</b><span>Number</span></h4>
+	<p>新节点插入的位置（从 0 开始）</p>
+	<p>index = -1 时，插入到最后</p>
+	<p>此参数可忽略</p>
+	<p class="highlight_red">v3.5.19+</p>
 	<h4 class="topLine"><b>newNodes</b><span>JSON / Array(JSON)</span></h4>
 	<p>需要增加的节点数据 JSON 对象集合，数据只需要满足 zTree 的节点数据必需的属性即可，详细请参考“treeNode 节点数据详解”</p>
 	<p class="highlight_red">1、v3.x 支持单独添加一个节点，即如果只新增一个节点，不用必须包在数组中</p>

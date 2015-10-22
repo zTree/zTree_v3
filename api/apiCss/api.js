@@ -238,7 +238,7 @@ var apiContent = {
 			{id:3, pId:0, name:""},
 			{id:4, pId:0, t:"zTreeObj", name:"zTreeObj : {", open:true},
 			{id:401, pId:4, t:"setting", name:"setting", iconSkin:"core", showAPI:true},
-			{id:402, pId:4, t:"addNodes", name:"addNodes (parentNode, newNodes, isSilent)", iconSkin:"core", showAPI:true},
+			{id:402, pId:4, t:"addNodes", name:"addNodes (parentNode, index, newNodes, isSilent)", iconSkin:"core", showAPI:true},
 			{id:403, pId:4, t:"cancelEditName", name:"cancelEditName (newName)", iconSkin:"edit", showAPI:true},
 			{id:404, pId:4, t:"cancelSelectedNode", name:"cancelSelectedNode (node)", iconSkin:"core", showAPI:true},
 			{id:405, pId:4, t:"checkAllNodes", name:"checkAllNodes (checked)", iconSkin:"check", showAPI:true},

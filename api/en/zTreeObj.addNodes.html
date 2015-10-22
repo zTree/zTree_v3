@@ -1,6 +1,6 @@
 <div class="apiDetail">
 <div>
-	<h2><span>Function(parentNode, newNodes, isSilent)</span><span class="path">zTreeObj.</span>addNodes</h2>
+	<h2><span>Function(parentNode, [index], newNodes, isSilent)</span><span class="path">zTreeObj.</span>addNodes</h2>
 	<h3>Overview<span class="h3_info">[ depends on <span class="highlight_green">jquery.ztree.core</span> js ]</span></h3>
 	<div class="desc">
 		<p></p>
@@ -15,6 +15,11 @@
 	<h4><b>parentNode</b><span>JSON</span></h4>
 	<p>The additional node's parent node. If additional node is root node, please the parentNode is null.</p>
 	<p class="highlight_red">Please ensure this node data object is a data object within zTree.</p>
+	<h4><b>[index]</b><span>Number</span></h4>
+	<p>The index of the parentNode's children where the newnodes will be added (the value start from 0)</p>
+	<p>When index = -1, the newnodes will be added to the last</p>
+	<p>This parameter can be ignore.</p>
+	<p class="highlight_red">v3.5.19+</p>
 	<h4 class="topLine"><b>newNodes</b><span>JSON / Array(JSON)</span></h4>
 	<p>The node data's JSON object collection which need to increase, refer to 'treeNode treeNode data details'</p>
 	<p class="highlight_red">1. zTree v3.x support to add single node, that is, if you only add a node, you can don't use the array.</p>

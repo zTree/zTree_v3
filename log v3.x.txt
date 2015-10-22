@@ -13,6 +13,10 @@
 
 </font>
 
+*2015.10.22* v3.5.19
+   * 【修改】addNodes 方法支持直接添加新节点到任意位置 addNodes(parentNode, index, newNodes, isSilent)
+   * 【修改】selectstart 事件未解绑导致的内存泄漏
+
 *2015.08.26* v3.5.18
    * 【修改】onSelected/onUnSelected 回调参数，由 (event, treeId, node) 修改为 （treeId, node）；另外 删除 已选择的节点时，也会触发 onUnSelected 回调
    * 【增加】Allow nodes to specify their own icon using an 'icon' property of the 'setting.data.key'
