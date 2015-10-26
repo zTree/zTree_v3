@@ -1,5 +1,5 @@
 /*
- * JQuery zTree exedit v3.5.19
+ * JQuery zTree exedit v3.5.19.1
  * http://zTree.me/
  *
  * Copyright (c) 2010 Hunter.z
@@ -8,7 +8,7 @@
  * http://www.opensource.org/licenses/mit-license.php
  *
  * email: hunter.z@263.net
- * Date: 2015-10-22
+ * Date: 2015-10-26
  */
 (function($){
 	//default consts of exedit
@@ -192,7 +192,7 @@
 			}
 			if (moveType == consts.move.TYPE_INNER) {
 				function copyCallback() {
-					view.addNodes(_this.setting, targetNode, [newNode], isSilent);
+					view.addNodes(_this.setting, targetNode, -1, [newNode], isSilent);
 				}
 
 				if (tools.canAsync(this.setting, targetNode)) {
@@ -201,7 +201,7 @@
 					copyCallback();
 				}
 			} else {
-				view.addNodes(this.setting, targetNode.parentNode, [newNode], isSilent);
+				view.addNodes(this.setting, targetNode.parentNode, -1, [newNode], isSilent);
 				view.moveNode(this.setting, targetNode, newNode, moveType, false, isSilent);
 			}
 			return newNode;
@@ -658,26 +658,16 @@
 								}
 							}
 							if (moveType == consts.move.TYPE_INNER) {
-								view.addNodes(targetSetting, dragTargetNode, newNodes);
+								view.addNodes(targetSetting, dragTargetNode, -1, newNodes);
 							} else {
-								view.addNodes(targetSetting, dragTargetNode.getParentNode(), newNodes);
-								if (moveType == consts.move.TYPE_PREV) {
-									for (i=0, l=newNodes.length; i<l; i++) {
-										view.moveNode(targetSetting, dragTargetNode, newNodes[i], moveType, false);
-									}
-								} else {
-									for (i=-1, l=newNodes.length-1; i<l; l--) {
-										view.moveNode(targetSetting, dragTargetNode, newNodes[l], moveType, false);
-									}
-								}
+								view.addNodes(targetSetting, dragTargetNode.getParentNode(), moveType == consts.move.TYPE_PREV ? dragTargetNode.getIndex() : dragTargetNode.getIndex()+1, newNodes);
 							}
 						} else {
 							if (isCopy && moveType == consts.move.TYPE_INNER) {
-								view.addNodes(targetSetting, dragTargetNode, newNodes);
+								view.addNodes(targetSetting, dragTargetNode, -1, newNodes);
+							} else if (isCopy) {
+								view.addNodes(targetSetting, dragTargetNode.getParentNode(), moveType == consts.move.TYPE_PREV ? dragTargetNode.getIndex() : dragTargetNode.getIndex()+1, newNodes);
 							} else {
-								if (isCopy) {
-									view.addNodes(targetSetting, dragTargetNode.getParentNode(), newNodes);
-								}
 								if (moveType != consts.move.TYPE_NEXT) {
 									for (i=0, l=newNodes.length; i<l; i++) {
 										view.moveNode(targetSetting, dragTargetNode, newNodes[i], moveType, false);
