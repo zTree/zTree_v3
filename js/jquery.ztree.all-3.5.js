@@ -1,6 +1,6 @@
 
 /*
- * JQuery zTree core v3.5.19.1
+ * JQuery zTree core v3.5.19.2
  * http://zTree.me/
  *
  * Copyright (c) 2010 Hunter.z
@@ -9,7 +9,7 @@
  * http://www.opensource.org/licenses/mit-license.php
  *
  * email: hunter.z@263.net
- * Date: 2015-10-26
+ * Date: 2015-11-15
  */
 (function($){
 	var settings = {}, roots = {}, caches = {},
@@ -19,7 +19,8 @@
 			BUTTON: "button",
 			LEVEL: "level",
 			ICO_LOADING: "ico_loading",
-			SWITCH: "switch"
+			SWITCH: "switch",
+			NAME: 'node_name'
 		},
 		event: {
 			NODECREATED: "ztree_nodeCreated",
@@ -1226,6 +1227,7 @@
 			html.push("<span id='", node.tId, consts.id.ICON,
 				"' title='' treeNode", consts.id.ICON," class='", view.makeNodeIcoClass(setting, node),
 				"' style='", view.makeNodeIcoStyle(setting, node), "'></span><span id='", node.tId, consts.id.SPAN,
+				"' class='", consts.className.NAME,
 				"'>",name,"</span>");
 		},
 		makeDOMNodeLine: function(html, setting, node) {
@@ -1794,7 +1796,7 @@
 	consts = zt.consts;
 })(jQuery);
 /*
- * JQuery zTree excheck v3.5.19.1
+ * JQuery zTree excheck v3.5.19.2
  * http://zTree.me/
  *
  * Copyright (c) 2010 Hunter.z
@@ -1803,7 +1805,7 @@
  * http://www.opensource.org/licenses/mit-license.php
  *
  * email: hunter.z@263.net
- * Date: 2015-10-26
+ * Date: 2015-11-15
  */
 (function($){
 	//default consts of excheck
@@ -2422,7 +2424,7 @@
 	}
 })(jQuery);
 /*
- * JQuery zTree exedit v3.5.19.1
+ * JQuery zTree exedit v3.5.19.2
  * http://zTree.me/
  *
  * Copyright (c) 2010 Hunter.z
@@ -2431,7 +2433,7 @@
  * http://www.opensource.org/licenses/mit-license.php
  *
  * email: hunter.z@263.net
- * Date: 2015-10-26
+ * Date: 2015-11-15
  */
 (function($){
 	//default consts of exedit
