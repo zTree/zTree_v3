@@ -11,8 +11,7 @@ if(array_key_exists( 'count',$_REQUEST)) {
 if ($pId==null || $pId=="") $pId = "0";
 if ($pCount==null || $pCount=="") $pCount = "10";
 
-$pId = str_replace("%<%", "&lt;", $pId);
-$pId = str_replace("%>%", "&gt;", $pId);
+$pId = htmlspecialchars($pId);
 
 $max = (int)$pCount;
 for ($i=1; $i<=$max; $i++) {
