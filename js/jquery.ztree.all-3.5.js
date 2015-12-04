@@ -1,6 +1,6 @@
 
 /*
- * JQuery zTree core v3.5.19.2
+ * JQuery zTree core v3.5.19.3
  * http://zTree.me/
  *
  * Copyright (c) 2010 Hunter.z
@@ -9,7 +9,7 @@
  * http://www.opensource.org/licenses/mit-license.php
  *
  * email: hunter.z@263.net
- * Date: 2015-11-15
+ * Date: 2015-12-04
  */
 (function($){
 	var settings = {}, roots = {}, caches = {},
@@ -1648,15 +1648,24 @@
 
 					data.getRoot(setting).expandTriggerFlag = callbackFlag;
 					if (!tools.canAsync(setting, node) && sonSign) {
-						view.expandCollapseSonNode(setting, node, expandFlag, true, function() {
-							if (focus !== false) {try{$$(node, setting).focus().blur();}catch(e){}}
-						});
+						view.expandCollapseSonNode(setting, node, expandFlag, true, showNodeFocus);
 					} else {
 						node.open = !expandFlag;
 						view.switchNode(this.setting, node);
-						if (focus !== false) {try{$$(node, setting).focus().blur();}catch(e){}}
+						showNodeFocus();
 					}
 					return expandFlag;
+
+					function showNodeFocus() {
+						var a = $$(node, setting).get(0);
+						if (a && focus !== false) {
+							if (a.scrollIntoView) {
+								a.scrollIntoView();
+							} else {
+								try{a.focus().blur();}catch(e){}
+							}
+						}
+					}
 				},
 				getNodes : function() {
 					return data.getNodes(setting);
@@ -1752,13 +1761,22 @@
 					if (tools.uCanDo(setting)) {
 						addFlag = setting.view.selectedMulti && addFlag;
 						if (node.parentTId) {
-							view.expandCollapseParentNode(setting, node.getParentNode(), true, false, function() {
-								try{$$(node, setting).focus().blur();}catch(e){}
-							});
+							view.expandCollapseParentNode(setting, node.getParentNode(), true, false, showNodeFocus);
 						} else {
 							try{$$(node, setting).focus().blur();}catch(e){}
 						}
 						view.selectNode(setting, node, addFlag);
+					}
+
+					function showNodeFocus() {
+						var a = $$(node, setting).get(0);
+						if (a) {
+							if (a.scrollIntoView) {
+								a.scrollIntoView();
+							} else {
+								try{a.focus().blur();}catch(e){}
+							}
+						}
 					}
 				},
 				transformTozTreeNodes : function(simpleNodes) {
@@ -1796,7 +1814,7 @@
 	consts = zt.consts;
 })(jQuery);
 /*
- * JQuery zTree excheck v3.5.19.2
+ * JQuery zTree excheck v3.5.19.3
  * http://zTree.me/
  *
  * Copyright (c) 2010 Hunter.z
@@ -1805,7 +1823,7 @@
  * http://www.opensource.org/licenses/mit-license.php
  *
  * email: hunter.z@263.net
- * Date: 2015-11-15
+ * Date: 2015-12-04
  */
 (function($){
 	//default consts of excheck
@@ -2424,7 +2442,7 @@
 	}
 })(jQuery);
 /*
- * JQuery zTree exedit v3.5.19.2
+ * JQuery zTree exedit v3.5.19.3
  * http://zTree.me/
  *
  * Copyright (c) 2010 Hunter.z
@@ -2433,7 +2451,7 @@
  * http://www.opensource.org/licenses/mit-license.php
  *
  * email: hunter.z@263.net
- * Date: 2015-11-15
+ * Date: 2015-12-04
  */
 (function($){
 	//default consts of exedit
@@ -3105,7 +3123,15 @@
 							}
 						}
 						view.selectNodes(targetSetting, newNodes);
-						$$(newNodes[0], setting).focus().blur();
+
+						var a = $$(newNodes[0], setting).get(0);
+						if (a) {
+							if (a.scrollIntoView) {
+								a.scrollIntoView();
+							} else {
+								try{a.focus().blur();}catch(e){}
+							}
+						}
 
 						setting.treeObj.trigger(consts.event.DROP, [event, targetSetting.treeId, newNodes, dragTargetNode, moveType, isCopy]);
 					}
