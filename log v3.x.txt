@@ -13,6 +13,9 @@
 
 </font>
 
+*2016.01.20* v3.5.20
+   * 【修改】checkAllNodes() 方法不处理 (chkDisabled = true) 的父节点的子节点的 bug
+
 *2015.12.04* v3.5.19.3
    * 【修改】为避免定位节点时抢焦点， 使用 scrollIntoView 方法替换之前的 focus 方法（对于IE6等旧浏览器仍然使用 focus方法）
 

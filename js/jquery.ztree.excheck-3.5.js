@@ -1,5 +1,5 @@
 /*
- * JQuery zTree excheck v3.5.19.3
+ * JQuery zTree excheck v3.5.20
  * http://zTree.me/
  *
  * Copyright (c) 2010 Hunter.z
@@ -8,7 +8,7 @@
  * http://www.opensource.org/licenses/mit-license.php
  *
  * email: hunter.z@263.net
- * Date: 2015-12-04
+ * Date: 2016-01-20
  */
 (function($){
 	//default consts of excheck
@@ -546,7 +546,7 @@
 
 			var hasDisable = false;
 			if (node[childKey]) {
-				for (var i = 0, l = node[childKey].length; i < l && node.chkDisabled !== true; i++) {
+				for (var i = 0, l = node[childKey].length; i < l; i++) {
 					var sNode = node[childKey][i];
 					view.setSonNodeCheckBox(setting, sNode, value, srcNode);
 					if (sNode.chkDisabled === true) hasDisable = true;

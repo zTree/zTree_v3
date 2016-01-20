@@ -1,5 +1,5 @@
 /*
- * JQuery zTree exedit v3.5.19.3
+ * JQuery zTree exedit v3.5.20
  * http://zTree.me/
  *
  * Copyright (c) 2010 Hunter.z
@@ -8,7 +8,7 @@
  * http://www.opensource.org/licenses/mit-license.php
  *
  * email: hunter.z@263.net
- * Date: 2015-12-04
+ * Date: 2016-01-20
  */
 (function($){
 	//default consts of exedit
@@ -684,7 +684,7 @@
 						var a = $$(newNodes[0], setting).get(0);
 						if (a) {
 							if (a.scrollIntoView) {
-								a.scrollIntoView();
+								a.scrollIntoView(false);
 							} else {
 								try{a.focus().blur();}catch(e){}
 							}

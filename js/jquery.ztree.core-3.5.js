@@ -1,5 +1,5 @@
 /*
- * JQuery zTree core v3.5.19.3
+ * JQuery zTree core v3.5.20
  * http://zTree.me/
  *
  * Copyright (c) 2010 Hunter.z
@@ -8,7 +8,7 @@
  * http://www.opensource.org/licenses/mit-license.php
  *
  * email: hunter.z@263.net
- * Date: 2015-12-04
+ * Date: 2016-01-20
  */
 (function($){
 	var settings = {}, roots = {}, caches = {},
@@ -1659,7 +1659,7 @@
 						var a = $$(node, setting).get(0);
 						if (a && focus !== false) {
 							if (a.scrollIntoView) {
-								a.scrollIntoView();
+								a.scrollIntoView(false);
 							} else {
 								try{a.focus().blur();}catch(e){}
 							}
