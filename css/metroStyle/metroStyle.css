@@ -92,5 +92,5 @@ span.tmpzTreeMove_arrow {width:16px; height:21px; display: inline-block; padding
     background-color:transparent; background-repeat:no-repeat; background-attachment: scroll;
     background-position:-168px -84px; background-image:url("./img/metro.png"); *background-image:url("./img/metro.gif")}
 
-ul.ztreeul.ztreeDragUL {margin:0; padding:0; position:absolute; width:auto; height:auto;overflow:hidden; background-color:#cfcfcf; border:1px #00B83F dotted; opacity:0.8; filter:alpha(opacity=80)}
+ul.ztree.zTreeDragUL {margin:0; padding:0; position:absolute; width:auto; height:auto;overflow:hidden; background-color:#cfcfcf; border:1px #00B83F dotted; opacity:0.8; filter:alpha(opacity=80)}
 .ztreeMask {z-index:10000; background-color:#cfcfcf; opacity:0.0; filter:alpha(opacity=0); position:absolute}
