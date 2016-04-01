@@ -1,5 +1,5 @@
 /*
- * JQuery zTree exedit v3.5.22
+ * JQuery zTree exedit v3.5.23
  * http://zTree.me/
  *
  * Copyright (c) 2010 Hunter.z
@@ -8,7 +8,7 @@
  * http://www.opensource.org/licenses/mit-license.php
  *
  * email: hunter.z@263.net
- * Date: 2016-03-01
+ * Date: 2016-04-01
  */
 (function($){
 	//default consts of exedit
@@ -692,13 +692,7 @@
 						view.selectNodes(targetSetting, newNodes);
 
 						var a = $$(newNodes[0], setting).get(0);
-						if (a) {
-							if (a.scrollIntoView) {
-								a.scrollIntoView(false);
-							} else {
-								try{a.focus().blur();}catch(e){}
-							}
-						}
+						view.scrollIntoView(a);
 
 						setting.treeObj.trigger(consts.event.DROP, [event, targetSetting.treeId, newNodes, dragTargetNode, moveType, isCopy]);
 					}

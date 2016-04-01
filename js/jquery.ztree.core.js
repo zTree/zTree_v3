@@ -1,5 +1,5 @@
 /*
- * JQuery zTree core v3.5.22
+ * JQuery zTree core v3.5.23
  * http://zTree.me/
  *
  * Copyright (c) 2010 Hunter.z
@@ -8,7 +8,7 @@
  * http://www.opensource.org/licenses/mit-license.php
  *
  * email: hunter.z@263.net
- * Date: 2016-03-01
+ * Date: 2016-04-01
  */
 (function($){
 	var settings = {}, roots = {}, caches = {},
@@ -1346,6 +1346,18 @@
 				$$(node, consts.id.UL, setting).empty();
 			}
 		},
+		scrollIntoView: function(dom) {
+			if (!dom) {
+				return;
+			}
+			if (dom.scrollIntoViewIfNeeded) {
+				dom.scrollIntoViewIfNeeded();
+			} else if (dom.scrollIntoView) {
+				dom.scrollIntoView(false);
+			} else {
+				try{dom.focus().blur();}catch(e){}
+			}
+		},
 		setFirstNode: function(setting, parentNode) {
 			var childKey = setting.data.key.children, childLength = parentNode[childKey].length;
 			if ( childLength > 0) {
@@ -1658,11 +1670,7 @@
 					function showNodeFocus() {
 						var a = $$(node, setting).get(0);
 						if (a && focus !== false) {
-							if (a.scrollIntoView) {
-								a.scrollIntoView(false);
-							} else {
-								try{a.focus().blur();}catch(e){}
-							}
+							view.scrollIntoView(a);
 						}
 					}
 				},
@@ -1755,7 +1763,7 @@
 						this.setting.treeObj.trigger(consts.event.REMOVE, [setting.treeId, node]);
 					}
 				},
-				selectNode : function(node, addFlag) {
+				selectNode : function(node, addFlag, isSilent) {
 					if (!node) return;
 					if (tools.uCanDo(setting)) {
 						addFlag = setting.view.selectedMulti && addFlag;
@@ -1768,14 +1776,11 @@
 					}
 
 					function showNodeFocus() {
-						var a = $$(node, setting).get(0);
-						if (a) {
-							if (a.scrollIntoView) {
-								a.scrollIntoView(false);
-							} else {
-								try{a.focus().blur();}catch(e){}
-							}
+						if (isSilent) {
+							return;
 						}
+						var a = $$(node, setting).get(0);
+						view.scrollIntoView(a);
 					}
 				},
 				transformTozTreeNodes : function(simpleNodes) {

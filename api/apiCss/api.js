@@ -267,7 +267,7 @@ var apiContent = {
 			{id:422, pId:4, t:"refresh", name:"refresh ()", iconSkin:"core", showAPI:true},
 			{id:423, pId:4, t:"removeChildNodes", name:"removeChildNodes (parentNode)", iconSkin:"core", showAPI:true},
 			{id:424, pId:4, t:"removeNode", name:"removeNode (node, callbackFlag)", iconSkin:"core", showAPI:true},
-			{id:425, pId:4, t:"selectNode", name:"selectNode (node, addFlag)", iconSkin:"core", showAPI:true},
+			{id:425, pId:4, t:"selectNode", name:"selectNode (node, addFlag, isSilent)", iconSkin:"core", showAPI:true},
 			{id:430, pId:4, t:"setChkDisabled", name:"setChkDisabled (node, disabled, inheritParent, inheritChildren)", iconSkin:"check", showAPI:true},
 			{id:426, pId:4, t:"setEditable", name:"setEditable (editable)", iconSkin:"edit", showAPI:true},
 			{id:434, pId:4, t:"showNode", name:"showNode (node)", iconSkin:"hide", showAPI:true},

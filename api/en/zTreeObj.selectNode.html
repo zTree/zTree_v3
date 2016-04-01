@@ -1,6 +1,6 @@
 <div class="apiDetail">
 <div>
-	<h2><span>Function(treeNode, addFlag)</span><span class="path">zTreeObj.</span>selectNode</h2>
+	<h2><span>Function(treeNode, addFlag, isSilent)</span><span class="path">zTreeObj.</span>selectNode</h2>
 	<h3>Overview<span class="h3_info">[ depends on <span class="highlight_green">jquery.ztree.core</span> js ]</span></h3>
 	<div class="desc">
 		<p></p>
@@ -17,8 +17,11 @@
 	<p class="highlight_red">Please ensure that this data object is an internal node data object in zTree.</p>
 	<h4 class="topLine"><b>addFlag</b><span>Boolean</span></h4>
 	<p>addFlag = true means: append to select node, don't affect the previously selected node, can select multiple nodes.</p>
-	<p>addFlag = false means: select single node, prior the selected node is deselected.</p>
+	<p>addFlag = false (default) means: select single node, prior the selected node is deselected.</p>
 	<p class="highlight_red">If setting.view.selectedMulti = false, this para, this parameter is not valid, always select single node</p>
+	<p>isSilent = true means: when you select node, zTree will not scroll the node into view.</p>
+	<p>isSilent = false (default) means: when you select node, zTree will scroll the node into view.</p>
+	<p class="highlight_red">(v3.5.23+)</p>
 	<h4 class="topLine"><b>Return </b><span>none</span></h4>
 	<p>no return value</p>
 	</div>
