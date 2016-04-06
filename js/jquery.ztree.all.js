@@ -599,7 +599,7 @@
 			var childKey = setting.data.key.children;
 			if (node[childKey]) {
 				for (var i=0, l=node[childKey].length; i<l; i++) {
-					arguments.callee(setting, node[childKey][i]);
+					data.removeNodeCache(setting, node[childKey][i]);
 				}
 			}
 			data.getCache(setting).nodes[data.getNodeCacheId(node.tId)] = null;
@@ -818,7 +818,7 @@
 			if (obj === null) return null;
 			var o = tools.isArray(obj) ? [] : {};
 			for(var i in obj){
-				o[i] = (obj[i] instanceof Date) ? new Date(obj[i].getTime()) : (typeof obj[i] === "object" ? arguments.callee(obj[i]) : obj[i]);
+				o[i] = (obj[i] instanceof Date) ? new Date(obj[i].getTime()) : (typeof obj[i] === "object" ? tools.clone(obj[i]) : obj[i]);
 			}
 			return o;
 		},

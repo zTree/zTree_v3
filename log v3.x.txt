@@ -14,6 +14,9 @@
 </font>
 
 
+*2016.04.06* v3.5.23
+   * [修改] 替换 arguments.callee 避免 'use strict' 严格模式下报错
+
 *2016.04.01* v3.5.23
    * [修改] selectNode 方法 增加 isSilent 参数，可以禁止 选中节点时，自动滚动到视图
    
