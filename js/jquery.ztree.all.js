@@ -1119,13 +1119,14 @@
 		expandCollapseNode: function(setting, node, expandFlag, animateFlag, callback) {
 			var root = data.getRoot(setting),
 			childKey = setting.data.key.children;
+			var tmpCb, _callback;
 			if (!node) {
 				tools.apply(callback, []);
 				return;
 			}
 			if (root.expandTriggerFlag) {
-				var _callback = callback;
-				callback = function(){
+				_callback = callback;
+				tmpCb = function(){
 					if (_callback) _callback();
 					if (node.open) {
 						setting.treeObj.trigger(consts.event.EXPAND, [setting.treeId, node]);
@@ -1133,6 +1134,7 @@
 						setting.treeObj.trigger(consts.event.COLLAPSE, [setting.treeId, node]);
 					}
 				};
+				callback = tmpCb;
 				root.expandTriggerFlag = false;
 			}
 			if (!node.open && node.isParent && ((!$$(node, consts.id.UL, setting).get(0)) || (node[childKey] && node[childKey].length>0 && !$$(node[childKey][0], setting).get(0)))) {
