@@ -16,6 +16,7 @@
 
 *2016.06.06* v3.5.24
    * [修改] selectNode 方法中 某些情况下，isSilent 参数无效
+   * [修改] 数据中 id = 'length'时， 导致 transformTozTreeFormat() 方法异常
 
 *2016.04.08* v3.5.23
    * [修改] expandCollapseNode 方法被 gulp 压缩后，在 IE8 上会导致溢出
