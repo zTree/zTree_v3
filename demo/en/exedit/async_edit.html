@@ -52,7 +52,11 @@
 		}		
 		function beforeRename(treeId, treeNode, newName) {
 			if (newName.length == 0) {
-				alert("Node name can not be empty.");
+				setTimeout(function() {
+					var zTree = $.fn.zTree.getZTreeObj("treeDemo");
+					zTree.cancelEditName();
+					alert("Node name can not be empty.");
+				}, 0);
 				return false;
 			}
 			return true;

@@ -52,7 +52,11 @@
 		}		
 		function beforeRename(treeId, treeNode, newName) {
 			if (newName.length == 0) {
-				alert("节点名称不能为空.");
+				setTimeout(function() {
+					var zTree = $.fn.zTree.getZTreeObj("treeDemo");
+					zTree.cancelEditName();
+					alert("节点名称不能为空.");
+				}, 0);
 				return false;
 			}
 			return true;

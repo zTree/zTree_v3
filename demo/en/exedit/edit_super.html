@@ -61,7 +61,14 @@
 			showLog("[ "+getTime()+" beforeEditName ]&nbsp;&nbsp;&nbsp;&nbsp; " + treeNode.name);
 			var zTree = $.fn.zTree.getZTreeObj("treeDemo");
 			zTree.selectNode(treeNode);
-			return confirm("Start node '" + treeNode.name + "' editorial status?");
+			setTimeout(function() {
+				if (confirm("Start node '" + treeNode.name + "' editorial status?")) {
+					setTimeout(function() {
+						zTree.editName(treeNode);
+					}, 0);
+				}
+			}, 0);
+			return false;
 		}
 		function beforeRemove(treeId, treeNode) {
 			className = (className === "dark" ? "":"dark");
@@ -77,9 +84,11 @@
 			className = (className === "dark" ? "":"dark");
 			showLog((isCancel ? "<span style='color:red'>":"") + "[ "+getTime()+" beforeRename ]&nbsp;&nbsp;&nbsp;&nbsp; " + treeNode.name + (isCancel ? "</span>":""));
 			if (newName.length == 0) {
-				alert("Node name can not be empty.");
-				var zTree = $.fn.zTree.getZTreeObj("treeDemo");
-				setTimeout(function(){zTree.editName(treeNode)}, 10);
+				setTimeout(function() {
+					var zTree = $.fn.zTree.getZTreeObj("treeDemo");
+					zTree.cancelEditName();
+					alert("Node name can not be empty.");
+				}, 0);
 				return false;
 			}
 			return true;
