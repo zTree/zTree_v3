@@ -1,5 +1,5 @@
 /*
- * JQuery zTree core v3.5.24
+ * JQuery zTree core v3.5.25
  * http://zTree.me/
  *
  * Copyright (c) 2010 Hunter.z
@@ -8,7 +8,7 @@
  * http://www.opensource.org/licenses/mit-license.php
  *
  * email: hunter.z@263.net
- * Date: 2016-06-06
+ * Date: 2016-09-27
  */
 (function($){
 	var settings = {}, roots = {}, caches = {},
@@ -1001,7 +1001,7 @@
                 cache: false,
 				type: setting.async.type,
 				url: tools.apply(setting.async.url, [setting.treeId, node], setting.async.url),
-				data: tmpParam,
+				data: setting.async.contentType.indexOf('application/json') > -1 ? JSON.stringify(tmpParam) : tmpParam,
 				dataType: setting.async.dataType,
 				success: function(msg) {
 					if (_tmpV != data.getRoot(setting)._ver) {

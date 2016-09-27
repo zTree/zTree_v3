@@ -13,6 +13,8 @@
 
 </font>
 
+*2016.09.27* v3.5.25
+   * [修改] ajax 异步加载支持 contentType = 'application/json'
 
 *2016.06.06* v3.5.24
    * [修改] selectNode 方法中 某些情况下，isSilent 参数无效
