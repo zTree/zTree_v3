@@ -13,6 +13,9 @@
 
 </font>
 
+*2016.11.03* v3.5.26
+   * [修改] 使用 scrollIntoViewIfNeeded 替代 scrollIntoView，兼容各种浏览器
+
 *2016.09.27* v3.5.25
    * [修改] ajax 异步加载支持 contentType = 'application/json'
 
