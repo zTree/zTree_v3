@@ -5,11 +5,11 @@
 
 具体修改内容可参考：
 
-   * [http://www.ztree.me/v3/api.php zTree v3.x API 文档]
+   * [http://www.treejs.cn/v3/api.php zTree v3.x API 文档]
 
-   * [http://www.ztree.me/v3/demo.php#_101 zTree v3.x Demo 演示]
+   * [http://www.treejs.cn/v3/demo.php#_101 zTree v3.x Demo 演示]
 
-   * [http://www.ztree.me/v3/faq.php#_101 zTree v3.x 常见问题]
+   * [http://www.treejs.cn/v3/faq.php#_101 zTree v3.x 常见问题]
 
 </font>
 
@@ -184,8 +184,8 @@
 *2012.05.13* v3.2
    * [增加] setting.data.key.url 允许修改 treeNode.url 属性
    * [增加] getNodesByFilter(filter, isSingle) 方法
-   * [增加] "与其他 DOM 拖拽互动" 的 Demo (http://www.ztree.me/v3/demo.php#_511)
-   * [增加] "异步加载模式下全部展开" 的 Demo (http://www.ztree.me/v3/demo.php#_512)
+   * [增加] "与其他 DOM 拖拽互动" 的 Demo (http://www.treejs.cn/v3/demo.php#_511)
+   * [增加] "异步加载模式下全部展开" 的 Demo (http://www.treejs.cn/v3/demo.php#_512)
 
    * [修改] 代码结构，将 addNodes、removeNode、removeChildNodes 方法 和 beforeRemove、onRemove 回调 转移到 core 内
    * [修改] IE7的环境下无子节点的父节点反复展开出现多余空行的 bug
@@ -262,4 +262,4 @@
    * [修正] setting 配置更加合理，并且增加了若干项配置参数
    * [修正] treeNode 节点数据的属性更加合理，并且增加了一些方法
    * [修正] 拖拽操作更加灵活方便，更容易制定自己的规则
-   * [修正] 其他若干修改，详细对比请参考 url：[http://www.ztree.me/v3/faq.php#_101 zTree v3.0 常见问题]
+   * [修正] 其他若干修改，详细对比请参考 url：[http://www.treejs.cn/v3/faq.php#_101 zTree v3.0 常见问题]

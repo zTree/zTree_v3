@@ -1,6 +1,6 @@
 /*
  * JQuery zTree exedit v3.5.26
- * http://zTree.me/
+ * http://treejs.cn/
  *
  * Copyright (c) 2010 Hunter.z
  *
