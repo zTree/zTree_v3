@@ -1,6 +1,6 @@
 
 /*
- * JQuery zTree core v3.5.26
+ * JQuery zTree core v3.5.27
  * http://treejs.cn/
  *
  * Copyright (c) 2010 Hunter.z
@@ -9,7 +9,7 @@
  * http://www.opensource.org/licenses/mit-license.php
  *
  * email: hunter.z@263.net
- * Date: 2016-11-03
+ * Date: 2016-12-27
  */
 (function($){
 	var settings = {}, roots = {}, caches = {},
@@ -906,7 +906,7 @@
 				tmpPChild = tmpPNode[childKey],
 				isFirstNode, isLastNode;
 
-			if (!tmpPChild || index >= tmpPChild.length) {
+            if (!tmpPChild || index >= tmpPChild.length - nodes.length) {
 				index = -1;
 			}
 
@@ -1883,7 +1883,7 @@
 	consts = zt.consts;
 })(jQuery);
 /*
- * JQuery zTree excheck v3.5.26
+ * JQuery zTree excheck v3.5.27
  * http://treejs.cn/
  *
  * Copyright (c) 2010 Hunter.z
@@ -1892,7 +1892,7 @@
  * http://www.opensource.org/licenses/mit-license.php
  *
  * email: hunter.z@263.net
- * Date: 2016-11-03
+ * Date: 2016-12-27
  */
 (function($){
 	//default consts of excheck
@@ -2511,7 +2511,7 @@
 	}
 })(jQuery);
 /*
- * JQuery zTree exedit v3.5.26
+ * JQuery zTree exedit v3.5.27
  * http://treejs.cn/
  *
  * Copyright (c) 2010 Hunter.z
@@ -2520,7 +2520,7 @@
  * http://www.opensource.org/licenses/mit-license.php
  *
  * email: hunter.z@263.net
- * Date: 2016-11-03
+ * Date: 2016-12-27
  */
 (function($){
 	//default consts of exedit

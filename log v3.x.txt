@@ -13,6 +13,9 @@
 
 </font>
 
+*2016.12.27* v3.5.27
+   * [修改] addNodes 方法设置 index 参数后，导致 treeNode.isLastNode 错误
+
 *2016.11.03* v3.5.26
    * [修改] 使用 scrollIntoViewIfNeeded 替代 scrollIntoView，兼容各种浏览器
 
