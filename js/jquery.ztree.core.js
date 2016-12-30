@@ -1856,6 +1856,9 @@
 				updateNode : function(node, checkTypeFlag) {
 					if (!node) return;
 					var nObj = $$(node, setting);
+					// Since a collapsed node is not appended to the HTML dom until it is expanded, 
+					// it is necessary to append it first when updating a node which has not been expanded bofore.
+					if(!nObj.get(0)) view.appendParentULDom(setting,node); 
 					if (nObj.get(0) && tools.uCanDo(setting)) {
 						view.setNodeName(setting, node);
 						view.setNodeTarget(setting, node);
