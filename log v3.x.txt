@@ -13,6 +13,9 @@
 
 </font>
 
+*2017.01.20* v3.5.28
+   * [修改] scrollIntoViewIfNeeded 方法对 IE8 的兼容
+
 *2016.12.27* v3.5.27
    * [修改] addNodes 方法设置 index 参数后，导致 treeNode.isLastNode 错误
 
