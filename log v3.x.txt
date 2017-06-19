@@ -13,6 +13,10 @@
 
 </font>
 
+*2017.06.19* v3.5.29
+   * [增加] reAsyncChildNodesPromise(parentNode, reloadType, isSilent) 方法支持 ES6 Promise
+   * [修改] reAsyncChildNodes 方法增加 callback 参数
+
 *2017.01.20* v3.5.28
    * [修改] scrollIntoViewIfNeeded 方法对 IE8 的兼容
 
