@@ -13,6 +13,9 @@
 
 </font>
 
+*2017.06.23* v3.5.29
+   * [修改] 拖拽操作后 body.css("cursor", "auto"); 修改为 body.css("cursor", "");（感谢 Jim）
+
 *2017.06.19* v3.5.29
    * [增加] reAsyncChildNodesPromise(parentNode, reloadType, isSilent) 方法支持 ES6 Promise
    * [修改] reAsyncChildNodes 方法增加 callback 参数
