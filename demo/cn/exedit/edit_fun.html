@@ -33,6 +33,7 @@
 				beforeDrag: beforeDrag,
 				beforeRemove: beforeRemove,
 				beforeRename: beforeRename,
+				onRename: OnRename,
 				onRemove: onRemove
 			}
 		};
@@ -66,11 +67,14 @@
 		function beforeRename(treeId, treeNode, newName) {
 			if (newName.length == 0) {
 				alert("节点名称不能为空.");
-				var zTree = $.fn.zTree.getZTreeObj("treeDemo");
-				setTimeout(function(){zTree.editName(treeNode)}, 10);
-				return false;
 			}
 			return true;
+		}
+		function OnRename(event, treeId, treeNode){
+			if(treeNode.name.length == 0){
+				zTree = $.fn.zTree.getZTreeObj("treeDemo");
+				setTimeout(function(){zTree.editName(treeNode)}, 10);
+			}
 		}
 		function showLog(str) {
 			if (!log) log = $("#log");
