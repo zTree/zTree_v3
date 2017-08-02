@@ -67,7 +67,10 @@
 				$("#m_check").show();
 				$("#m_unCheck").show();
 			}
-			rMenu.css({"top":y+"px", "left":x+"px", "visibility":"visible"});
+
+            y += document.body.scrollTop;
+            x += document.body.scrollLeft;
+            rMenu.css({"top":y+"px", "left":x+"px", "visibility":"visible"});
 
 			$("body").bind("mousedown", onBodyMouseDown);
 		}
