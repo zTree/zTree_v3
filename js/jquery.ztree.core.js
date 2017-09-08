@@ -1841,9 +1841,9 @@
                     }
                     view.asyncNode(this.setting, isRoot ? null : parentNode, !!isSilent, callback);
                 },
-                refresh: function () {
+                 refresh: function (exitSetting) { // 在refresh时根据需求更新setting，此setting将与原来的setting对象合并。
                     this.setting.treeObj.empty();
-                    var root = data.getRoot(setting),
+                    var root = data.getRoot(Object.assign(setting,exitSetting)),
                         nodes = root[setting.data.key.children]
                     data.initRoot(setting);
                     root[setting.data.key.children] = nodes
