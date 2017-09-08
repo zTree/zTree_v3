@@ -1841,7 +1841,7 @@
                     }
                     view.asyncNode(this.setting, isRoot ? null : parentNode, !!isSilent, callback);
                 },
-                 refresh: function (extraSetting) { // 在refresh时根据需求更新setting，通过es6的Object.assign()函数此setting将与原来的setting对象合并。
+                 refresh: function (extraSetting) { // 在refresh时根据需求向refresh函数传入新的setting对象，通过es6的Object.assign()函数新的setting对象将与原来的setting对象合并，从而可在实例化之后通过操作节点时更改setting。
                     this.setting.treeObj.empty();
                     var root = data.getRoot(Object.assign(setting,extraSetting)),
                         nodes = root[setting.data.key.children]
