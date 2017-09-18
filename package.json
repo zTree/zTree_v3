@@ -6,7 +6,6 @@
   "author": "zTree (https://github.com/zTree)",
   "repository": "zTree/zTree",
   "license": "MIT",
-  "main": "index.js",
   "engines": {
     "node": ">=0.10.0"
   },
