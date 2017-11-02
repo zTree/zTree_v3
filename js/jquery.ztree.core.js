@@ -316,6 +316,9 @@
             n.getNextNode = function () {
                 return data.getNextNode(setting, n);
             };
+            n.getSiblingNodes=function () {
+                return data.getSiblingNodes(setting,n);
+            };
             n.getIndex = function () {
                 return data.getNodeIndex(setting, n);
             };
@@ -571,6 +574,22 @@
                     }
                 }
                 return null;
+            },
+            getSiblingNodes: function (node) {
+                if(!node)
+                    return null;
+                var siblings=[],
+                    origin=node;
+                while (node.getNextNode()!==null){
+                    siblings.push(node.getNextNode());
+                    node=node.getNextNode();
+                }
+                node=origin;
+                while (node.getPreNode()!==null){
+                    siblings.push(node.getPreNode());
+                    node=node.getPreNode();
+                }
+                return siblings;
             },
             getRoot: function (setting) {
                 return setting ? roots[setting.treeId] : null;
@@ -1469,7 +1488,9 @@
                 node.getNextNode = function () {
                     return null;
                 };
-
+                node.getSiblingNodes =function () {
+                    return null;
+                }
                 if (!data.getNodeCache(setting, node.tId)) {
                     return;
                 }
