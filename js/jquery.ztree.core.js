@@ -1639,7 +1639,7 @@
                 }
             }
         };
-    // zTree defind
+    // zTree define
     $.fn.zTree = {
         consts: _consts,
         _z: {
