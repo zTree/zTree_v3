@@ -575,21 +575,18 @@
                 }
                 return null;
             },
-            getSiblingNodes: function (node) {
-                if(!node)
+            getSiblingNodes: function (setting, node) {
+                if (!node)
                     return null;
-                var siblings=[],
-                    origin=node;
-                while (node.getNextNode()!==null){
-                    siblings.push(node.getNextNode());
-                    node=node.getNextNode();
+                var childKey = setting.data.key.children,
+                    siblingNodes = [],
+                    p = node.parentTId ? node.getParentNode() : data.getRoot(setting);
+                for (var i = 0, l = p[childKey].length; i < l; i++) {
+                    if (p[childKey][i] !== node) {
+                        siblingNodes.push(p[childKey][i]);
+                    }
                 }
-                node=origin;
-                while (node.getPreNode()!==null){
-                    siblings.push(node.getPreNode());
-                    node=node.getPreNode();
-                }
-                return siblings;
+                return siblingNodes.length > 0 ? siblingNodes : null;
             },
             getRoot: function (setting) {
                 return setting ? roots[setting.treeId] : null;
