@@ -13,6 +13,10 @@
 
 </font>
 
+
+*2017.11.11* v3.5.30
+   * [修改] scrollIntoViewIfNeeded 方法对 IE7 的兼容
+
 *2017.06.23* v3.5.29
    * [修改] 拖拽操作后 body.css("cursor", "auto"); 修改为 body.css("cursor", "");（感谢 Jim）
 

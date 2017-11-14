@@ -1,5 +1,5 @@
 /*
- * JQuery zTree core v3.5.29
+ * JQuery zTree core v3.5.30
  * http://treejs.cn/
  *
  * Copyright (c) 2010 Hunter.z
@@ -8,7 +8,7 @@
  * http://www.opensource.org/licenses/mit-license.php
  *
  * email: hunter.z@263.net
- * Date: 2017-06-19
+ * Date: 2017-11-11
  */
 (function ($) {
     var settings = {}, roots = {}, caches = {},
@@ -1373,9 +1373,19 @@
                     $$(node, consts.id.UL, setting).empty();
                 }
             },
-            scrollIntoView: function (dom) {
+            scrollIntoView: function (setting, dom) {
                 if (!dom) {
                     return;
+                }
+                // support IE 7
+                if (typeof Element === 'undefined') {
+                  var contRect = setting.treeObj.get(0).getBoundingClientRect(),
+                    findMeRect = dom.getBoundingClientRect();
+                  if (findMeRect.top < contRect.top || findMeRect.bottom > contRect.bottom
+                    || findMeRect.right > contRect.right || findMeRect.left < contRect.left) {
+                    dom.scrollIntoView();
+                  }
+                  return;
                 }
                 // code src: http://jsfiddle.net/08u6cxwj/
                 if (!Element.prototype.scrollIntoViewIfNeeded) {
@@ -1761,7 +1771,7 @@
                     function showNodeFocus() {
                         var a = $$(node, setting).get(0);
                         if (a && focus !== false) {
-                            view.scrollIntoView(a);
+                            view.scrollIntoView(setting, a);
                         }
                     }
                 },
@@ -1886,7 +1896,7 @@
                             return;
                         }
                         var a = $$(node, setting).get(0);
-                        view.scrollIntoView(a);
+                        view.scrollIntoView(setting, a);
                     }
                 },
                 transformTozTreeNodes: function (simpleNodes) {
