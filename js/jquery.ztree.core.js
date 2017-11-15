@@ -316,6 +316,9 @@
             n.getNextNode = function () {
                 return data.getNextNode(setting, n);
             };
+            n.getSiblingNodes=function () {
+                return data.getSiblingNodes(setting,n);
+            };
             n.getIndex = function () {
                 return data.getNodeIndex(setting, n);
             };
@@ -571,6 +574,19 @@
                     }
                 }
                 return null;
+            },
+            getSiblingNodes: function (setting, node) {
+                if (!node)
+                    return null;
+                var childKey = setting.data.key.children,
+                    siblingNodes = [],
+                    p = node.parentTId ? node.getParentNode() : data.getRoot(setting);
+                for (var i = 0, l = p[childKey].length; i < l; i++) {
+                    if (p[childKey][i] !== node) {
+                        siblingNodes.push(p[childKey][i]);
+                    }
+                }
+                return siblingNodes.length > 0 ? siblingNodes : null;
             },
             getRoot: function (setting) {
                 return setting ? roots[setting.treeId] : null;
@@ -1479,7 +1495,9 @@
                 node.getNextNode = function () {
                     return null;
                 };
-
+                node.getSiblingNodes =function () {
+                    return null;
+                }
                 if (!data.getNodeCache(setting, node.tId)) {
                     return;
                 }
@@ -1649,7 +1667,7 @@
                 }
             }
         };
-    // zTree defind
+    // zTree define
     $.fn.zTree = {
         consts: _consts,
         _z: {
