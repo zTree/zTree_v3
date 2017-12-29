@@ -51,7 +51,6 @@ h4 {font-size: 14px;font-weight: normal;line-height: 25px;}
 .shortcuts li span.selected {padding: 2px;background-color: #528036;}
 .shortcuts li a {color: #fff;}
 .ieSuggest {display:none;font-size: 12px;color: silver;position: absolute;left: 10px;top: 2px;}
-.google_plus {position: absolute;right: 10px; top:10px;}
 .light-bulb {position: absolute;left: -20px;bottom: -35px;width:116px;height:180px;background-image:url(img/lightbulb.png);background-repeat: no-repeat;}
 
 /* Content */

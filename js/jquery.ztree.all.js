@@ -1,6 +1,6 @@
 
 /*
- * JQuery zTree core v3.5.30
+ * JQuery zTree core v3.5.31
  * http://treejs.cn/
  *
  * Copyright (c) 2010 Hunter.z
@@ -9,7 +9,7 @@
  * http://www.opensource.org/licenses/mit-license.php
  *
  * email: hunter.z@263.net
- * Date: 2017-11-11
+ * Date: 2017-12-28
  */
 (function ($) {
     var settings = {}, roots = {}, caches = {},
@@ -298,7 +298,9 @@
             n.tId = setting.treeId + "_" + (++r.zId);
             n.parentTId = parentNode ? parentNode.tId : null;
             n.open = (typeof n.open == "string") ? tools.eqs(n.open, "true") : !!n.open;
-            if (n[childKey] && n[childKey].length > 0) {
+            // if (n[childKey] && n[childKey].length > 0) {
+            if (tools.isArray(n[childKey]) &&
+              !(n.isParent === false || (typeof n.isParent == "string" && tools.eqs(n.isParent, "false")))) {
                 n.isParent = true;
                 n.zAsync = true;
             } else {
@@ -1506,6 +1508,7 @@
                     //old parentNode has no child nodes
                     parentNode.isParent = false;
                     parentNode.open = false;
+                    delete parentNode[childKey];
                     tmp_ulObj = $$(parentNode, consts.id.UL, setting);
                     tmp_switchObj = $$(parentNode, consts.id.SWITCH, setting);
                     tmp_icoObj = $$(parentNode, consts.id.ICON, setting);
@@ -1935,7 +1938,7 @@
         consts = zt.consts;
 })(jQuery);
 /*
- * JQuery zTree excheck v3.5.30
+ * JQuery zTree excheck v3.5.31
  * http://treejs.cn/
  *
  * Copyright (c) 2010 Hunter.z
@@ -1944,7 +1947,7 @@
  * http://www.opensource.org/licenses/mit-license.php
  *
  * email: hunter.z@263.net
- * Date: 2017-11-11
+ * Date: 2017-12-28
  */
 (function($){
 	//default consts of excheck
@@ -2563,7 +2566,7 @@
 	}
 })(jQuery);
 /*
- * JQuery zTree exedit v3.5.30
+ * JQuery zTree exedit v3.5.31
  * http://treejs.cn/
  *
  * Copyright (c) 2010 Hunter.z
@@ -2572,7 +2575,7 @@
  * http://www.opensource.org/licenses/mit-license.php
  *
  * email: hunter.z@263.net
- * Date: 2017-11-11
+ * Date: 2017-12-28
  */
 (function($){
 	//default consts of exedit

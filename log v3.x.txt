@@ -13,6 +13,8 @@
 
 </font>
 
+*2017.12.28* v3.5.31
+   * [修改] 初始化节点数据的规则，支持 treeNode { name: "Node2", children: []}, 情况下自动设置为 isParent = true
 
 *2017.11.11* v3.5.30
    * [修改] scrollIntoViewIfNeeded 方法对 IE7 的兼容
