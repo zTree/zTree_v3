@@ -1,5 +1,5 @@
 /*
- * JQuery zTree exedit v3.5.31
+ * JQuery zTree exedit v3.5.32
  * http://treejs.cn/
  *
  * Copyright (c) 2010 Hunter.z
@@ -8,7 +8,7 @@
  * http://www.opensource.org/licenses/mit-license.php
  *
  * email: hunter.z@263.net
- * Date: 2017-12-28
+ * Date: 2018-01-06
  */
 (function($){
 	//default consts of exedit
@@ -183,7 +183,8 @@
 		}
 		zTreeTools.copyNode = function(targetNode, node, moveType, isSilent) {
 			if (!node) return null;
-			if (targetNode && !targetNode.isParent && this.setting.data.keep.leaf && moveType === consts.move.TYPE_INNER) return null;
+      var isParent = data.nodeIsParent(setting, targetNode);
+			if (targetNode && !isParent && this.setting.data.keep.leaf && moveType === consts.move.TYPE_INNER) return null;
 			var _this = this,
 				newNode = tools.clone(node);
 			if (!targetNode) {
@@ -213,7 +214,8 @@
 		}
 		zTreeTools.moveNode = function(targetNode, node, moveType, isSilent) {
 			if (!node) return node;
-			if (targetNode && !targetNode.isParent && this.setting.data.keep.leaf && moveType === consts.move.TYPE_INNER) {
+      var isParent = data.nodeIsParent(setting, targetNode);
+			if (targetNode && !isParent && this.setting.data.keep.leaf && moveType === consts.move.TYPE_INNER) {
 				return null;
 			} else if (targetNode && ((node.parentTId == targetNode.tId && moveType == consts.move.TYPE_INNER) || $$(node, this.setting).find("#" + targetNode.tId).length > 0)) {
 				return null;
@@ -240,11 +242,11 @@
 	_data = {
 		setSonNodeLevel: function(setting, parentNode, node) {
 			if (!node) return;
-			var childKey = setting.data.key.children;
+      var children = data.nodeChildren(setting, node);
 			node.level = (parentNode)? parentNode.level + 1 : 0;
-			if (!node[childKey]) return;
-			for (var i = 0, l = node[childKey].length; i < l; i++) {
-				if (node[childKey][i]) data.setSonNodeLevel(setting, node, node[childKey][i]);
+			if (!children) return;
+			for (var i = 0, l = children.length; i < l; i++) {
+				if (children[i]) data.setSonNodeLevel(setting, node, children[i]);
 			}
 		}
 	},
@@ -323,8 +325,7 @@
 					&& Math.abs(mouseDownY - event.clientY) < setting.edit.drag.minMoveSize) {
 					return true;
 				}
-				var i, l, tmpNode, tmpDom, tmpNodes,
-				childKey = setting.data.key.children;
+				var i, l, tmpNode, tmpDom, tmpNodes;
 				body.css("cursor", "pointer");
 
 				if (root.dragFlag == 0) {
@@ -338,7 +339,7 @@
 							root.dragNodeShowBefore = [];
 						}
 						tmpNode = nodes[i];
-						if (tmpNode.isParent && tmpNode.open) {
+						if (data.nodeIsParent(setting, tmpNode) && tmpNode.open) {
 							view.expandCollapseNode(setting, tmpNode, !tmpNode.open);
 							root.dragNodeShowBefore[tmpNode.tId] = true;
 						} else {
@@ -353,7 +354,7 @@
 					//sort
 					var isOrder = true, lastIndex = -1;
 					if (nodes.length>1) {
-						var pNodes = nodes[0].parentTId ? nodes[0].getParentNode()[childKey] : data.getNodes(setting);
+						var pNodes = nodes[0].parentTId ? data.nodeChildren(setting, nodes[0].getParentNode()) : data.getNodes(setting);
 						tmpNodes = [];
 						for (i=0, l=pNodes.length; i<l; i++) {
 							if (root.dragNodeShowBefore[pNodes[i].tId] !== undefined) {
@@ -514,7 +515,7 @@
 							isInner = (tmpNode.parentTId && tmpNode.parentTId == tmpTargetNodeId),
 							canPrev = (isCopy || !isNext) && tools.apply(targetSetting.edit.drag.prev, [targetSetting.treeId, nodes, tmpTargetNode], !!targetSetting.edit.drag.prev),
 							canNext = (isCopy || !isPrev) && tools.apply(targetSetting.edit.drag.next, [targetSetting.treeId, nodes, tmpTargetNode], !!targetSetting.edit.drag.next),
-							canInner = (isCopy || !isInner) && !(targetSetting.data.keep.leaf && !tmpTargetNode.isParent) && tools.apply(targetSetting.edit.drag.inner, [targetSetting.treeId, nodes, tmpTargetNode], !!targetSetting.edit.drag.inner);
+							canInner = (isCopy || !isInner) && !(targetSetting.data.keep.leaf && !data.nodeIsParent(setting, tmpTargetNode)) && tools.apply(targetSetting.edit.drag.inner, [targetSetting.treeId, nodes, tmpTargetNode], !!targetSetting.edit.drag.inner);
 
 						function clearMove() {
 							tmpTarget = null;
@@ -545,7 +546,7 @@
 								moveType = consts.move.TYPE_PREV;
 							} else if ((nextPercent==0 || dY_percent>=nextPercent && dY_percent<=1.2) && canNext) {
 								dX = 1 - tmpArrow.width();
-								dY = (tmpNextA == null || (tmpTargetNode.isParent && tmpTargetNode.open)) ? (tmpTop + tmpTargetA.height() - tmpArrow.height()/2) : (tmpNextA.offset().top - tmpArrow.height()/2);
+								dY = (tmpNextA == null || (data.nodeIsParent(setting, tmpTargetNode) && tmpTargetNode.open)) ? (tmpTop + tmpTargetA.height() - tmpArrow.height()/2) : (tmpNextA.offset().top - tmpArrow.height()/2);
 								moveType = consts.move.TYPE_NEXT;
 							} else if (canInner) {
 								dX = 5 - tmpArrow.width();
@@ -566,7 +567,7 @@
 								if (preTmpTargetNodeId != tmpTargetNodeId || preTmpMoveType != moveType) {
 									startTime = (new Date()).getTime();
 								}
-								if (tmpTargetNode && tmpTargetNode.isParent && moveType == consts.move.TYPE_INNER) {
+								if (tmpTargetNode && data.nodeIsParent(setting, tmpTargetNode) && moveType == consts.move.TYPE_INNER) {
 									var startTimer = true;
 									if (window.zTreeMoveTimer && window.zTreeMoveTargetNodeTId !== tmpTargetNode.tId) {
 										clearTimeout(window.zTreeMoveTimer);
@@ -577,7 +578,7 @@
 									if (startTimer) {
 										window.zTreeMoveTimer = setTimeout(function() {
 											if (moveType != consts.move.TYPE_INNER) return;
-											if (tmpTargetNode && tmpTargetNode.isParent && !tmpTargetNode.open && (new Date()).getTime() - startTime > targetSetting.edit.drag.autoOpenTime
+											if (tmpTargetNode && data.nodeIsParent(setting, tmpTargetNode) && !tmpTargetNode.open && (new Date()).getTime() - startTime > targetSetting.edit.drag.autoOpenTime
 												&& tools.apply(targetSetting.callback.beforeDragOpen, [targetSetting.treeId, tmpTargetNode], true)) {
 												view.switchNode(targetSetting, tmpTargetNode);
 												if (targetSetting.edit.drag.autoExpandTrigger) {
@@ -639,7 +640,7 @@
 				var i, l, tmpNode;
 				for (i=0, l=nodes.length; i<l; i++) {
 					tmpNode = nodes[i];
-					if (tmpNode.isParent && root.dragNodeShowBefore[tmpNode.tId] && !tmpNode.open) {
+					if (data.nodeIsParent(setting, tmpNode) && root.dragNodeShowBefore[tmpNode.tId] && !tmpNode.open) {
 						view.expandCollapseNode(setting, tmpNode, !tmpNode.open);
 						delete root.dragNodeShowBefore[tmpNode.tId];
 					}
@@ -831,17 +832,16 @@
 		},
 		cancelCurEditNode: function (setting, forceName, isCancel) {
 			var root = data.getRoot(setting),
-			nameKey = setting.data.key.name,
 			node = root.curEditNode;
 
 			if (node) {
 				var inputObj = root.curEditInput,
-				newName = forceName ? forceName:(isCancel ? node[nameKey]: inputObj.val());
+				newName = forceName ? forceName:(isCancel ? data.nodeName(setting, node): inputObj.val());
 				if (tools.apply(setting.callback.beforeRename, [setting.treeId, node, newName, isCancel], true) === false) {
 					return false;
 				}
-                node[nameKey] = newName;
-                var aObj = $$(node, consts.id.A, setting);
+        data.nodeName(setting, node, newName);
+				var aObj = $$(node, consts.id.A, setting);
 				aObj.removeClass(consts.node.CURSELECTED_EDIT);
 				inputObj.unbind();
 				view.setNodeName(setting, node);
@@ -849,7 +849,7 @@
 				root.curEditNode = null;
 				root.curEditInput = null;
 				view.selectNode(setting, node, false);
-                setting.treeObj.trigger(consts.event.RENAME, [setting.treeId, node, isCancel]);
+				setting.treeObj.trigger(consts.event.RENAME, [setting.treeId, node, isCancel]);
 			}
 			root.noSelection = true;
 			return true;
@@ -861,14 +861,13 @@
 				setTimeout(function() {tools.inputFocus(root.curEditInput);}, 0);
 				return;
 			}
-			var nameKey = setting.data.key.name;
 			node.editNameFlag = true;
 			view.removeTreeDom(setting, node);
 			view.cancelCurEditNode(setting);
 			view.selectNode(setting, node, false);
 			$$(node, consts.id.SPAN, setting).html("<input type=text class='rename' id='" + node.tId + consts.id.INPUT + "' treeNode" + consts.id.INPUT + " >");
 			var inputObj = $$(node, consts.id.INPUT, setting);
-			inputObj.attr("value", node[nameKey]);
+			inputObj.attr("value", data.nodeName(setting, node));
 			if (setting.edit.editNameSelectAll) {
 				tools.inputSelect(inputObj);
 			} else {
@@ -898,10 +897,9 @@
 			root.curEditNode = node;
 		},
 		moveNode: function(setting, targetNode, node, moveType, animateFlag, isSilent) {
-			var root = data.getRoot(setting),
-			childKey = setting.data.key.children;
+			var root = data.getRoot(setting);
 			if (targetNode == node) return;
-			if (setting.data.keep.leaf && targetNode && !targetNode.isParent && moveType == consts.move.TYPE_INNER) return;
+			if (setting.data.keep.leaf && targetNode && !data.nodeIsParent(setting, targetNode) && moveType == consts.move.TYPE_INNER) return;
 			var oldParentNode = (node.parentTId ? node.getParentNode(): root),
 			targetNodeIsRoot = (targetNode === null || targetNode == root);
 			if (targetNodeIsRoot && targetNode === null) targetNode = root;
@@ -917,8 +915,8 @@
 					//parentTId of root node is null
 					node.parentTId = null;
 				} else {
-					if (!targetNode.isParent) {
-						targetNode.isParent = true;
+					if (!data.nodeIsParent(setting, targetNode)) {
+            data.nodeIsParent(setting, targetNode, true);
 						targetNode.open = !!targetNode.open;
 						view.setNodeLineIcos(setting, targetNode);
 					}
@@ -967,43 +965,48 @@
 			oldNeighbor = null,
 			newNeighbor = null,
 			oldLevel = node.level;
+			var oldChildren = data.nodeChildren(setting, oldParentNode);
+			var targetParentChildren = data.nodeChildren(setting, targetParentNode);
+			var targetChildren = data.nodeChildren(setting, targetNode);
 			if (node.isFirstNode) {
 				tmpSrcIndex = 0;
-				if (oldParentNode[childKey].length > 1 ) {
-					oldNeighbor = oldParentNode[childKey][1];
+				if (oldChildren.length > 1 ) {
+					oldNeighbor = oldChildren[1];
 					oldNeighbor.isFirstNode = true;
 				}
 			} else if (node.isLastNode) {
-				tmpSrcIndex = oldParentNode[childKey].length -1;
-				oldNeighbor = oldParentNode[childKey][tmpSrcIndex - 1];
+				tmpSrcIndex = oldChildren.length -1;
+				oldNeighbor = oldChildren[tmpSrcIndex - 1];
 				oldNeighbor.isLastNode = true;
 			} else {
-				for (i = 0, l = oldParentNode[childKey].length; i < l; i++) {
-					if (oldParentNode[childKey][i].tId == node.tId) {
+				for (i = 0, l = oldChildren.length; i < l; i++) {
+					if (oldChildren[i].tId == node.tId) {
 						tmpSrcIndex = i;
 						break;
 					}
 				}
 			}
 			if (tmpSrcIndex >= 0) {
-				oldParentNode[childKey].splice(tmpSrcIndex, 1);
+				oldChildren.splice(tmpSrcIndex, 1);
 			}
 			if (moveType != consts.move.TYPE_INNER) {
-				for (i = 0, l = targetParentNode[childKey].length; i < l; i++) {
-					if (targetParentNode[childKey][i].tId == targetNode.tId) tmpTargetIndex = i;
+				for (i = 0, l = targetParentChildren.length; i < l; i++) {
+					if (targetParentChildren[i].tId == targetNode.tId) tmpTargetIndex = i;
 				}
 			}
 			if (moveType == consts.move.TYPE_INNER) {
-				if (!targetNode[childKey]) targetNode[childKey] = new Array();
-				if (targetNode[childKey].length > 0) {
-					newNeighbor = targetNode[childKey][targetNode[childKey].length - 1];
+				if (!targetChildren) {
+          targetChildren = data.nodeChildren(setting, targetNode, []);
+        }
+				if (targetChildren.length > 0) {
+					newNeighbor = targetChildren[targetChildren.length - 1];
 					newNeighbor.isLastNode = false;
 				}
-				targetNode[childKey].splice(targetNode[childKey].length, 0, node);
+				targetChildren.splice(targetChildren.length, 0, node);
 				node.isLastNode = true;
-				node.isFirstNode = (targetNode[childKey].length == 1);
+				node.isFirstNode = (targetChildren.length == 1);
 			} else if (targetNode.isFirstNode && moveType == consts.move.TYPE_PREV) {
-				targetParentNode[childKey].splice(tmpTargetIndex, 0, node);
+				targetParentChildren.splice(tmpTargetIndex, 0, node);
 				newNeighbor = targetNode;
 				newNeighbor.isFirstNode = false;
 				node.parentTId = targetNode.parentTId;
@@ -1011,7 +1014,7 @@
 				node.isLastNode = false;
 
 			} else if (targetNode.isLastNode && moveType == consts.move.TYPE_NEXT) {
-				targetParentNode[childKey].splice(tmpTargetIndex + 1, 0, node);
+				targetParentChildren.splice(tmpTargetIndex + 1, 0, node);
 				newNeighbor = targetNode;
 				newNeighbor.isLastNode = false;
 				node.parentTId = targetNode.parentTId;
@@ -1020,9 +1023,9 @@
 
 			} else {
 				if (moveType == consts.move.TYPE_PREV) {
-					targetParentNode[childKey].splice(tmpTargetIndex, 0, node);
+					targetParentChildren.splice(tmpTargetIndex, 0, node);
 				} else {
-					targetParentNode[childKey].splice(tmpTargetIndex + 1, 0, node);
+					targetParentChildren.splice(tmpTargetIndex + 1, 0, node);
 				}
 				node.parentTId = targetNode.parentTId;
 				node.isFirstNode = false;
@@ -1033,12 +1036,12 @@
 
 			//repair node what been moved
 			view.setNodeLineIcos(setting, node);
-			view.repairNodeLevelClass(setting, node, oldLevel)
+			view.repairNodeLevelClass(setting, node, oldLevel);
 
 			//repair node's old parentNode dom
-			if (!setting.data.keep.parent && oldParentNode[childKey].length < 1) {
+			if (!setting.data.keep.parent && oldChildren.length < 1) {
 				//old parentNode has no child nodes
-				oldParentNode.isParent = false;
+        data.nodeIsParent(setting, oldParentNode, false);
 				oldParentNode.open = false;
 				var tmp_ulObj = $$(oldParentNode, consts.id.UL, setting),
 				tmp_switchObj = $$(oldParentNode, consts.id.SWITCH, setting),

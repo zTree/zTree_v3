@@ -1,6 +1,6 @@
 <div class="apiDetail">
 <div>
-	<h2><span>Array(String) / JSON</span><span class="path">setting.async.</span>otherParam</h2>
+	<h2><span>Array(String) / JSON / Function(treeId, treeNode)</span><span class="path">setting.async.</span>otherParam</h2>
 	<h3>Overview<span class="h3_info">[ depends on <span class="highlight_green">jquery.ztree.core</span> js ]</span></h3>
 	<div class="desc">
 		<p></p>
@@ -16,6 +16,16 @@
 	<h3>JSON Format</h3>
 	<div class="desc">
 	<p>Use JSON hash data to set the key-value pairs. e.g. { key1:value1, key2:value2 }</p>
+	</div>
+	<h3>Function Parameter Descriptions</h3>
+	<div class="desc">
+		<h4><b>treeId</b><span>String</span></h4>
+		<p>zTree unique identifier: <b class="highlight_red">treeId</b>.</p>
+		<h4 class="topLine"><b>treeNode</b><span>JSON</span></h4>
+		<p>Parent node's JSON data object</p>
+		<p class="highlight_red">When asynchronously loading the root, the treeNode = null</p>
+		<h4 class="topLine"><b>Return </b><span>Array(String) || JSON</span></h4>
+		<p>Return value is same as 'Array(String) || JSON Format'</p>
 	</div>
 	<h3>Examples of setting</h3>
 	<h4>1. Using Array(String) Format</h4>

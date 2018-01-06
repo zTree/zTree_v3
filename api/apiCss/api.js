@@ -133,6 +133,8 @@ var apiContent = {
 			{id:510, pId:50, t:"key", name:"key : {", open:true},
 			{id:5101, pId:510, t:"checked", name:"checked : \"checked\",", iconSkin:"check", showAPI:true},
 			{id:5102, pId:510, t:"children", name:"children : \"children\",", iconSkin:"core", showAPI:true},
+			{id:5106, pId:510, t:"isParent", name:"isParent : \"isParent\",", iconSkin:"core", showAPI:true},
+			{id:5107, pId:510, t:"isHidden", name:"isHidden : \"isHidden\",", iconSkin:"hide", showAPI:true},
 			{id:5103, pId:510, t:"name", name:"name : \"name\",", iconSkin:"core", showAPI:true},
 			{id:5104, pId:510, t:"title", name:"title : \"\"", iconSkin:"core", showAPI:true},
 			{id:5105, pId:510, t:"url", name:"url : \"url\"", iconSkin:"core", showAPI:true},

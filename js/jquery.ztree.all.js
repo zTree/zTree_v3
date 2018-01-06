@@ -1,6 +1,6 @@
 
 /*
- * JQuery zTree core v3.5.31
+ * JQuery zTree core v3.5.32
  * http://treejs.cn/
  *
  * Copyright (c) 2010 Hunter.z
@@ -9,7 +9,7 @@
  * http://www.opensource.org/licenses/mit-license.php
  *
  * email: hunter.z@263.net
- * Date: 2017-12-28
+ * Date: 2018-01-06
  */
 (function ($) {
     var settings = {}, roots = {}, caches = {},
@@ -76,6 +76,7 @@
             },
             data: {
                 key: {
+                    isParent: "isParent",
                     children: "children",
                     name: "name",
                     title: "",
@@ -135,7 +136,7 @@
                 r = {};
                 data.setRoot(setting, r);
             }
-            r[setting.data.key.children] = [];
+            data.nodeChildren(setting, r, []);
             r.expandTriggerFlag = false;
             r.curSelectedList = [];
             r.noSelection = true;
@@ -250,7 +251,8 @@
                 node = data.getNodeCache(setting, tId);
                 switch (nodeEventType) {
                     case "switchNode" :
-                        if (!node.isParent) {
+                        var isParent = data.nodeIsParent(setting, node);
+                        if (!isParent) {
                             nodeEventType = "";
                         } else if (tools.eqs(event.type, "click")
                             || (tools.eqs(event.type, "dblclick") && tools.apply(setting.view.dblClickExpand, [setting.treeId, node], setting.view.dblClickExpand))) {
@@ -293,20 +295,20 @@
         _initNode = function (setting, level, n, parentNode, isFirstNode, isLastNode, openFlag) {
             if (!n) return;
             var r = data.getRoot(setting),
-                childKey = setting.data.key.children;
+                children = data.nodeChildren(setting, n);
             n.level = level;
             n.tId = setting.treeId + "_" + (++r.zId);
             n.parentTId = parentNode ? parentNode.tId : null;
             n.open = (typeof n.open == "string") ? tools.eqs(n.open, "true") : !!n.open;
-            // if (n[childKey] && n[childKey].length > 0) {
-            if (tools.isArray(n[childKey]) &&
-              !(n.isParent === false || (typeof n.isParent == "string" && tools.eqs(n.isParent, "false")))) {
-                n.isParent = true;
+            var isParent = data.nodeIsParent(setting, n);
+            if (tools.isArray(children) &&
+              !(isParent === false || (typeof isParent == "string" && tools.eqs(isParent, "false")))) {
+                data.nodeIsParent(setting, n, true);
                 n.zAsync = true;
             } else {
-                n.isParent = (typeof n.isParent == "string") ? tools.eqs(n.isParent, "true") : !!n.isParent;
-                n.open = (n.isParent && !setting.async.enable) ? n.open : false;
-                n.zAsync = !n.isParent;
+                isParent = data.nodeIsParent(setting, n, isParent);
+                n.open = (isParent && !setting.async.enable) ? n.open : false;
+                n.zAsync = !isParent;
             }
             n.isFirstNode = isFirstNode;
             n.isLastNode = isLastNode;
@@ -384,28 +386,28 @@
                 _init.roots.push(initRoot);
             },
             addNodesData: function (setting, parentNode, index, nodes) {
-                var childKey = setting.data.key.children, params;
-                if (!parentNode[childKey]) {
-                    parentNode[childKey] = [];
+                var children = data.nodeChildren(setting, parentNode), params;
+                if (!children) {
+                    children = data.nodeChildren(setting, parentNode, []);
                     index = -1;
-                } else if (index >= parentNode[childKey].length) {
+                } else if (index >= children.length) {
                     index = -1;
                 }
 
-                if (parentNode[childKey].length > 0 && index === 0) {
-                    parentNode[childKey][0].isFirstNode = false;
-                    view.setNodeLineIcos(setting, parentNode[childKey][0]);
-                } else if (parentNode[childKey].length > 0 && index < 0) {
-                    parentNode[childKey][parentNode[childKey].length - 1].isLastNode = false;
-                    view.setNodeLineIcos(setting, parentNode[childKey][parentNode[childKey].length - 1]);
+                if (children.length > 0 && index === 0) {
+                    children[0].isFirstNode = false;
+                    view.setNodeLineIcos(setting, children[0]);
+                } else if (children.length > 0 && index < 0) {
+                    children[children.length - 1].isLastNode = false;
+                    view.setNodeLineIcos(setting, children[children.length - 1]);
                 }
-                parentNode.isParent = true;
+                data.nodeIsParent(setting, parentNode, true);
 
                 if (index < 0) {
-                    parentNode[childKey] = parentNode[childKey].concat(nodes);
+                    data.nodeChildren(setting, parentNode, children.concat(nodes));
                 } else {
                     params = [index, 0].concat(nodes);
-                    parentNode[childKey].splice.apply(parentNode[childKey], params);
+                    children.splice.apply(children, params);
                 }
             },
             addSelectedNode: function (setting, node) {
@@ -456,10 +458,10 @@
             },
             getNodeIndex: function (setting, node) {
                 if (!node) return null;
-                var childKey = setting.data.key.children,
-                    p = node.parentTId ? node.getParentNode() : data.getRoot(setting);
-                for (var i = 0, l = p[childKey].length - 1; i <= l; i++) {
-                    if (p[childKey][i] === node) {
+                var p = node.parentTId ? node.getParentNode() : data.getRoot(setting),
+                    children = data.nodeChildren(setting, p);
+                for (var i = 0, l = children.length - 1; i <= l; i++) {
+                    if (children[i] === node) {
                         return i;
                     }
                 }
@@ -467,23 +469,24 @@
             },
             getNextNode: function (setting, node) {
                 if (!node) return null;
-                var childKey = setting.data.key.children,
-                    p = node.parentTId ? node.getParentNode() : data.getRoot(setting);
-                for (var i = 0, l = p[childKey].length - 1; i <= l; i++) {
-                    if (p[childKey][i] === node) {
-                        return (i == l ? null : p[childKey][i + 1]);
+                var p = node.parentTId ? node.getParentNode() : data.getRoot(setting),
+                    children = data.nodeChildren(setting, p);
+                for (var i = 0, l = children.length - 1; i <= l; i++) {
+                    if (children[i] === node) {
+                        return (i == l ? null : children[i + 1]);
                     }
                 }
                 return null;
             },
             getNodeByParam: function (setting, nodes, key, value) {
                 if (!nodes || !key) return null;
-                var childKey = setting.data.key.children;
                 for (var i = 0, l = nodes.length; i < l; i++) {
-                    if (nodes[i][key] == value) {
+                    var node = nodes[i];
+                    if (node[key] == value) {
                         return nodes[i];
                     }
-                    var tmp = data.getNodeByParam(setting, nodes[i][childKey], key, value);
+                    var children = data.nodeChildren(setting, node);
+                    var tmp = data.getNodeByParam(setting, children, key, value);
                     if (tmp) return tmp;
                 }
                 return null;
@@ -492,10 +495,6 @@
                 if (!tId) return null;
                 var n = caches[setting.treeId].nodes[data.getNodeCacheId(tId)];
                 return n ? n : null;
-            },
-            getNodeName: function (setting, node) {
-                var nameKey = setting.data.key.name;
-                return "" + node[nameKey];
             },
             getNodePath: function (setting, node) {
                 if (!node) return null;
@@ -513,50 +512,49 @@
 
                 return path;
             },
-            getNodeTitle: function (setting, node) {
-                var t = setting.data.key.title === "" ? setting.data.key.name : setting.data.key.title;
-                return "" + node[t];
-            },
             getNodes: function (setting) {
-                return data.getRoot(setting)[setting.data.key.children];
+                return data.nodeChildren(setting, data.getRoot(setting));
             },
             getNodesByParam: function (setting, nodes, key, value) {
                 if (!nodes || !key) return [];
-                var childKey = setting.data.key.children,
-                    result = [];
+                var result = [];
                 for (var i = 0, l = nodes.length; i < l; i++) {
-                    if (nodes[i][key] == value) {
-                        result.push(nodes[i]);
+                    var node = nodes[i];
+                    if (node[key] == value) {
+                        result.push(node);
                     }
-                    result = result.concat(data.getNodesByParam(setting, nodes[i][childKey], key, value));
+                    var children = data.nodeChildren(setting, node);
+                    result = result.concat(data.getNodesByParam(setting, children, key, value));
                 }
                 return result;
             },
             getNodesByParamFuzzy: function (setting, nodes, key, value) {
                 if (!nodes || !key) return [];
-                var childKey = setting.data.key.children,
-                    result = [];
+                var result = [];
                 value = value.toLowerCase();
                 for (var i = 0, l = nodes.length; i < l; i++) {
-                    if (typeof nodes[i][key] == "string" && nodes[i][key].toLowerCase().indexOf(value) > -1) {
-                        result.push(nodes[i]);
+                    var node = nodes[i];
+                    if (typeof node[key] == "string" && nodes[i][key].toLowerCase().indexOf(value) > -1) {
+                        result.push(node);
                     }
-                    result = result.concat(data.getNodesByParamFuzzy(setting, nodes[i][childKey], key, value));
+                    var children = data.nodeChildren(setting, node);
+                    result = result.concat(data.getNodesByParamFuzzy(setting, children, key, value));
                 }
                 return result;
             },
             getNodesByFilter: function (setting, nodes, filter, isSingle, invokeParam) {
                 if (!nodes) return (isSingle ? null : []);
-                var childKey = setting.data.key.children,
-                    result = isSingle ? null : [];
+                var result = isSingle ? null : [];
                 for (var i = 0, l = nodes.length; i < l; i++) {
-                    if (tools.apply(filter, [nodes[i], invokeParam], false)) {
+                    var node = nodes[i];
+                    if (tools.apply(filter, [node, invokeParam], false)) {
                         if (isSingle) {
-                            return nodes[i];
+                            return node;
                         }
-                        result.push(nodes[i]);
+                        result.push(node);
                     }
-                    var tmpResult = data.getNodesByFilter(setting, nodes[i][childKey], filter, isSingle, invokeParam);
+                    var children = data.nodeChildren(setting, node);
+                    var tmpResult = data.getNodesByFilter(setting, children, filter, isSingle, invokeParam);
                     if (isSingle && !!tmpResult) {
                         return tmpResult;
                     }
@@ -566,11 +564,11 @@
             },
             getPreNode: function (setting, node) {
                 if (!node) return null;
-                var childKey = setting.data.key.children,
-                    p = node.parentTId ? node.getParentNode() : data.getRoot(setting);
-                for (var i = 0, l = p[childKey].length; i < l; i++) {
-                    if (p[childKey][i] === node) {
-                        return (i == 0 ? null : p[childKey][i - 1]);
+                var p = node.parentTId ? node.getParentNode() : data.getRoot(setting),
+                    children = data.nodeChildren(setting, p);
+                for (var i = 0, l = children.length; i < l; i++) {
+                    if (children[i] === node) {
+                        return (i == 0 ? null : children[i - 1]);
                     }
                 }
                 return null;
@@ -613,11 +611,46 @@
                 }
                 return false;
             },
+            nodeChildren: function (setting, node, newChildren) {
+                if (!node) {
+                    return null;
+                }
+                var key = setting.data.key.children;
+                if (typeof newChildren !== 'undefined') {
+                    node[key] = newChildren;
+                }
+                return node[key];
+            },
+            nodeIsParent: function (setting, node, newIsParent) {
+                if (!node) {
+                    return false;
+                }
+                var key = setting.data.key.isParent;
+                if (typeof newIsParent !== 'undefined') {
+                    if (typeof newIsParent === "string") {
+                        newIsParent = tools.eqs(checked, "true");
+                    }
+                    newIsParent = !!newIsParent;
+                    node[key] = newIsParent;
+                }
+                return node[key];
+            },
+            nodeName: function (setting, node, newName) {
+                var key = setting.data.key.name;
+                if (typeof newName !== 'undefined') {
+                    node[key] = newName;
+                }
+                return "" + node[key];
+            },
+            nodeTitle: function (setting, node) {
+                var t = setting.data.key.title === "" ? setting.data.key.name : setting.data.key.title;
+                return "" + node[t];
+            },
             removeNodeCache: function (setting, node) {
-                var childKey = setting.data.key.children;
-                if (node[childKey]) {
-                    for (var i = 0, l = node[childKey].length; i < l; i++) {
-                        data.removeNodeCache(setting, node[childKey][i]);
+                var children = data.nodeChildren(setting, node);
+                if (children) {
+                    for (var i = 0, l = children.length; i < l; i++) {
+                        data.removeNodeCache(setting, children[i]);
                     }
                 }
                 data.getCache(setting).nodes[data.getNodeCacheId(node.tId)] = null;
@@ -646,26 +679,29 @@
             },
             transformToArrayFormat: function (setting, nodes) {
                 if (!nodes) return [];
-                var childKey = setting.data.key.children,
-                    r = [];
+                var r = [];
                 if (tools.isArray(nodes)) {
                     for (var i = 0, l = nodes.length; i < l; i++) {
-                        r.push(nodes[i]);
-                        if (nodes[i][childKey])
-                            r = r.concat(data.transformToArrayFormat(setting, nodes[i][childKey]));
+                        var node = nodes[i];
+                        _do(node);
                     }
                 } else {
-                    r.push(nodes);
-                    if (nodes[childKey])
-                        r = r.concat(data.transformToArrayFormat(setting, nodes[childKey]));
+                    _do(nodes);
                 }
                 return r;
+
+                function _do(_node) {
+                  r.push(_node);
+                  var children = data.nodeChildren(setting, _node);
+                  if (children) {
+                      r = r.concat(data.transformToArrayFormat(setting, children));
+                  }
+                }
             },
             transformTozTreeFormat: function (setting, sNodes) {
                 var i, l,
                     key = setting.data.simpleData.idKey,
-                    parentKey = setting.data.simpleData.pIdKey,
-                    childKey = setting.data.key.children;
+                    parentKey = setting.data.simpleData.pIdKey;
                 if (!key || key == "" || !sNodes) return [];
 
                 if (tools.isArray(sNodes)) {
@@ -675,10 +711,13 @@
                         tmpMap[sNodes[i][key]] = sNodes[i];
                     }
                     for (i = 0, l = sNodes.length; i < l; i++) {
-                        if (tmpMap[sNodes[i][parentKey]] && sNodes[i][key] != sNodes[i][parentKey]) {
-                            if (!tmpMap[sNodes[i][parentKey]][childKey])
-                                tmpMap[sNodes[i][parentKey]][childKey] = [];
-                            tmpMap[sNodes[i][parentKey]][childKey].push(sNodes[i]);
+                        var p = tmpMap[sNodes[i][parentKey]];
+                        if (p && sNodes[i][key] != sNodes[i][parentKey]) {
+                            var children = data.nodeChildren(setting, p);
+                            if (!children) {
+                                children = data.nodeChildren(setting, p, []);
+                            }
+                            children.push(sNodes[i]);
                         } else {
                             r.push(sNodes[i]);
                         }
@@ -830,8 +869,9 @@
                 return defaultValue;
             },
             canAsync: function (setting, node) {
-                var childKey = setting.data.key.children;
-                return (setting.async.enable && node && node.isParent && !(node.zAsync || (node[childKey] && node[childKey].length > 0)));
+                var children = data.nodeChildren(setting, node);
+                var isParent = data.nodeIsParent(setting, node);
+                return (setting.async.enable && node && isParent && !(node.zAsync || (children && children.length > 0)));
             },
             clone: function (obj) {
                 if (obj === null) return null;
@@ -889,7 +929,8 @@
         //method of operate ztree dom
         view = {
             addNodes: function (setting, parentNode, index, newNodes, isSilent) {
-                if (setting.data.keep.leaf && parentNode && !parentNode.isParent) {
+                var isParent = data.nodeIsParent(setting, parentNode);
+                if (setting.data.keep.leaf && parentNode && !isParent) {
                     return;
                 }
                 if (!tools.isArray(newNodes)) {
@@ -924,11 +965,10 @@
             },
             appendNodes: function (setting, level, nodes, parentNode, index, initFlag, openFlag) {
                 if (!nodes) return [];
-                var html = [],
-                    childKey = setting.data.key.children;
+                var html = [];
 
                 var tmpPNode = (parentNode) ? parentNode : data.getRoot(setting),
-                    tmpPChild = tmpPNode[childKey],
+                    tmpPChild = data.nodeChildren(setting, tmpPNode),
                     isFirstNode, isLastNode;
 
                 if (!tmpPChild || index >= tmpPChild.length - nodes.length) {
@@ -943,14 +983,15 @@
                         data.initNode(setting, level, node, parentNode, isFirstNode, isLastNode, openFlag);
                         data.addNodeCache(setting, node);
                     }
+                    var isParent = data.nodeIsParent(setting, node);
 
                     var childHtml = [];
-                    if (node[childKey] && node[childKey].length > 0) {
+                    var children = data.nodeChildren(setting, node);
+                    if (children && children.length > 0) {
                         //make child html first, because checkType
-                        childHtml = view.appendNodes(setting, level + 1, node[childKey], node, -1, initFlag, openFlag && node.open);
+                        childHtml = view.appendNodes(setting, level + 1, children, node, -1, initFlag, openFlag && node.open);
                     }
                     if (openFlag) {
-
                         view.makeDOMNodeMainBefore(html, setting, node);
                         view.makeDOMNodeLine(html, setting, node);
                         data.getBeforeA(setting, node, html);
@@ -960,7 +1001,7 @@
                         data.getInnerAfterA(setting, node, html);
                         view.makeDOMNodeNameAfter(html, setting, node);
                         data.getAfterA(setting, node, html);
-                        if (node.isParent && node.open) {
+                        if (isParent && node.open) {
                             view.makeUlHtml(setting, node, html, childHtml.join(''));
                         }
                         view.makeDOMNodeMainAfter(html, setting, node);
@@ -980,14 +1021,15 @@
                 if (ulObj.get(0)) {
                     ulObj.remove();
                 }
-                var childKey = setting.data.key.children,
-                    childHtml = view.appendNodes(setting, node.level + 1, node[childKey], node, -1, false, true);
+                var children = data.nodeChildren(setting, node),
+                    childHtml = view.appendNodes(setting, node.level + 1, children, node, -1, false, true);
                 view.makeUlHtml(setting, node, html, childHtml.join(''));
                 nObj.append(html.join(''));
             },
             asyncNode: function (setting, node, isSilent, callback) {
                 var i, l;
-                if (node && !node.isParent) {
+                var isParent = data.nodeIsParent(setting, node);
+                if (node && !isParent) {
                     tools.apply(callback);
                     return false;
                 } else if (node && node.isAjaxing) {
@@ -1003,21 +1045,23 @@
                 }
 
                 var tmpParam = {};
-                for (i = 0, l = setting.async.autoParam.length; node && i < l; i++) {
-                    var pKey = setting.async.autoParam[i].split("="), spKey = pKey;
+                var autoParam = tools.apply(setting.async.autoParam, [setting.treeId, node], setting.async.autoParam);
+                for (i = 0, l = autoParam.length; node && i < l; i++) {
+                    var pKey = autoParam[i].split("="), spKey = pKey;
                     if (pKey.length > 1) {
                         spKey = pKey[1];
                         pKey = pKey[0];
                     }
                     tmpParam[spKey] = node[pKey];
                 }
-                if (tools.isArray(setting.async.otherParam)) {
-                    for (i = 0, l = setting.async.otherParam.length; i < l; i += 2) {
-                        tmpParam[setting.async.otherParam[i]] = setting.async.otherParam[i + 1];
+                var otherParam = tools.apply(setting.async.otherParam, [setting.treeId, node], setting.async.otherParam);
+                if (tools.isArray(otherParam)) {
+                    for (i = 0, l = otherParam.length; i < l; i += 2) {
+                        tmpParam[otherParam[i]] = otherParam[i + 1];
                     }
                 } else {
-                    for (var p in setting.async.otherParam) {
-                        tmpParam[p] = setting.async.otherParam[p];
+                    for (var p in otherParam) {
+                        tmpParam[p] = otherParam[p];
                     }
                 }
 
@@ -1103,8 +1147,7 @@
             createNodes: function (setting, level, nodes, parentNode, index) {
                 if (!nodes || nodes.length == 0) return;
                 var root = data.getRoot(setting),
-                    childKey = setting.data.key.children,
-                    openFlag = !parentNode || parentNode.open || !!$$(parentNode[childKey][0], setting).get(0);
+                    openFlag = !parentNode || parentNode.open || !!$$(data.nodeChildren(setting, parentNode)[0], setting).get(0);
                 root.createdNodes = [];
                 var zTreeHtml = view.appendNodes(setting, level, nodes, parentNode, index, true, openFlag),
                     parentObj, nextObj;
@@ -1142,13 +1185,14 @@
                 delete settings[setting.treeId];
             },
             expandCollapseNode: function (setting, node, expandFlag, animateFlag, callback) {
-                var root = data.getRoot(setting),
-                    childKey = setting.data.key.children;
+                var root = data.getRoot(setting);
                 var tmpCb, _callback;
                 if (!node) {
                     tools.apply(callback, []);
                     return;
                 }
+                var children = data.nodeChildren(setting, node);
+                var isParent = data.nodeIsParent(setting, node);
                 if (root.expandTriggerFlag) {
                     _callback = callback;
                     tmpCb = function () {
@@ -1162,7 +1206,7 @@
                     callback = tmpCb;
                     root.expandTriggerFlag = false;
                 }
-                if (!node.open && node.isParent && ((!$$(node, consts.id.UL, setting).get(0)) || (node[childKey] && node[childKey].length > 0 && !$$(node[childKey][0], setting).get(0)))) {
+                if (!node.open && isParent && ((!$$(node, consts.id.UL, setting).get(0)) || (children && children.length > 0 && !$$(children[0], setting).get(0)))) {
                     view.appendParentULDom(setting, node);
                     view.createNodeCallback(setting);
                 }
@@ -1174,7 +1218,7 @@
                     switchObj = $$(node, consts.id.SWITCH, setting),
                     icoObj = $$(node, consts.id.ICON, setting);
 
-                if (node.isParent) {
+                if (isParent) {
                     node.open = !node.open;
                     if (node.iconOpen && node.iconClose) {
                         icoObj.attr("style", view.makeNodeIcoStyle(setting, node));
@@ -1187,7 +1231,7 @@
                             ulObj.show();
                             tools.apply(callback, []);
                         } else {
-                            if (node[childKey] && node[childKey].length > 0) {
+                            if (children && children.length > 0) {
                                 ulObj.slideDown(setting.view.expandSpeed, callback);
                             } else {
                                 ulObj.show();
@@ -1197,7 +1241,7 @@
                     } else {
                         view.replaceSwitchClass(node, switchObj, consts.folder.CLOSE);
                         view.replaceIcoClass(node, icoObj, consts.folder.CLOSE);
-                        if (animateFlag == false || setting.view.expandSpeed == "" || !(node[childKey] && node[childKey].length > 0)) {
+                        if (animateFlag == false || setting.view.expandSpeed == "" || !(children && children.length > 0)) {
                             ulObj.hide();
                             tools.apply(callback, []);
                         } else {
@@ -1222,8 +1266,7 @@
             },
             expandCollapseSonNode: function (setting, node, expandFlag, animateFlag, callback) {
                 var root = data.getRoot(setting),
-                    childKey = setting.data.key.children,
-                    treeNodes = (node) ? node[childKey] : root[childKey],
+                    treeNodes = (node) ? data.nodeChildren(setting, node) : data.nodeChildren(setting, root),
                     selfAnimateSign = (node) ? false : animateFlag,
                     expandTriggerFlag = data.getRoot(setting).expandTriggerFlag;
                 data.getRoot(setting).expandTriggerFlag = false;
@@ -1249,7 +1292,7 @@
                 return false;
             },
             makeDOMNodeIcon: function (html, setting, node) {
-                var nameStr = data.getNodeName(setting, node),
+                var nameStr = data.nodeName(setting, node),
                     name = setting.view.nameIsHTML ? nameStr : nameStr.replace(/&/g, '&amp;').replace(/</g, '&lt;').replace(/>/g, '&gt;');
                 html.push("<span id='", node.tId, consts.id.ICON,
                     "' title='' treeNode", consts.id.ICON, " class='", view.makeNodeIcoClass(setting, node),
@@ -1270,7 +1313,7 @@
                 html.push("</a>");
             },
             makeDOMNodeNameBefore: function (html, setting, node) {
-                var title = data.getNodeTitle(setting, node),
+                var title = data.nodeTitle(setting, node),
                     url = view.makeNodeUrl(setting, node),
                     fontcss = view.makeNodeFontCss(setting, node),
                     fontStyle = [];
@@ -1292,8 +1335,9 @@
             makeNodeIcoClass: function (setting, node) {
                 var icoCss = ["ico"];
                 if (!node.isAjaxing) {
+                    var isParent = data.nodeIsParent(setting, node);
                     icoCss[0] = (node.iconSkin ? node.iconSkin + "_" : "") + icoCss[0];
-                    if (node.isParent) {
+                    if (isParent) {
                         icoCss.push(node.open ? consts.folder.OPEN : consts.folder.CLOSE);
                     } else {
                         icoCss.push(consts.folder.DOCU);
@@ -1304,7 +1348,8 @@
             makeNodeIcoStyle: function (setting, node) {
                 var icoStyle = [];
                 if (!node.isAjaxing) {
-                    var icon = (node.isParent && node.iconOpen && node.iconClose) ? (node.open ? node.iconOpen : node.iconClose) : node[setting.data.key.icon];
+                    var isParent = data.nodeIsParent(setting, node);
+                    var icon = (isParent && node.iconOpen && node.iconClose) ? (node.open ? node.iconOpen : node.iconClose) : node[setting.data.key.icon];
                     if (icon) icoStyle.push("background:url(", icon, ") 0 0 no-repeat;");
                     if (setting.view.showIcon == false || !tools.apply(setting.view.showIcon, [setting.treeId, node], true)) {
                         icoStyle.push("width:0px;height:0px;");
@@ -1327,7 +1372,7 @@
                 } else {
                     lineClass.push(consts.line.NOLINE);
                 }
-                if (node.isParent) {
+                if (data.nodeIsParent(setting, node)) {
                     lineClass.push(node.open ? consts.folder.OPEN : consts.folder.CLOSE);
                 } else {
                     lineClass.push(consts.folder.DOCU);
@@ -1354,18 +1399,17 @@
             },
             removeChildNodes: function (setting, node) {
                 if (!node) return;
-                var childKey = setting.data.key.children,
-                    nodes = node[childKey];
+                var nodes = data.nodeChildren(setting, node);
                 if (!nodes) return;
 
                 for (var i = 0, l = nodes.length; i < l; i++) {
                     data.removeNodeCache(setting, nodes[i]);
                 }
                 data.removeSelectedNode(setting);
-                delete node[childKey];
+                delete node[setting.data.key.children];
 
                 if (!setting.data.keep.parent) {
-                    node.isParent = false;
+                    data.nodeIsParent(setting, node, false);
                     node.open = false;
                     var tmp_switchObj = $$(node, consts.id.SWITCH, setting),
                         tmp_icoObj = $$(node, consts.id.ICON, setting);
@@ -1458,20 +1502,19 @@
                 dom.scrollIntoViewIfNeeded();
             },
             setFirstNode: function (setting, parentNode) {
-                var childKey = setting.data.key.children, childLength = parentNode[childKey].length;
-                if (childLength > 0) {
-                    parentNode[childKey][0].isFirstNode = true;
+                var children = data.nodeChildren(setting, parentNode);
+                if (children.length > 0) {
+                    children[0].isFirstNode = true;
                 }
             },
             setLastNode: function (setting, parentNode) {
-                var childKey = setting.data.key.children, childLength = parentNode[childKey].length;
-                if (childLength > 0) {
-                    parentNode[childKey][childLength - 1].isLastNode = true;
+                var children = data.nodeChildren(setting, parentNode);
+                if (children.length > 0) {
+                    children[children.length - 1].isLastNode = true;
                 }
             },
             removeNode: function (setting, node) {
                 var root = data.getRoot(setting),
-                    childKey = setting.data.key.children,
                     parentNode = (node.parentTId) ? node.getParentNode() : root;
 
                 node.isFirstNode = false;
@@ -1491,9 +1534,10 @@
                 data.removeNodeCache(setting, node);
                 data.removeSelectedNode(setting, node);
 
-                for (var i = 0, l = parentNode[childKey].length; i < l; i++) {
-                    if (parentNode[childKey][i].tId == node.tId) {
-                        parentNode[childKey].splice(i, 1);
+                var children = data.nodeChildren(setting, parentNode);
+                for (var i = 0, l = children.length; i < l; i++) {
+                    if (children[i].tId == node.tId) {
+                        children.splice(i, 1);
                         break;
                     }
                 }
@@ -1501,14 +1545,14 @@
                 view.setLastNode(setting, parentNode);
 
                 var tmp_ulObj, tmp_switchObj, tmp_icoObj,
-                    childLength = parentNode[childKey].length;
+                    childLength = children.length;
 
                 //repair nodes old parent
                 if (!setting.data.keep.parent && childLength == 0) {
                     //old parentNode has no child nodes
-                    parentNode.isParent = false;
+                    data.nodeIsParent(setting, parentNode, false);
                     parentNode.open = false;
-                    delete parentNode[childKey];
+                    delete parentNode[setting.data.key.children];
                     tmp_ulObj = $$(parentNode, consts.id.UL, setting);
                     tmp_switchObj = $$(parentNode, consts.id.SWITCH, setting);
                     tmp_icoObj = $$(parentNode, consts.id.ICON, setting);
@@ -1518,17 +1562,17 @@
 
                 } else if (setting.view.showLine && childLength > 0) {
                     //old parentNode has child nodes
-                    var newLast = parentNode[childKey][childLength - 1];
+                    var newLast = children[childLength - 1];
                     tmp_ulObj = $$(newLast, consts.id.UL, setting);
                     tmp_switchObj = $$(newLast, consts.id.SWITCH, setting);
                     tmp_icoObj = $$(newLast, consts.id.ICON, setting);
                     if (parentNode == root) {
-                        if (parentNode[childKey].length == 1) {
+                        if (children.length == 1) {
                             //node was root, and ztree has only one root after move node
                             view.replaceSwitchClass(newLast, tmp_switchObj, consts.line.ROOT);
                         } else {
-                            var tmp_first_switchObj = $$(parentNode[childKey][0], consts.id.SWITCH, setting);
-                            view.replaceSwitchClass(parentNode[childKey][0], tmp_first_switchObj, consts.line.ROOTS);
+                            var tmp_first_switchObj = $$(children[0], consts.id.SWITCH, setting);
+                            view.replaceSwitchClass(children[0], tmp_first_switchObj, consts.line.ROOTS);
                             view.replaceSwitchClass(newLast, tmp_switchObj, consts.line.BOTTOM);
                         }
                     } else {
@@ -1604,7 +1648,7 @@
                     ulObj.addClass(ulLine);
                 }
                 switchObj.attr("class", view.makeNodeLineClass(setting, node));
-                if (node.isParent) {
+                if (data.nodeIsParent(setting, node)) {
                     switchObj.removeAttr("disabled");
                 } else {
                     switchObj.attr("disabled", "disabled");
@@ -1614,13 +1658,13 @@
                 icoObj.attr("class", view.makeNodeIcoClass(setting, node));
             },
             setNodeName: function (setting, node) {
-                var title = data.getNodeTitle(setting, node),
+                var title = data.nodeTitle(setting, node),
                     nObj = $$(node, consts.id.SPAN, setting);
                 nObj.empty();
                 if (setting.view.nameIsHTML) {
-                    nObj.html(data.getNodeName(setting, node));
+                    nObj.html(data.nodeName(setting, node));
                 } else {
-                    nObj.text(data.getNodeName(setting, node));
+                    nObj.text(data.nodeName(setting, node));
                 }
                 if (tools.apply(setting.view.showTitle, [setting.treeId, node], setting.view.showTitle)) {
                     var aObj = $$(node, consts.id.A, setting);
@@ -1687,13 +1731,12 @@
                 setting.view.expandSpeed = "";
             }
             data.initRoot(setting);
-            var root = data.getRoot(setting),
-                childKey = setting.data.key.children;
+            var root = data.getRoot(setting);
             zNodes = zNodes ? tools.clone(tools.isArray(zNodes) ? zNodes : [zNodes]) : [];
             if (setting.data.simpleData.enable) {
-                root[childKey] = data.transformTozTreeFormat(setting, zNodes);
+                data.nodeChildren(setting, root, data.transformTozTreeFormat(setting, zNodes));
             } else {
-                root[childKey] = zNodes;
+                data.nodeChildren(setting, root, zNodes);
             }
 
             data.initCache(setting);
@@ -1706,7 +1749,8 @@
                 setting: setting,
                 addNodes: function (parentNode, index, newNodes, isSilent) {
                     if (!parentNode) parentNode = null;
-                    if (parentNode && !parentNode.isParent && setting.data.keep.leaf) return null;
+                    var isParent = data.nodeIsParent(setting, parentNode);
+                    if (parentNode && !isParent && setting.data.keep.leaf) return null;
 
                     var i = parseInt(index, 10);
                     if (isNaN(i)) {
@@ -1744,7 +1788,7 @@
                     return expandFlag;
                 },
                 expandNode: function (node, expandFlag, sonSign, focus, callbackFlag) {
-                    if (!node || !node.isParent) return null;
+                    if (!node || !data.nodeIsParent(setting, node)) return null;
                     if (expandFlag !== true && expandFlag !== false) {
                         expandFlag = !node.open;
                     }
@@ -1784,30 +1828,30 @@
                 },
                 getNodeByParam: function (key, value, parentNode) {
                     if (!key) return null;
-                    return data.getNodeByParam(setting, parentNode ? parentNode[setting.data.key.children] : data.getNodes(setting), key, value);
+                    return data.getNodeByParam(setting, parentNode ? data.nodeChildren(setting, parentNode) : data.getNodes(setting), key, value);
                 },
                 getNodeByTId: function (tId) {
                     return data.getNodeCache(setting, tId);
                 },
                 getNodesByParam: function (key, value, parentNode) {
                     if (!key) return null;
-                    return data.getNodesByParam(setting, parentNode ? parentNode[setting.data.key.children] : data.getNodes(setting), key, value);
+                    return data.getNodesByParam(setting, parentNode ? data.nodeChildren(setting, parentNode) : data.getNodes(setting), key, value);
                 },
                 getNodesByParamFuzzy: function (key, value, parentNode) {
                     if (!key) return null;
-                    return data.getNodesByParamFuzzy(setting, parentNode ? parentNode[setting.data.key.children] : data.getNodes(setting), key, value);
+                    return data.getNodesByParamFuzzy(setting, parentNode ? data.nodeChildren(setting, parentNode) : data.getNodes(setting), key, value);
                 },
                 getNodesByFilter: function (filter, isSingle, parentNode, invokeParam) {
                     isSingle = !!isSingle;
                     if (!filter || (typeof filter != "function")) return (isSingle ? null : []);
-                    return data.getNodesByFilter(setting, parentNode ? parentNode[setting.data.key.children] : data.getNodes(setting), filter, isSingle, invokeParam);
+                    return data.getNodesByFilter(setting, parentNode ? data.nodeChildren(setting, parentNode) : data.getNodes(setting), filter, isSingle, invokeParam);
                 },
                 getNodeIndex: function (node) {
                     if (!node) return null;
-                    var childKey = setting.data.key.children,
-                        parentNode = (node.parentTId) ? node.getParentNode() : data.getRoot(setting);
-                    for (var i = 0, l = parentNode[childKey].length; i < l; i++) {
-                        if (parentNode[childKey][i] == node) return i;
+                    var parentNode = (node.parentTId) ? node.getParentNode() : data.getRoot(setting);
+                    var children = data.nodeChildren(setting, parentNode);
+                    for (var i = 0, l = children.length; i < l; i++) {
+                        if (children[i] == node) return i;
                     }
                     return -1;
                 },
@@ -1840,12 +1884,12 @@
                         parentNode = data.getRoot(setting);
                     }
                     if (reloadType == "refresh") {
-                        var childKey = this.setting.data.key.children;
-                        for (var i = 0, l = parentNode[childKey] ? parentNode[childKey].length : 0; i < l; i++) {
-                            data.removeNodeCache(setting, parentNode[childKey][i]);
+                        var children = data.nodeChildren(setting, parentNode);
+                        for (var i = 0, l = children ? children.length : 0; i < l; i++) {
+                            data.removeNodeCache(setting, children[i]);
                         }
                         data.removeSelectedNode(setting);
-                        parentNode[childKey] = [];
+                        data.nodeChildren(setting, parentNode, []);
                         if (isRoot) {
                             this.setting.treeObj.empty();
                         } else {
@@ -1858,16 +1902,15 @@
                 refresh: function () {
                     this.setting.treeObj.empty();
                     var root = data.getRoot(setting),
-                        nodes = root[setting.data.key.children]
+                        nodes = data.nodeChildren(setting, root);
                     data.initRoot(setting);
-                    root[setting.data.key.children] = nodes
+                    data.nodeChildren(setting, root, nodes);
                     data.initCache(setting);
-                    view.createNodes(setting, 0, root[setting.data.key.children], null, -1);
+                    view.createNodes(setting, 0, data.nodeChildren(setting, root), null, -1);
                 },
                 removeChildNodes: function (node) {
                     if (!node) return null;
-                    var childKey = setting.data.key.children,
-                        nodes = node[childKey];
+                    var nodes = data.nodeChildren(setting, node);
                     view.removeChildNodes(setting, node);
                     return nodes ? nodes : null;
                 },
@@ -1920,12 +1963,12 @@
                         view.setNodeFontCss(setting, node);
                     }
                 }
-            }
+            };
             root.treeTools = zTreeTools;
             data.setZTreeTools(setting, zTreeTools);
-
-            if (root[childKey] && root[childKey].length > 0) {
-                view.createNodes(setting, 0, root[childKey], null, -1);
+            var children = data.nodeChildren(setting, root);
+            if (children && children.length > 0) {
+                view.createNodes(setting, 0, children, null, -1);
             } else if (setting.async.enable && setting.async.url && setting.async.url !== '') {
                 view.asyncNode(setting);
             }
@@ -1938,7 +1981,7 @@
         consts = zt.consts;
 })(jQuery);
 /*
- * JQuery zTree excheck v3.5.31
+ * JQuery zTree excheck v3.5.32
  * http://treejs.cn/
  *
  * Copyright (c) 2010 Hunter.z
@@ -1947,7 +1990,7 @@
  * http://www.opensource.org/licenses/mit-license.php
  *
  * email: hunter.z@263.net
- * Date: 2017-12-28
+ * Date: 2018-01-06
  */
 (function($){
 	//default consts of excheck
@@ -2070,10 +2113,9 @@
 	//default init node of excheck
 	_initNode = function(setting, level, n, parentNode, isFirstNode, isLastNode, openFlag) {
 		if (!n) return;
-		var checkedKey = setting.data.key.checked;
-		if (typeof n[checkedKey] == "string") n[checkedKey] = tools.eqs(n[checkedKey], "true");
-		n[checkedKey] = !!n[checkedKey];
-		n.checkedOld = n[checkedKey];
+		var checked = data.nodeChecked(setting, n);
+		checked = data.nodeChecked(setting, n, checked);
+		n.checkedOld = checked;
 		if (typeof n.nocheck == "string") n.nocheck = tools.eqs(n.nocheck, "true");
 		n.nocheck = !!n.nocheck || (setting.check.nocheckInherit && parentNode && !!parentNode.nocheck);
 		if (typeof n.chkDisabled == "string") n.chkDisabled = tools.eqs(n.chkDisabled, "true");
@@ -2084,14 +2126,13 @@
 		n.check_Focus = false;
 		n.getCheckStatus = function() {return data.getCheckStatus(setting, n);};
 
-		if (setting.check.chkStyle == consts.radio.STYLE && setting.check.radioType == consts.radio.TYPE_ALL && n[checkedKey] ) {
+		if (setting.check.chkStyle == consts.radio.STYLE && setting.check.radioType == consts.radio.TYPE_ALL && checked) {
 			var r = data.getRoot(setting);
 			r.radioCheckedList.push(n);
 		}
 	},
 	//add dom for check
 	_beforeA = function(setting, node, html) {
-		var checkedKey = setting.data.key.checked;
 		if (setting.check.enable) {
 			data.makeChkFlag(setting, node);
 			html.push("<span ID='", node.tId, consts.id.CHECK, "' class='", view.makeChkClass(setting, node), "' treeNode", consts.id.CHECK, (node.nocheck === true?" style='display:none;'":""),"></span>");
@@ -2100,20 +2141,20 @@
 	//update zTreeObj, add method of check
 	_zTreeTools = function(setting, zTreeTools) {
 		zTreeTools.checkNode = function(node, checked, checkTypeFlag, callbackFlag) {
-			var checkedKey = this.setting.data.key.checked;
+			var nodeChecked = data.nodeChecked(setting, node);
 			if (node.chkDisabled === true) return;
 			if (checked !== true && checked !== false) {
-				checked = !node[checkedKey];
+				checked = !nodeChecked;
 			}
 			callbackFlag = !!callbackFlag;
 
-			if (node[checkedKey] === checked && !checkTypeFlag) {
+			if (nodeChecked === checked && !checkTypeFlag) {
 				return;
 			} else if (callbackFlag && tools.apply(this.setting.callback.beforeCheck, [this.setting.treeId, node], true) == false) {
 				return;
 			}
 			if (tools.uCanDo(this.setting) && this.setting.check.enable && node.nocheck !== true) {
-				node[checkedKey] = checked;
+        data.nodeChecked(setting, node, checked);
 				var checkObj = $$(node, consts.id.CHECK, this.setting);
 				if (checkTypeFlag || this.setting.check.chkStyle === consts.radio.STYLE) view.checkNodeRelation(this.setting, node);
 				view.setChkClass(this.setting, checkObj, node);
@@ -2129,14 +2170,14 @@
 		}
 
 		zTreeTools.getCheckedNodes = function(checked) {
-			var childKey = this.setting.data.key.children;
-			checked = (checked !== false);
-			return data.getTreeCheckedNodes(this.setting, data.getRoot(this.setting)[childKey], checked);
+			var checked = (checked !== false);
+			var children = data.nodeChildren(setting, data.getRoot(this.setting));
+			return data.getTreeCheckedNodes(this.setting, children, checked);
 		}
 
 		zTreeTools.getChangeCheckedNodes = function() {
-			var childKey = this.setting.data.key.children;
-			return data.getTreeChangeCheckedNodes(this.setting, data.getRoot(this.setting)[childKey]);
+      var children = data.nodeChildren(setting, data.getRoot(this.setting));
+			return data.getTreeChangeCheckedNodes(this.setting, children);
 		}
 
 		zTreeTools.setChkDisabled = function(node, disabled, inheritParent, inheritChildren) {
@@ -2174,27 +2215,28 @@
 		},
 		getCheckStatus: function(setting, node) {
 			if (!setting.check.enable || node.nocheck || node.chkDisabled) return null;
-			var checkedKey = setting.data.key.checked,
+			var checked = data.nodeChecked(setting, node),
 			r = {
-				checked: node[checkedKey],
-				half: node.halfCheck ? node.halfCheck : (setting.check.chkStyle == consts.radio.STYLE ? (node.check_Child_State === 2) : (node[checkedKey] ? (node.check_Child_State > -1 && node.check_Child_State < 2) : (node.check_Child_State > 0)))
+				checked: checked,
+				half: node.halfCheck ? node.halfCheck : (setting.check.chkStyle == consts.radio.STYLE ? (node.check_Child_State === 2) : (checked ? (node.check_Child_State > -1 && node.check_Child_State < 2) : (node.check_Child_State > 0)))
 			};
 			return r;
 		},
 		getTreeCheckedNodes: function(setting, nodes, checked, results) {
 			if (!nodes) return [];
-			var childKey = setting.data.key.children,
-			checkedKey = setting.data.key.checked,
-			onlyOne = (checked && setting.check.chkStyle == consts.radio.STYLE && setting.check.radioType == consts.radio.TYPE_ALL);
+			var onlyOne = (checked && setting.check.chkStyle == consts.radio.STYLE && setting.check.radioType == consts.radio.TYPE_ALL);
 			results = !results ? [] : results;
 			for (var i = 0, l = nodes.length; i < l; i++) {
-				if (nodes[i].nocheck !== true && nodes[i].chkDisabled !== true && nodes[i][checkedKey] == checked) {
-					results.push(nodes[i]);
+				var node = nodes[i];
+        var children = data.nodeChildren(setting, node);
+        var nodeChecked = data.nodeChecked(setting, node);
+				if (node.nocheck !== true && node.chkDisabled !== true && nodeChecked == checked) {
+					results.push(node);
 					if(onlyOne) {
 						break;
 					}
 				}
-				data.getTreeCheckedNodes(setting, nodes[i][childKey], checked, results);
+				data.getTreeCheckedNodes(setting, children, checked, results);
 				if(onlyOne && results.length > 0) {
 					break;
 				}
@@ -2203,32 +2245,33 @@
 		},
 		getTreeChangeCheckedNodes: function(setting, nodes, results) {
 			if (!nodes) return [];
-			var childKey = setting.data.key.children,
-			checkedKey = setting.data.key.checked;
 			results = !results ? [] : results;
 			for (var i = 0, l = nodes.length; i < l; i++) {
-				if (nodes[i].nocheck !== true && nodes[i].chkDisabled !== true && nodes[i][checkedKey] != nodes[i].checkedOld) {
-					results.push(nodes[i]);
+				var node = nodes[i];
+        var children = data.nodeChildren(setting, node);
+        var nodeChecked = data.nodeChecked(setting, node);
+				if (node.nocheck !== true && node.chkDisabled !== true && nodeChecked != node.checkedOld) {
+					results.push(node);
 				}
-				data.getTreeChangeCheckedNodes(setting, nodes[i][childKey], results);
+				data.getTreeChangeCheckedNodes(setting, children, results);
 			}
 			return results;
 		},
 		makeChkFlag: function(setting, node) {
 			if (!node) return;
-			var childKey = setting.data.key.children,
-			checkedKey = setting.data.key.checked,
-			chkFlag = -1;
-			if (node[childKey]) {
-				for (var i = 0, l = node[childKey].length; i < l; i++) {
-					var cNode = node[childKey][i];
+			var chkFlag = -1;
+			var children = data.nodeChildren(setting, node);
+			if (children) {
+				for (var i = 0, l = children.length; i < l; i++) {
+					var cNode = children[i];
+          var nodeChecked = data.nodeChecked(setting, cNode);
 					var tmp = -1;
 					if (setting.check.chkStyle == consts.radio.STYLE) {
 						if (cNode.nocheck === true || cNode.chkDisabled === true) {
 							tmp = cNode.check_Child_State;
 						} else if (cNode.halfCheck === true) {
 							tmp = 2;
-						} else if (cNode[checkedKey]) {
+						} else if (nodeChecked) {
 							tmp = 2;
 						} else {
 							tmp = cNode.check_Child_State > 0 ? 2:0;
@@ -2243,7 +2286,7 @@
 							tmp = cNode.check_Child_State;
 						} else if (cNode.halfCheck === true) {
 							tmp = 1;
-						} else if (cNode[checkedKey] ) {
+						} else if (nodeChecked) {
 							tmp = (cNode.check_Child_State === -1 || cNode.check_Child_State === 2) ? 2 : 1;
 						} else {
 							tmp = (cNode.check_Child_State > 0) ? 1 : 0;
@@ -2271,10 +2314,10 @@
 	_handler = {
 		onCheckNode: function (event, node) {
 			if (node.chkDisabled === true) return false;
-			var setting = data.getSetting(event.data.treeId),
-			checkedKey = setting.data.key.checked;
+			var setting = data.getSetting(event.data.treeId);
 			if (tools.apply(setting.callback.beforeCheck, [setting.treeId, node], true) == false) return true;
-			node[checkedKey] = !node[checkedKey];
+      var nodeChecked = data.nodeChecked(setting, node);
+      data.nodeChecked(setting, node, !nodeChecked);
 			view.checkNodeRelation(setting, node);
 			var checkObj = $$(node, consts.id.CHECK, setting);
 			view.setChkClass(setting, checkObj, node);
@@ -2307,17 +2350,17 @@
 	_view = {
 		checkNodeRelation: function(setting, node) {
 			var pNode, i, l,
-			childKey = setting.data.key.children,
-			checkedKey = setting.data.key.checked,
 			r = consts.radio;
+      var nodeChecked = data.nodeChecked(setting, node);
 			if (setting.check.chkStyle == r.STYLE) {
 				var checkedList = data.getRadioCheckedList(setting);
-				if (node[checkedKey]) {
+				if (nodeChecked) {
 					if (setting.check.radioType == r.TYPE_ALL) {
 						for (i = checkedList.length-1; i >= 0; i--) {
 							pNode = checkedList[i];
-							if (pNode[checkedKey] && pNode != node) {
-								pNode[checkedKey] = false;
+              var pNodeChecked = data.nodeChecked(setting, pNode);
+							if (pNodeChecked && pNode != node) {
+                data.nodeChecked(setting, pNode, false);
 								checkedList.splice(i, 1);
 
 								view.setChkClass(setting, $$(pNode, consts.id.CHECK, setting), pNode);
@@ -2329,10 +2372,12 @@
 						checkedList.push(node);
 					} else {
 						var parentNode = (node.parentTId) ? node.getParentNode() : data.getRoot(setting);
-						for (i = 0, l = parentNode[childKey].length; i < l; i++) {
-							pNode = parentNode[childKey][i];
-							if (pNode[checkedKey] && pNode != node) {
-								pNode[checkedKey] = false;
+            var children = data.nodeChildren(setting, parentNode);
+						for (i = 0, l = children.length; i < l; i++) {
+							pNode = children[i];
+              var pNodeChecked = data.nodeChecked(setting, pNode);
+							if (pNodeChecked && pNode != node) {
+								data.nodeChecked(setting, pNode, false);
 								view.setChkClass(setting, $$(pNode, consts.id.CHECK, setting), pNode);
 							}
 						}
@@ -2347,24 +2392,25 @@
 				}
 
 			} else {
-				if (node[checkedKey] && (!node[childKey] || node[childKey].length==0 || setting.check.chkboxType.Y.indexOf("s") > -1)) {
+        var children = data.nodeChildren(setting, node);
+				if (nodeChecked && (!children || children.length==0 || setting.check.chkboxType.Y.indexOf("s") > -1)) {
 					view.setSonNodeCheckBox(setting, node, true);
 				}
-				if (!node[checkedKey] && (!node[childKey] || node[childKey].length==0 || setting.check.chkboxType.N.indexOf("s") > -1)) {
+				if (!nodeChecked && (!children || children.length==0 || setting.check.chkboxType.N.indexOf("s") > -1)) {
 					view.setSonNodeCheckBox(setting, node, false);
 				}
-				if (node[checkedKey] && setting.check.chkboxType.Y.indexOf("p") > -1) {
+				if (nodeChecked && setting.check.chkboxType.Y.indexOf("p") > -1) {
 					view.setParentNodeCheckBox(setting, node, true);
 				}
-				if (!node[checkedKey] && setting.check.chkboxType.N.indexOf("p") > -1) {
+				if (!nodeChecked && setting.check.chkboxType.N.indexOf("p") > -1) {
 					view.setParentNodeCheckBox(setting, node, false);
 				}
 			}
 		},
 		makeChkClass: function(setting, node) {
-			var checkedKey = setting.data.key.checked,
-			c = consts.checkbox, r = consts.radio,
+			var c = consts.checkbox, r = consts.radio,
 			fullStyle = "";
+      var nodeChecked = data.nodeChecked(setting, node);
 			if (node.chkDisabled === true) {
 				fullStyle = c.DISABLED;
 			} else if (node.halfCheck) {
@@ -2372,21 +2418,20 @@
 			} else if (setting.check.chkStyle == r.STYLE) {
 				fullStyle = (node.check_Child_State < 1)? c.FULL:c.PART;
 			} else {
-				fullStyle = node[checkedKey] ? ((node.check_Child_State === 2 || node.check_Child_State === -1) ? c.FULL:c.PART) : ((node.check_Child_State < 1)? c.FULL:c.PART);
+				fullStyle = nodeChecked ? ((node.check_Child_State === 2 || node.check_Child_State === -1) ? c.FULL:c.PART) : ((node.check_Child_State < 1)? c.FULL:c.PART);
 			}
-			var chkName = setting.check.chkStyle + "_" + (node[checkedKey] ? c.TRUE : c.FALSE) + "_" + fullStyle;
+			var chkName = setting.check.chkStyle + "_" + (nodeChecked ? c.TRUE : c.FALSE) + "_" + fullStyle;
 			chkName = (node.check_Focus && node.chkDisabled !== true) ? chkName + "_" + c.FOCUS : chkName;
 			return consts.className.BUTTON + " " + c.DEFAULT + " " + chkName;
 		},
 		repairAllChk: function(setting, checked) {
 			if (setting.check.enable && setting.check.chkStyle === consts.checkbox.STYLE) {
-				var checkedKey = setting.data.key.checked,
-				childKey = setting.data.key.children,
-				root = data.getRoot(setting);
-				for (var i = 0, l = root[childKey].length; i<l ; i++) {
-					var node = root[childKey][i];
+				var root = data.getRoot(setting);
+				var children = data.nodeChildren(setting, root);
+				for (var i = 0, l = children.length; i<l ; i++) {
+					var node = children[i];
 					if (node.nocheck !== true && node.chkDisabled !== true) {
-						node[checkedKey] = checked;
+            data.nodeChecked(setting, node, checked);
 					}
 					view.setSonNodeCheckBox(setting, node, checked);
 				}
@@ -2408,23 +2453,23 @@
 		},
 		repairParentChkClassWithSelf: function(setting, node) {
 			if (!node) return;
-			var childKey = setting.data.key.children;
-			if (node[childKey] && node[childKey].length > 0) {
-				view.repairParentChkClass(setting, node[childKey][0]);
+      var children = data.nodeChildren(setting, node);
+			if (children && children.length > 0) {
+				view.repairParentChkClass(setting, children[0]);
 			} else {
 				view.repairParentChkClass(setting, node);
 			}
 		},
 		repairSonChkDisabled: function(setting, node, chkDisabled, inherit) {
 			if (!node) return;
-			var childKey = setting.data.key.children;
-			if (node.chkDisabled != chkDisabled) {
+      if (node.chkDisabled != chkDisabled) {
 				node.chkDisabled = chkDisabled;
 			}
 			view.repairChkClass(setting, node);
-			if (node[childKey] && inherit) {
-				for (var i = 0, l = node[childKey].length; i < l; i++) {
-					var sNode = node[childKey][i];
+      var children = data.nodeChildren(setting, node);
+      if (children && inherit) {
+				for (var i = 0, l = children.length; i < l; i++) {
+					var sNode = children[i];
 					view.repairSonChkDisabled(setting, sNode, chkDisabled, inherit);
 				}
 			}
@@ -2447,13 +2492,11 @@
             obj.attr('class', view.makeChkClass(setting, node));
 		},
 		setParentNodeCheckBox: function(setting, node, value, srcNode) {
-			var childKey = setting.data.key.children,
-			checkedKey = setting.data.key.checked,
-			checkObj = $$(node, consts.id.CHECK, setting);
+			var checkObj = $$(node, consts.id.CHECK, setting);
 			if (!srcNode) srcNode = node;
 			data.makeChkFlag(setting, node);
 			if (node.nocheck !== true && node.chkDisabled !== true) {
-				node[checkedKey] = value;
+        data.nodeChecked(setting, node, value);
 				view.setChkClass(setting, checkObj, node);
 				if (setting.check.autoCheckTrigger && node != srcNode) {
 					setting.treeObj.trigger(consts.event.CHECK, [null, setting.treeId, node]);
@@ -2462,10 +2505,12 @@
 			if (node.parentTId) {
 				var pSign = true;
 				if (!value) {
-					var pNodes = node.getParentNode()[childKey];
+          var pNodes = data.nodeChildren(setting, node.getParentNode());
 					for (var i = 0, l = pNodes.length; i < l; i++) {
-						if ((pNodes[i].nocheck !== true && pNodes[i].chkDisabled !== true && pNodes[i][checkedKey])
-						|| ((pNodes[i].nocheck === true || pNodes[i].chkDisabled === true) && pNodes[i].check_Child_State > 0)) {
+					  var pNode = pNodes[i];
+            var nodeChecked = data.nodeChecked(setting, pNode);
+						if ((pNode.nocheck !== true && pNode.chkDisabled !== true && nodeChecked)
+						|| ((pNode.nocheck === true || pNode.chkDisabled === true) && pNode.check_Child_State > 0)) {
 							pSign = false;
 							break;
 						}
@@ -2478,15 +2523,14 @@
 		},
 		setSonNodeCheckBox: function(setting, node, value, srcNode) {
 			if (!node) return;
-			var childKey = setting.data.key.children,
-			checkedKey = setting.data.key.checked,
-			checkObj = $$(node, consts.id.CHECK, setting);
+			var checkObj = $$(node, consts.id.CHECK, setting);
 			if (!srcNode) srcNode = node;
 
 			var hasDisable = false;
-			if (node[childKey]) {
-				for (var i = 0, l = node[childKey].length; i < l; i++) {
-					var sNode = node[childKey][i];
+      var children = data.nodeChildren(setting, node);
+			if (children) {
+				for (var i = 0, l = children.length; i < l; i++) {
+					var sNode = children[i];
 					view.setSonNodeCheckBox(setting, sNode, value, srcNode);
 					if (sNode.chkDisabled === true) hasDisable = true;
 				}
@@ -2497,8 +2541,8 @@
 					data.makeChkFlag(setting, node);
 				}
 				if (node.nocheck !== true && node.chkDisabled !== true) {
-					node[checkedKey] = value;
-					if (!hasDisable) node.check_Child_State = (node[childKey] && node[childKey].length > 0) ? (value ? 2 : 0) : -1;
+          data.nodeChecked(setting, node, value);
+					if (!hasDisable) node.check_Child_State = (children && children.length > 0) ? (value ? 2 : 0) : -1;
 				} else {
 					node.check_Child_State = -1;
 				}
@@ -2527,6 +2571,21 @@
 	data = zt._z.data,
 	event = zt._z.event,
 	$$ = tools.$;
+
+	data.nodeChecked = function(setting, node, newChecked) {
+    if (!node) {
+      return false;
+    }
+    var key = setting.data.key.checked;
+    if (typeof newChecked !== 'undefined') {
+      if (typeof newChecked === "string") {
+        newChecked = tools.eqs(checked, "true");
+      }
+      newChecked = !!newChecked;
+      node[key] = newChecked;
+    }
+    return node[key];
+  };
 
 	data.exSetting(_setting);
 	data.addInitBind(_bindEvent);
@@ -2566,7 +2625,7 @@
 	}
 })(jQuery);
 /*
- * JQuery zTree exedit v3.5.31
+ * JQuery zTree exedit v3.5.32
  * http://treejs.cn/
  *
  * Copyright (c) 2010 Hunter.z
@@ -2575,7 +2634,7 @@
  * http://www.opensource.org/licenses/mit-license.php
  *
  * email: hunter.z@263.net
- * Date: 2017-12-28
+ * Date: 2018-01-06
  */
 (function($){
 	//default consts of exedit
@@ -2750,7 +2809,8 @@
 		}
 		zTreeTools.copyNode = function(targetNode, node, moveType, isSilent) {
 			if (!node) return null;
-			if (targetNode && !targetNode.isParent && this.setting.data.keep.leaf && moveType === consts.move.TYPE_INNER) return null;
+      var isParent = data.nodeIsParent(setting, targetNode);
+			if (targetNode && !isParent && this.setting.data.keep.leaf && moveType === consts.move.TYPE_INNER) return null;
 			var _this = this,
 				newNode = tools.clone(node);
 			if (!targetNode) {
@@ -2780,7 +2840,8 @@
 		}
 		zTreeTools.moveNode = function(targetNode, node, moveType, isSilent) {
 			if (!node) return node;
-			if (targetNode && !targetNode.isParent && this.setting.data.keep.leaf && moveType === consts.move.TYPE_INNER) {
+      var isParent = data.nodeIsParent(setting, targetNode);
+			if (targetNode && !isParent && this.setting.data.keep.leaf && moveType === consts.move.TYPE_INNER) {
 				return null;
 			} else if (targetNode && ((node.parentTId == targetNode.tId && moveType == consts.move.TYPE_INNER) || $$(node, this.setting).find("#" + targetNode.tId).length > 0)) {
 				return null;
@@ -2807,11 +2868,11 @@
 	_data = {
 		setSonNodeLevel: function(setting, parentNode, node) {
 			if (!node) return;
-			var childKey = setting.data.key.children;
+      var children = data.nodeChildren(setting, node);
 			node.level = (parentNode)? parentNode.level + 1 : 0;
-			if (!node[childKey]) return;
-			for (var i = 0, l = node[childKey].length; i < l; i++) {
-				if (node[childKey][i]) data.setSonNodeLevel(setting, node, node[childKey][i]);
+			if (!children) return;
+			for (var i = 0, l = children.length; i < l; i++) {
+				if (children[i]) data.setSonNodeLevel(setting, node, children[i]);
 			}
 		}
 	},
@@ -2890,8 +2951,7 @@
 					&& Math.abs(mouseDownY - event.clientY) < setting.edit.drag.minMoveSize) {
 					return true;
 				}
-				var i, l, tmpNode, tmpDom, tmpNodes,
-				childKey = setting.data.key.children;
+				var i, l, tmpNode, tmpDom, tmpNodes;
 				body.css("cursor", "pointer");
 
 				if (root.dragFlag == 0) {
@@ -2905,7 +2965,7 @@
 							root.dragNodeShowBefore = [];
 						}
 						tmpNode = nodes[i];
-						if (tmpNode.isParent && tmpNode.open) {
+						if (data.nodeIsParent(setting, tmpNode) && tmpNode.open) {
 							view.expandCollapseNode(setting, tmpNode, !tmpNode.open);
 							root.dragNodeShowBefore[tmpNode.tId] = true;
 						} else {
@@ -2920,7 +2980,7 @@
 					//sort
 					var isOrder = true, lastIndex = -1;
 					if (nodes.length>1) {
-						var pNodes = nodes[0].parentTId ? nodes[0].getParentNode()[childKey] : data.getNodes(setting);
+						var pNodes = nodes[0].parentTId ? data.nodeChildren(setting, nodes[0].getParentNode()) : data.getNodes(setting);
 						tmpNodes = [];
 						for (i=0, l=pNodes.length; i<l; i++) {
 							if (root.dragNodeShowBefore[pNodes[i].tId] !== undefined) {
@@ -3081,7 +3141,7 @@
 							isInner = (tmpNode.parentTId && tmpNode.parentTId == tmpTargetNodeId),
 							canPrev = (isCopy || !isNext) && tools.apply(targetSetting.edit.drag.prev, [targetSetting.treeId, nodes, tmpTargetNode], !!targetSetting.edit.drag.prev),
 							canNext = (isCopy || !isPrev) && tools.apply(targetSetting.edit.drag.next, [targetSetting.treeId, nodes, tmpTargetNode], !!targetSetting.edit.drag.next),
-							canInner = (isCopy || !isInner) && !(targetSetting.data.keep.leaf && !tmpTargetNode.isParent) && tools.apply(targetSetting.edit.drag.inner, [targetSetting.treeId, nodes, tmpTargetNode], !!targetSetting.edit.drag.inner);
+							canInner = (isCopy || !isInner) && !(targetSetting.data.keep.leaf && !data.nodeIsParent(setting, tmpTargetNode)) && tools.apply(targetSetting.edit.drag.inner, [targetSetting.treeId, nodes, tmpTargetNode], !!targetSetting.edit.drag.inner);
 
 						function clearMove() {
 							tmpTarget = null;
@@ -3112,7 +3172,7 @@
 								moveType = consts.move.TYPE_PREV;
 							} else if ((nextPercent==0 || dY_percent>=nextPercent && dY_percent<=1.2) && canNext) {
 								dX = 1 - tmpArrow.width();
-								dY = (tmpNextA == null || (tmpTargetNode.isParent && tmpTargetNode.open)) ? (tmpTop + tmpTargetA.height() - tmpArrow.height()/2) : (tmpNextA.offset().top - tmpArrow.height()/2);
+								dY = (tmpNextA == null || (data.nodeIsParent(setting, tmpTargetNode) && tmpTargetNode.open)) ? (tmpTop + tmpTargetA.height() - tmpArrow.height()/2) : (tmpNextA.offset().top - tmpArrow.height()/2);
 								moveType = consts.move.TYPE_NEXT;
 							} else if (canInner) {
 								dX = 5 - tmpArrow.width();
@@ -3133,7 +3193,7 @@
 								if (preTmpTargetNodeId != tmpTargetNodeId || preTmpMoveType != moveType) {
 									startTime = (new Date()).getTime();
 								}
-								if (tmpTargetNode && tmpTargetNode.isParent && moveType == consts.move.TYPE_INNER) {
+								if (tmpTargetNode && data.nodeIsParent(setting, tmpTargetNode) && moveType == consts.move.TYPE_INNER) {
 									var startTimer = true;
 									if (window.zTreeMoveTimer && window.zTreeMoveTargetNodeTId !== tmpTargetNode.tId) {
 										clearTimeout(window.zTreeMoveTimer);
@@ -3144,7 +3204,7 @@
 									if (startTimer) {
 										window.zTreeMoveTimer = setTimeout(function() {
 											if (moveType != consts.move.TYPE_INNER) return;
-											if (tmpTargetNode && tmpTargetNode.isParent && !tmpTargetNode.open && (new Date()).getTime() - startTime > targetSetting.edit.drag.autoOpenTime
+											if (tmpTargetNode && data.nodeIsParent(setting, tmpTargetNode) && !tmpTargetNode.open && (new Date()).getTime() - startTime > targetSetting.edit.drag.autoOpenTime
 												&& tools.apply(targetSetting.callback.beforeDragOpen, [targetSetting.treeId, tmpTargetNode], true)) {
 												view.switchNode(targetSetting, tmpTargetNode);
 												if (targetSetting.edit.drag.autoExpandTrigger) {
@@ -3206,7 +3266,7 @@
 				var i, l, tmpNode;
 				for (i=0, l=nodes.length; i<l; i++) {
 					tmpNode = nodes[i];
-					if (tmpNode.isParent && root.dragNodeShowBefore[tmpNode.tId] && !tmpNode.open) {
+					if (data.nodeIsParent(setting, tmpNode) && root.dragNodeShowBefore[tmpNode.tId] && !tmpNode.open) {
 						view.expandCollapseNode(setting, tmpNode, !tmpNode.open);
 						delete root.dragNodeShowBefore[tmpNode.tId];
 					}
@@ -3398,17 +3458,16 @@
 		},
 		cancelCurEditNode: function (setting, forceName, isCancel) {
 			var root = data.getRoot(setting),
-			nameKey = setting.data.key.name,
 			node = root.curEditNode;
 
 			if (node) {
 				var inputObj = root.curEditInput,
-				newName = forceName ? forceName:(isCancel ? node[nameKey]: inputObj.val());
+				newName = forceName ? forceName:(isCancel ? data.nodeName(setting, node): inputObj.val());
 				if (tools.apply(setting.callback.beforeRename, [setting.treeId, node, newName, isCancel], true) === false) {
 					return false;
 				}
-                node[nameKey] = newName;
-                var aObj = $$(node, consts.id.A, setting);
+        data.nodeName(setting, node, newName);
+				var aObj = $$(node, consts.id.A, setting);
 				aObj.removeClass(consts.node.CURSELECTED_EDIT);
 				inputObj.unbind();
 				view.setNodeName(setting, node);
@@ -3416,7 +3475,7 @@
 				root.curEditNode = null;
 				root.curEditInput = null;
 				view.selectNode(setting, node, false);
-                setting.treeObj.trigger(consts.event.RENAME, [setting.treeId, node, isCancel]);
+				setting.treeObj.trigger(consts.event.RENAME, [setting.treeId, node, isCancel]);
 			}
 			root.noSelection = true;
 			return true;
@@ -3428,14 +3487,13 @@
 				setTimeout(function() {tools.inputFocus(root.curEditInput);}, 0);
 				return;
 			}
-			var nameKey = setting.data.key.name;
 			node.editNameFlag = true;
 			view.removeTreeDom(setting, node);
 			view.cancelCurEditNode(setting);
 			view.selectNode(setting, node, false);
 			$$(node, consts.id.SPAN, setting).html("<input type=text class='rename' id='" + node.tId + consts.id.INPUT + "' treeNode" + consts.id.INPUT + " >");
 			var inputObj = $$(node, consts.id.INPUT, setting);
-			inputObj.attr("value", node[nameKey]);
+			inputObj.attr("value", data.nodeName(setting, node));
 			if (setting.edit.editNameSelectAll) {
 				tools.inputSelect(inputObj);
 			} else {
@@ -3465,10 +3523,9 @@
 			root.curEditNode = node;
 		},
 		moveNode: function(setting, targetNode, node, moveType, animateFlag, isSilent) {
-			var root = data.getRoot(setting),
-			childKey = setting.data.key.children;
+			var root = data.getRoot(setting);
 			if (targetNode == node) return;
-			if (setting.data.keep.leaf && targetNode && !targetNode.isParent && moveType == consts.move.TYPE_INNER) return;
+			if (setting.data.keep.leaf && targetNode && !data.nodeIsParent(setting, targetNode) && moveType == consts.move.TYPE_INNER) return;
 			var oldParentNode = (node.parentTId ? node.getParentNode(): root),
 			targetNodeIsRoot = (targetNode === null || targetNode == root);
 			if (targetNodeIsRoot && targetNode === null) targetNode = root;
@@ -3484,8 +3541,8 @@
 					//parentTId of root node is null
 					node.parentTId = null;
 				} else {
-					if (!targetNode.isParent) {
-						targetNode.isParent = true;
+					if (!data.nodeIsParent(setting, targetNode)) {
+            data.nodeIsParent(setting, targetNode, true);
 						targetNode.open = !!targetNode.open;
 						view.setNodeLineIcos(setting, targetNode);
 					}
@@ -3534,43 +3591,48 @@
 			oldNeighbor = null,
 			newNeighbor = null,
 			oldLevel = node.level;
+			var oldChildren = data.nodeChildren(setting, oldParentNode);
+			var targetParentChildren = data.nodeChildren(setting, targetParentNode);
+			var targetChildren = data.nodeChildren(setting, targetNode);
 			if (node.isFirstNode) {
 				tmpSrcIndex = 0;
-				if (oldParentNode[childKey].length > 1 ) {
-					oldNeighbor = oldParentNode[childKey][1];
+				if (oldChildren.length > 1 ) {
+					oldNeighbor = oldChildren[1];
 					oldNeighbor.isFirstNode = true;
 				}
 			} else if (node.isLastNode) {
-				tmpSrcIndex = oldParentNode[childKey].length -1;
-				oldNeighbor = oldParentNode[childKey][tmpSrcIndex - 1];
+				tmpSrcIndex = oldChildren.length -1;
+				oldNeighbor = oldChildren[tmpSrcIndex - 1];
 				oldNeighbor.isLastNode = true;
 			} else {
-				for (i = 0, l = oldParentNode[childKey].length; i < l; i++) {
-					if (oldParentNode[childKey][i].tId == node.tId) {
+				for (i = 0, l = oldChildren.length; i < l; i++) {
+					if (oldChildren[i].tId == node.tId) {
 						tmpSrcIndex = i;
 						break;
 					}
 				}
 			}
 			if (tmpSrcIndex >= 0) {
-				oldParentNode[childKey].splice(tmpSrcIndex, 1);
+				oldChildren.splice(tmpSrcIndex, 1);
 			}
 			if (moveType != consts.move.TYPE_INNER) {
-				for (i = 0, l = targetParentNode[childKey].length; i < l; i++) {
-					if (targetParentNode[childKey][i].tId == targetNode.tId) tmpTargetIndex = i;
+				for (i = 0, l = targetParentChildren.length; i < l; i++) {
+					if (targetParentChildren[i].tId == targetNode.tId) tmpTargetIndex = i;
 				}
 			}
 			if (moveType == consts.move.TYPE_INNER) {
-				if (!targetNode[childKey]) targetNode[childKey] = new Array();
-				if (targetNode[childKey].length > 0) {
-					newNeighbor = targetNode[childKey][targetNode[childKey].length - 1];
+				if (!targetChildren) {
+          targetChildren = data.nodeChildren(setting, targetNode, []);
+        }
+				if (targetChildren.length > 0) {
+					newNeighbor = targetChildren[targetChildren.length - 1];
 					newNeighbor.isLastNode = false;
 				}
-				targetNode[childKey].splice(targetNode[childKey].length, 0, node);
+				targetChildren.splice(targetChildren.length, 0, node);
 				node.isLastNode = true;
-				node.isFirstNode = (targetNode[childKey].length == 1);
+				node.isFirstNode = (targetChildren.length == 1);
 			} else if (targetNode.isFirstNode && moveType == consts.move.TYPE_PREV) {
-				targetParentNode[childKey].splice(tmpTargetIndex, 0, node);
+				targetParentChildren.splice(tmpTargetIndex, 0, node);
 				newNeighbor = targetNode;
 				newNeighbor.isFirstNode = false;
 				node.parentTId = targetNode.parentTId;
@@ -3578,7 +3640,7 @@
 				node.isLastNode = false;
 
 			} else if (targetNode.isLastNode && moveType == consts.move.TYPE_NEXT) {
-				targetParentNode[childKey].splice(tmpTargetIndex + 1, 0, node);
+				targetParentChildren.splice(tmpTargetIndex + 1, 0, node);
 				newNeighbor = targetNode;
 				newNeighbor.isLastNode = false;
 				node.parentTId = targetNode.parentTId;
@@ -3587,9 +3649,9 @@
 
 			} else {
 				if (moveType == consts.move.TYPE_PREV) {
-					targetParentNode[childKey].splice(tmpTargetIndex, 0, node);
+					targetParentChildren.splice(tmpTargetIndex, 0, node);
 				} else {
-					targetParentNode[childKey].splice(tmpTargetIndex + 1, 0, node);
+					targetParentChildren.splice(tmpTargetIndex + 1, 0, node);
 				}
 				node.parentTId = targetNode.parentTId;
 				node.isFirstNode = false;
@@ -3600,12 +3662,12 @@
 
 			//repair node what been moved
 			view.setNodeLineIcos(setting, node);
-			view.repairNodeLevelClass(setting, node, oldLevel)
+			view.repairNodeLevelClass(setting, node, oldLevel);
 
 			//repair node's old parentNode dom
-			if (!setting.data.keep.parent && oldParentNode[childKey].length < 1) {
+			if (!setting.data.keep.parent && oldChildren.length < 1) {
 				//old parentNode has no child nodes
-				oldParentNode.isParent = false;
+        data.nodeIsParent(setting, oldParentNode, false);
 				oldParentNode.open = false;
 				var tmp_ulObj = $$(oldParentNode, consts.id.UL, setting),
 				tmp_switchObj = $$(oldParentNode, consts.id.SWITCH, setting),

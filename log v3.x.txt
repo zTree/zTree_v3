@@ -13,6 +13,10 @@
 
 </font>
 
+*2018.01.06* v3.5.32
+   * [修改] setting.async.autoParam / otherParam 支持 function
+   * [修改] isParent / isHidden 允许自定义属性名称 setting.data.key.isParent / isHidden
+
 *2017.12.28* v3.5.31
    * [修改] 初始化节点数据的规则，支持 treeNode { name: "Node2", children: []}, 情况下自动设置为 isParent = true
 
