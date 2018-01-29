@@ -627,7 +627,7 @@
                 var key = setting.data.key.isParent;
                 if (typeof newIsParent !== 'undefined') {
                     if (typeof newIsParent === "string") {
-                        newIsParent = tools.eqs(checked, "true");
+                        newIsParent = tools.eqs(newIsParent, "true");
                     }
                     newIsParent = !!newIsParent;
                     node[key] = newIsParent;
