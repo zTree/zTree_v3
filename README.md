@@ -1,6 +1,6 @@
 jQuery Tree Plugin ---- zTree  
 ============
-last verson :  3.5.32
+last verson :  3.5.33
 
 
 **Donate to zTree** : http://www.treejs.cn/v3/donate.php

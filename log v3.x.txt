@@ -13,6 +13,9 @@
 
 </font>
 
+*2018.01.30* v3.5.33
+   * [修改] nodeIsParent 方法内的错误  Thanks @netmou
+
 *2018.01.06* v3.5.32
    * [修改] setting.async.autoParam / otherParam 支持 function
    * [修改] isParent / isHidden 允许自定义属性名称 setting.data.key.isParent / isHidden
