@@ -1,5 +1,5 @@
 /*
- * JQuery zTree exHideNodes v3.5.33
+ * JQuery zTree exHideNodes v3.5.34
  * http://treejs.cn/
  *
  * Copyright (c) 2010 Hunter.z
@@ -8,7 +8,7 @@
  * http://www.opensource.org/licenses/mit-license.php
  *
  * email: hunter.z@263.net
- * Date: 2018-01-30
+ * Date: 2018-02-12
  */
 (function(j){j.extend(!0,j.fn.zTree._z,{view:{clearOldFirstNode:function(c,a){for(var b=a.getNextNode();b;){if(b.isFirstNode){b.isFirstNode=!1;e.setNodeLineIcos(c,b);break}if(b.isLastNode)break;b=b.getNextNode()}},clearOldLastNode:function(c,a,b){for(a=a.getPreNode();a;){if(a.isLastNode){a.isLastNode=!1;b&&e.setNodeLineIcos(c,a);break}if(a.isFirstNode)break;a=a.getPreNode()}},makeDOMNodeMainBefore:function(c,a,b){a=d.isHidden(a,b);c.push("<li ",a?"style='display:none;' ":"","id='",b.tId,"' class='",
 l.className.LEVEL,b.level,"' tabindex='0' hidefocus='true' treenode>")},showNode:function(c,a){d.isHidden(c,a,!1);d.initShowForExCheck(c,a);k(a,c).show()},showNodes:function(c,a,b){if(a&&a.length!=0){var f={},g,i;for(g=0,i=a.length;g<i;g++){var h=a[g];if(!f[h.parentTId]){var u=h.getParentNode();f[h.parentTId]=u===null?d.getRoot(c):h.getParentNode()}e.showNode(c,h,b)}for(var j in f)a=d.nodeChildren(c,f[j]),e.setFirstNodeForShow(c,a),e.setLastNodeForShow(c,a)}},hideNode:function(c,a){d.isHidden(c,a,

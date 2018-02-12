@@ -13,6 +13,9 @@
 
 </font>
 
+*2018.02.12* v3.5.34
+   * [修改] nodeChecked 方法内的错误  Thanks @勇哥
+
 *2018.01.30* v3.5.33
    * [修改] nodeIsParent 方法内的错误  Thanks @netmou
 
