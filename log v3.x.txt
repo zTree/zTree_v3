@@ -13,6 +13,9 @@
 
 </font>
 
+*2018.03.30* v3.5.35
+   * [修改] 关闭拖拽方法内的 eventMouseDown.preventDefault(); 避免影响 zTree 外部的事件  Thanks @heyusysu
+
 *2018.02.12* v3.5.34
    * [修改] nodeChecked 方法内的错误  Thanks @勇哥
 
