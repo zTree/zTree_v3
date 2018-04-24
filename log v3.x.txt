@@ -13,6 +13,9 @@
 
 </font>
 
+*2018.04.24* v3.5.35
+   * [增加] Demo：模糊搜索（Fuzzy Search）  Thanks @bigablecat
+
 *2018.03.30* v3.5.35
    * [修改] 关闭拖拽方法内的 eventMouseDown.preventDefault(); 避免影响 zTree 外部的事件  Thanks @heyusysu
 

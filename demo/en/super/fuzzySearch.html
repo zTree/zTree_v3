@@ -1,0 +1,95 @@
+<!DOCTYPE html>
+<HTML>
+<HEAD>
+	<TITLE> ZTREE DEMO - fuzzySearch</TITLE>
+	<meta http-equiv="content-type" content="text/html; charset=UTF-8">
+	<link rel="stylesheet" href="../../../css/demo.css" type="text/css">
+	<link rel="stylesheet" href="../../../css/zTreeStyle/zTreeStyle.css" type="text/css">
+	<script type="text/javascript" src="../../../js/jquery-1.4.4.min.js"></script>
+	<script type="text/javascript" src="../../../js/jquery.ztree.core.js"></script>
+	<script type="text/javascript" src="../../../js/jquery.ztree.exhide.js"></script>
+	<script type="text/javascript" src="../../js/fuzzysearch.js"></script>
+	
+	<SCRIPT type="text/javascript">
+		var setting = {
+				check: {
+					enable: true//checkbox
+				},
+				view: {
+					nameIsHTML: true, //allow html in node name for highlight use				
+					selectedMulti: false
+				},
+				edit: {
+					enable: false,
+					editNameSelectAll: false
+				},
+				data: {
+					simpleData: {
+						enable: true
+					}
+				}
+		};
+
+		var zNodes =[
+			{ id:1, pId:0, name:"fuzzySearch demo 1", t:"id=1", open:true},
+			{ id:11, pId:1, name:"[]\\^$.|?*+():keywords with js meta characters", t:"id=11"},
+			{ id:12, pId:1, name:"{}<>'\"~`!@#%&-;:/,=:keywords with other characters", t:"id=12"},
+			{ id:2, pId:0, name:"fuzzySearch demo 2", t:"id=2", open:true},
+			{ id:21, pId:2, name:"uppercase ABDEFGHINQRT:keywords igonore case", t:"id=21"},
+			{ id:22, pId:2, name:"lowercase abdefghinqrt:keywords igonore case", t:"id=21"},
+			{ id:3, pId:0, name:"fuzzySearch demo 3", t:"id=3", open:true },
+			{ id:31, pId:3, name:"blank blank:keywords with blank", t:"id=31"}
+		];
+
+		$(document).ready(function(){
+			$.fn.zTree.init($("#treeDemo"), setting, zNodes);
+			fuzzySearch('treeDemo','#key',null,true); //initialize fuzzysearch function
+		});
+		//-->
+	</SCRIPT>
+</HEAD>
+
+<BODY>
+<h1>Fuzzy Search</h1>
+<h6>[ File Path: fuzzySearch/fuzzySearch.html ]</h6>
+<div class="content_wrap">
+	<div class="zTreeDemoBackground left">
+		<ul id="treeDemo" class="ztree"></ul>
+	</div>
+	<div class="right">
+		<ul class="info">
+			<li class="title">
+				<h2>1. Explaination of fuzzySearch()</h2>
+				<ul class="list">
+				<li class="highlight_red">
+ 					@param the ztree id used to get the ztree object
+				</li>
+				<li class="highlight_red">
+					@param searchField selector of your input for fuzzy search
+				</li>
+				<li class="highlight_red">
+					@param isHighLight whether highlight the match words, default true
+				</li>
+				<li class="highlight_red">
+					@param isExpand whether to expand the node, default false
+				</li>
+				<li class="highlight_red">
+					fuzzySearch ( zTreeId, searchField, isHighLight, isExpand )
+				</li>
+				<li><p>Try to search：<br/>
+						Keywords：<input type="text" id="key" value="" class="empty" /><br/>
+					</p>
+				</li>
+				</ul>
+			</li>
+			<li class="title"><h2>2. js dependencies</h2>
+				<ul class="list">
+					<li>ztree v3.5.19.1 +, getPath() in use</li>
+					<li>ztree.exhide extension, hideNode() in use</li>
+				</ul>
+			</li>
+		</ul>
+	</div>
+</div>
+</BODY>
+</HTML>
