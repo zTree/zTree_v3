@@ -1,5 +1,5 @@
 /*
- * JQuery zTree excheck v3.5.35
+ * JQuery zTree excheck v3.5.36
  * http://treejs.cn/
  *
  * Copyright (c) 2010 Hunter.z
@@ -8,7 +8,7 @@
  * http://www.opensource.org/licenses/mit-license.php
  *
  * email: hunter.z@263.net
- * Date: 2018-03-30
+ * Date: 2018-06-26
  */
 (function(n){var q,r,s,p={event:{CHECK:"ztree_check"},id:{CHECK:"_check"},checkbox:{STYLE:"checkbox",DEFAULT:"chk",DISABLED:"disable",FALSE:"false",TRUE:"true",FULL:"full",PART:"part",FOCUS:"focus"},radio:{STYLE:"radio",TYPE_ALL:"all",TYPE_LEVEL:"level"}},w={check:{enable:!1,autoCheckTrigger:!1,chkStyle:p.checkbox.STYLE,nocheckInherit:!1,chkDisabledInherit:!1,radioType:p.radio.TYPE_LEVEL,chkboxType:{Y:"ps",N:"ps"}},data:{key:{checked:"checked"}},callback:{beforeCheck:null,onCheck:null}};q=function(c,
 a){if(a.chkDisabled===!0)return!1;var b=e.getSetting(c.data.treeId);if(i.apply(b.callback.beforeCheck,[b.treeId,a],!0)==!1)return!0;var d=e.nodeChecked(b,a);e.nodeChecked(b,a,!d);f.checkNodeRelation(b,a);d=m(a,h.id.CHECK,b);f.setChkClass(b,d,a);f.repairParentChkClassWithSelf(b,a);b.treeObj.trigger(h.event.CHECK,[c,b.treeId,a]);return!0};r=function(c,a){if(a.chkDisabled===!0)return!1;var b=e.getSetting(c.data.treeId),d=m(a,h.id.CHECK,b);a.check_Focus=!0;f.setChkClass(b,d,a);return!0};s=function(c,

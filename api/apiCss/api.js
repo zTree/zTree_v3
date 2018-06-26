@@ -73,6 +73,8 @@ var apiContent = {
 			{id:204, pId:20, t:"enable", name:"enable : false,", iconSkin:"core", showAPI:true},
 			{id:205, pId:20, t:"otherParam", name:"otherParam : [],", iconSkin:"core", showAPI:true},
 			{id:206, pId:20, t:"type", name:"type : \"post\",", iconSkin:"core", showAPI:true},
+      {id:209, pId:20, t:"headers", name:"headers : {},", iconSkin:"core", showAPI:true},
+      {id:210, pId:20, t:"xhrFields", name:"xhrFields : {},", iconSkin:"core", showAPI:true},
 			{id:207, pId:20, t:"url", name:"url : \"\"", iconSkin:"core", showAPI:true},
 			{id:21, pId:1, name:"},"},
 			{id:22, pId:1, name:""},

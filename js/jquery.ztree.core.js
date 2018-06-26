@@ -1,5 +1,5 @@
 /*
- * JQuery zTree core v3.5.35
+ * JQuery zTree core v3.5.36
  * http://treejs.cn/
  *
  * Copyright (c) 2010 Hunter.z
@@ -8,7 +8,7 @@
  * http://www.opensource.org/licenses/mit-license.php
  *
  * email: hunter.z@263.net
- * Date: 2018-03-30
+ * Date: 2018-06-26
  */
 (function ($) {
     var settings = {}, roots = {}, caches = {},
@@ -98,6 +98,8 @@
                 contentType: "application/x-www-form-urlencoded",
                 type: "post",
                 dataType: "text",
+                headers: {},
+                xhrFields: {},
                 url: "",
                 autoParam: [],
                 otherParam: [],
@@ -1072,6 +1074,8 @@
                     url: tools.apply(setting.async.url, [setting.treeId, node], setting.async.url),
                     data: setting.async.contentType.indexOf('application/json') > -1 ? JSON.stringify(tmpParam) : tmpParam,
                     dataType: setting.async.dataType,
+                    headers: setting.async.headers,
+                    xhrFields: setting.async.xhrFields,
                     success: function (msg) {
                         if (_tmpV != data.getRoot(setting)._ver) {
                             return;

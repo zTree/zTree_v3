@@ -13,6 +13,9 @@
 
 </font>
 
+*2018.06.26* v3.5.36
+   * [增加] setting.async.headers & setting.async.xhrFields
+
 *2018.04.24* v3.5.35
    * [增加] Demo：模糊搜索（Fuzzy Search）  Thanks @bigablecat
 
