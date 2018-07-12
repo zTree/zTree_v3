@@ -1437,68 +1437,66 @@
                   }
                   return;
                 }
-                // code src: http://jsfiddle.net/08u6cxwj/
+                // CC-BY jocki84@googlemail.com, https://gist.github.com/jocki84/6ffafd003387179a988e
                 if (!Element.prototype.scrollIntoViewIfNeeded) {
                     Element.prototype.scrollIntoViewIfNeeded = function (centerIfNeeded) {
-                        function withinBounds(value, min, max, extent) {
-                            if (false === centerIfNeeded || max <= value + extent && value <= min + extent) {
-                                return Math.min(max, Math.max(min, value));
-                            } else {
-                                return (min + max) / 2;
-                            }
+                        "use strict";
+
+                        function makeRange(start, length) {
+                            return {"start": start, "length": length, "end": start + length};
                         }
 
-                        function makeArea(left, top, width, height) {
+                        function coverRange(inner, outer) {
+                            if (
+                                false === centerIfNeeded ||
+                                (outer.start < inner.end && inner.start < outer.end)
+                            ) {
+                                return Math.max(
+                                    inner.end - outer.length,
+                                    Math.min(outer.start, inner.start)
+                                );
+                            }
+                            return (inner.start + inner.end - outer.length) / 2;
+                        }
+
+                        function makePoint(x, y) {
                             return {
-                                "left": left, "top": top, "width": width, "height": height
-                                , "right": left + width, "bottom": top + height
-                                , "translate": function (x, y) {
-                                    return makeArea(x + left, y + top, width, height);
-                                }
-                                , "relativeFromTo": function (lhs, rhs) {
-                                    var newLeft = left, newTop = top;
-                                    lhs = lhs.offsetParent;
-                                    rhs = rhs.offsetParent;
-                                    if (lhs === rhs) {
-                                        return area;
-                                    }
-                                    for (; lhs; lhs = lhs.offsetParent) {
-                                        newLeft += lhs.offsetLeft + lhs.clientLeft;
-                                        newTop += lhs.offsetTop + lhs.clientTop;
-                                    }
-                                    for (; rhs; rhs = rhs.offsetParent) {
-                                        newLeft -= rhs.offsetLeft + rhs.clientLeft;
-                                        newTop -= rhs.offsetTop + rhs.clientTop;
-                                    }
-                                    return makeArea(newLeft, newTop, width, height);
+                                "x": x,
+                                "y": y,
+                                "translate": function translate(dX, dY) {
+                                    return makePoint(x + dX, y + dY);
                                 }
                             };
                         }
 
-                        var parent, elem = this, area = makeArea(
-                            this.offsetLeft, this.offsetTop,
-                            this.offsetWidth, this.offsetHeight);
-                        while (tools.isElement(parent = elem.parentNode)) {
-                            var clientLeft = parent.offsetLeft + parent.clientLeft;
-                            var clientTop = parent.offsetTop + parent.clientTop;
+                        function absolute(elem, pt) {
+                            while (elem) {
+                                pt = pt.translate(elem.offsetLeft, elem.offsetTop);
+                                elem = elem.offsetParent;
+                            }
+                            return pt;
+                        }
 
-                            // Make area relative to parent's client area.
-                            area = area.relativeFromTo(elem, parent).translate(-clientLeft, -clientTop);
+                        var target = absolute(this, makePoint(0, 0)),
+                            extent = makePoint(this.offsetWidth, this.offsetHeight),
+                            elem = this.parentNode,
+                            origin;
 
-                            parent.scrollLeft = withinBounds(
-                                parent.scrollLeft,
-                                area.right - parent.clientWidth, area.left,
-                                parent.clientWidth);
-
-                            parent.scrollTop = withinBounds(
-                                parent.scrollTop,
-                                area.bottom - parent.clientHeight, area.top,
-                                parent.clientHeight);
+                        while (elem instanceof HTMLElement) {
+                            // Apply desired scroll amount.
+                            origin = absolute(elem, makePoint(elem.clientLeft, elem.clientTop));
+                            elem.scrollLeft = coverRange(
+                                makeRange(target.x - origin.x, extent.x),
+                                makeRange(elem.scrollLeft, elem.clientWidth)
+                            );
+                            elem.scrollTop = coverRange(
+                                makeRange(target.y - origin.y, extent.y),
+                                makeRange(elem.scrollTop, elem.clientHeight)
+                            );
 
                             // Determine actual scroll amount by reading back scroll properties.
-                            area = area.translate(clientLeft - parent.scrollLeft,
-                                clientTop - parent.scrollTop);
-                            elem = parent;
+                            target = target.translate(-elem.scrollLeft, -elem.scrollTop);
+                            elem = elem.parentNode;
                         }
                     };
                 }
