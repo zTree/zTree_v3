@@ -13,6 +13,10 @@
 
 </font>
 
+*2018.08.21* v3.5.37
+   * [修改] 替换 scrollIntoViewIfNeeded 方法    Thanks @jocki84
+   * [修改] 部分 API 文字错误
+
 *2018.06.26* v3.5.36
    * [增加] setting.async.headers & setting.async.xhrFields
 
@@ -150,8 +154,8 @@
 *2013.03.11* v3.5.12
    * [修改] 由于 jquery 1.9 中移除 event.srcElement 导致的 js 报错的bug。
    * [修改] 在异步加载模式下，使用 moveNode 方法，且 moveType != "inner" 时，也会导致 targetNode 自动加载子节点的 bug
-   * [修改] 对已经显示的节点(nochecked=true)使用 showNodes 或 showNode 方法后，导致勾选框出现的bug。
-   * [修改] 对已经隐藏的节点(nochecked=false)使用 hideNodes 或 hideNode 方法后，导致勾选框消失的bug。
+   * [修改] 对已经显示的节点(nocheck=true)使用 showNodes 或 showNode 方法后，导致勾选框出现的bug。
+   * [修改] 对已经隐藏的节点(nocheck=false)使用 hideNodes 或 hideNode 方法后，导致勾选框消失的bug。
    * [修改] getNodesByParamFuzzy 支持 大小写模糊。
    * [修改] className 结构，提取 _consts.className.BUTTON / LEVEL / ICO_LOADING / SWITCH，便于快速修改 css 冲突。
      例如：与 WordPress 产生冲突后，直接修改 core 中的 "button" 和 "level" 即可。  Issue: https://github.com/zTree/zTree_v3/issues/2

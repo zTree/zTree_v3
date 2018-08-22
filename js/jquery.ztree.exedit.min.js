@@ -1,5 +1,5 @@
 /*
- * JQuery zTree exedit v3.5.36
+ * JQuery zTree exedit v3.5.37
  * http://treejs.cn/
  *
  * Copyright (c) 2010 Hunter.z
@@ -8,7 +8,7 @@
  * http://www.opensource.org/licenses/mit-license.php
  *
  * email: hunter.z@263.net
- * Date: 2018-06-26
+ * Date: 2018-08-21
  */
 (function(B){var I={event:{DRAG:"ztree_drag",DROP:"ztree_drop",RENAME:"ztree_rename",DRAGMOVE:"ztree_dragmove"},id:{EDIT:"_edit",INPUT:"_input",REMOVE:"_remove"},move:{TYPE_INNER:"inner",TYPE_PREV:"prev",TYPE_NEXT:"next"},node:{CURSELECTED_EDIT:"curSelectedNode_Edit",TMPTARGET_TREE:"tmpTargetzTree",TMPTARGET_NODE:"tmpTargetNode"}},v={onHoverOverNode:function(a,b){var c=i.getSetting(a.data.treeId),d=i.getRoot(c);if(d.curHoverNode!=b)v.onHoverOutNode(a);d.curHoverNode=b;e.addHoverDom(c,b)},onHoverOutNode:function(a){var a=
 i.getSetting(a.data.treeId),b=i.getRoot(a);if(b.curHoverNode&&!i.isSelectedNode(a,b.curHoverNode))e.removeTreeDom(a,b.curHoverNode),b.curHoverNode=null},onMousedownNode:function(a,b){function c(a){if(m.dragFlag==0&&Math.abs(N-a.clientX)<f.edit.drag.minMoveSize&&Math.abs(O-a.clientY)<f.edit.drag.minMoveSize)return!0;var b,c,g,j;L.css("cursor","pointer");if(m.dragFlag==0){if(k.apply(f.callback.beforeDrag,[f.treeId,n],!0)==!1)return l(a),!0;for(b=0,c=n.length;b<c;b++){if(b==0)m.dragNodeShowBefore=[];

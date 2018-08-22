@@ -19,12 +19,12 @@
 	<p>checked = true  表示勾选节点</p>
 	<p>checked = false 表示节点取消勾选</p>
 	<p class="highlight_red">省略此参数，则根据对此节点的勾选状态进行 toggle 切换</p>
-	<p class="highlight_red">不影响 treeNode.nochecked = true 的节点。</p>
+	<p class="highlight_red">不影响 treeNode.nocheck = true 的节点。</p>
 	<h4 class="topLine"><b>checkTypeFlag</b><span>Boolean</span></h4>
 	<p>checkTypeFlag = true 表示按照 setting.check.chkboxType 属性进行父子节点的勾选联动操作</p>
 	<p>checkTypeFlag = false 表示只修改此节点勾选状态，无任何勾选联动操作</p>
 	<p class="highlight_red">checkTypeFlag = false 且 treeNode.checked = checked 时，不会触发回调函数，直接返回</p>
-	<p class="highlight_red">不影响父子节点中 treeNode.nochecked = true 的节点。</p>
+	<p class="highlight_red">不影响父子节点中 treeNode.nocheck = true 的节点。</p>
 	<h4 class="topLine"><b>callbackFlag</b><span>Boolean</span></h4>
 	<p>callbackFlag = true 表示执行此方法时触发 beforeCheck & onCheck 事件回调函数</p>
 	<p>callbackFlag = false 表示执行此方法时不触发事件回调函数</p>
