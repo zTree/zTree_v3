@@ -13,6 +13,9 @@
 
 </font>
 
+*2018.12.10* v3.5.37
+   * [修改] fuzzySearch.js & Demo   Thanks @SadWood & @JerryWang24
+
 *2018.08.21* v3.5.37
    * [修改] 替换 scrollIntoViewIfNeeded 方法    Thanks @jocki84
    * [修改] 部分 API 文字错误
