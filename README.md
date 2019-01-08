@@ -11,7 +11,7 @@ zTree API : http://www.treejs.cn/v3/api.php
 
 zTree Demo : http://www.treejs.cn/v3/demo.php
 
-###INSTALL
+### INSTALL
 ```
 npm install @ztree/ztree_v3
 ```
