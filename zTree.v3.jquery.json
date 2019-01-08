@@ -3,10 +3,10 @@
     "title": "zTree.v3",
     "description": "jquery tree plugin",
     "keywords": [
-	"tree",
+	    "tree",
     	"ui"
     ],
-    "version": "3.5.37",
+    "version": "3.5.38",
     "author": {
       "name": "Zhang QiGang",
       "email":"hunter.z@263.net",

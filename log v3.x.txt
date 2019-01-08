@@ -13,6 +13,9 @@
 
 </font>
 
+*2018.12.10* v3.5.38
+   * [修改] data.nodeChecked & data.isHidden 的 返回值规范为 boolean   Thanks @xinhochen
+
 *2018.12.10* v3.5.37
    * [修改] fuzzySearch.js & Demo   Thanks @SadWood & @JerryWang24
 
