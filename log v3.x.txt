@@ -13,7 +13,10 @@
 
 </font>
 
-*2018.12.10* v3.5.38
+*2019.01.17* v3.5.39
+   * [修改] data.nodeChecked & data.isHidden & data.nodeIsParent 的 返回值规范为 boolean   Thanks @xinhochen & @田biubiu
+
+*2019.01.08* v3.5.38
    * [修改] data.nodeChecked & data.isHidden 的 返回值规范为 boolean   Thanks @xinhochen
 
 *2018.12.10* v3.5.37
