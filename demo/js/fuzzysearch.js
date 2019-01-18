@@ -14,7 +14,7 @@
  function fuzzySearch(zTreeId, searchField, isHighLight, isExpand){
 	var zTreeObj = $.fn.zTree.getZTreeObj(zTreeId);//get the ztree object by ztree id
 	if(!zTreeObj){
-		alter("fail to get ztree object");
+		alert("fail to get ztree object");
 	}
 	var nameKey = zTreeObj.setting.data.key.name; //get the key of the node name
 	isHighLight = isHighLight===false?false:true;//default true, only use false to disable highlight
