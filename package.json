@@ -17,5 +17,6 @@
     "ztree",
     "html",
     "node"
-  ]
+  ],
+  "typings": "index.d.ts"
 }
