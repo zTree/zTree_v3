@@ -1,7 +1,7 @@
 {
   "name": "zTree_v3",
   "description": "zTree is a multi-functional 'tree plug-ins.' based on jQuery. The main advantages of zTree includes excellent performance, flexible configuration, and the combination of multiple functions.",
-  "version": "3.5.40",
+  "version": "3.5.41",
   "homepage": "http://www.treejs.cn/v3/main.php",
   "author": "zTree (https://github.com/zTree)",
   "repository": "zTree/zTree",
