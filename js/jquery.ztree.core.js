@@ -1429,8 +1429,8 @@
         if (!dom) {
           return;
         }
-        // support IE 7
-        if (typeof Element === 'undefined') {
+        // support IE 7/8
+        if (typeof Element === 'undefined' || typeof HTMLElement === 'undefined') {
           var contRect = setting.treeObj.get(0).getBoundingClientRect(),
             findMeRect = dom.getBoundingClientRect();
           if (findMeRect.top < contRect.top || findMeRect.bottom > contRect.bottom
