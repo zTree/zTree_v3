@@ -7,7 +7,7 @@
  * Licensed same as jquery - MIT License
  * http://www.opensource.org/licenses/mit-license.php
  *
- * Date: 2019-10-11
+ * Date: 2020-01-06
  */
 (function ($) {
   //default consts of exedit
