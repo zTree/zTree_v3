@@ -1,66 +1,102 @@
-
 interface JQuery {
   zTree: IzTree;
 }
 
-interface IJSON { 
+interface IJSON {
   [key: string]: any
 }
 
+interface ITreeNode {
+  checked?: boolean;
+  children?: Array<ITreeNode>;
+  chkDisabled?: boolean;
+  click?: CallBackOnFn;
+  getCheckStatus?: () => object;
+  getIndex?: () => number;
+  getNextNode?: () => ITreeNode;
+  getParentNode?: () => ITreeNode;
+  getPath?: () => Array<ITreeNode>;
+  getPrevNode?: () => ITreeNode;
+  halfCheck?: boolean;
+  icon?: string;
+  iconClose?: string;
+  iconOpen?: string;
+  iconSkin?: string;
+  isHidden?: boolean;
+  isParent?: boolean;
+  name?: string;
+  nocheck?: boolean;
+  open?: boolean;
+  target?: string;
+  url?: string;
+  check_Child_State?: number;
+  check_Focus?: boolean;
+  checkedOld?: boolean;
+  editNameFlag?: boolean;
+  isAjaxing?: boolean;
+  isFirstNode?: boolean;
+  isHover?: boolean;
+  isLastNode?: boolean;
+  level?: number;
+  parentTId?: string;
+  tId?: string;
+  [key: string]: any;
+}
 
 type ApplicationType = 'application/x-www-form-urlencoded' | 'application/json';
 type AjaxType = 'get' | 'post';
-type dataType = 'text' | 'json' | 'jsonp' | 'html' | 'xml' | 'script';
+type DataType = 'text' | 'json' | 'jsonp' | 'html' | 'xml' | 'script';
+
 
 interface IAsync {
   autoParam?: string[];
   contentType?: ApplicationType;
   dataFilter?: (treeId: string, parentNode: object, responseData: IJSON[] | IJSON | string) => IJSON[] | IJSON;
-  dataType?: dataType;
+  dataType?: DataType;
   enable?: boolean;
   otherParam?: string[] | IJSON;
   type?: AjaxType;
   headers?: object;
   xhrFields?: object;
-  url: string;
+  url: (treeId: string, treeNode: object) => string | string;
 }
 
 
-type CallBackBeforeFn = (treeId: string, treeNode: object) => boolean;
-type CallBackOnFn = (event: Event, treeId: string, treeNode: IJSON) => void;
+type CallBackBeforeFn = (treeId: string, treeNode: ITreeNode) => boolean | Promise<boolean>;
+type CallBackOnFn = (event: Event, treeId: string, treeNode: ITreeNode) => void | Promise<void>;
 
 interface ICallback {
   beforeAsync?: CallBackBeforeFn;
   beforeCheck?: CallBackBeforeFn;
-  beforeClick?: (treeId: string, treeNode: object, clickFlag: number) => boolean;
+  beforeClick?: (treeId: string, treeNode: ITreeNode, clickFlag: number) => boolean | Promise<boolean>;
   beforeCollapse?: CallBackBeforeFn;
   beforeDblClick?: CallBackBeforeFn;
-  beforeDrag?: (treeId: string, treeNode: IJSON[]) => boolean;
+  beforeDrag?: (treeId: string, treeNode: ITreeNode[]) => boolean | Promise<boolean>;
   beforeDragOpen?: CallBackBeforeFn;
-  beforeDrop?: (treeId: string, treeNode: IJSON[], targetNode: object, moveType: string, isCopy: boolean) => boolean;
+  beforeDrop?: (treeId: string, treeNode: ITreeNode[], targetNode: object, moveType: string, isCopy: boolean) => boolean | Promise<boolean>;
   beforeEditName?: CallBackBeforeFn;
   beforeExpand?: CallBackBeforeFn;
   beforeMouseDown?: CallBackBeforeFn;
   beforeMouseUp?: CallBackBeforeFn;
   beforeRemove?: CallBackBeforeFn;
-  beforeRename?: (treeId: string, treeNode: object, newName: string, isCancel: boolean) => boolean;
+  beforeRename?: (treeId: string, treeNode: ITreeNode, newName: string, isCancel: boolean) => boolean | Promise<boolean>;
   beforeRightClick?: CallBackBeforeFn;
 
-  onAsyncError?: (event: Event, treeId: string, treeNode: object, XMLHttpRequest: any, textStatus: string, errorThrown: string) => void;
-  onAsyncSuccess?: (event: Event, treeId: string, treeNode: object, msg: string | object) => void;
-  onCheck?: (event: Event, treeId: string, treeNode: object) => void;
-  onClick?: (event: Event, treeId: string, treeNode: object, clickFlag: number) => void;
-  onCollapse?: (event: Event, treeId: string, treeNode: object) => void;
-  onDblClick?: (event: Event, treeId: string, treeNode: object) => void;
-  onDrag?: (event: Event, treeId: string, treeNodes: IJSON[]) => void;
-  onDragMove?: (event: Event, treeId: string, treeNodes: IJSON[]) => void;
-  onDrop?: (event: Event, treeId: string, treeNodes: IJSON[], targetNode: object, moveType: string, isCopy: boolean) => void;
+  onAsyncError?: (event: Event, treeId: string, treeNode: ITreeNode, XMLHttpRequest: any, textStatus: string, errorThrown: string) => void | Promise<void>;
+  onAsyncSuccess?: (event: Event, treeId: string, treeNode: ITreeNode, msg: string | object) => void | Promise<void>;
+  onCheck?: (event: Event, treeId: string, treeNode: ITreeNode) => void | Promise<void>;
+  onClick?: (event: Event, treeId: string, treeNode: ITreeNode, clickFlag: number) => void | Promise<void>;
+  onCollapse?: (event: Event, treeId: string, treeNode: ITreeNode) => void | Promise<void>;
+  onDblClick?: (event: Event, treeId: string, treeNode: ITreeNode) => void | Promise<void>;
+  onDrag?: (event: Event, treeId: string, treeNodes: ITreeNode[]) => void | Promise<void>;
+  onDragMove?: (event: Event, treeId: string, treeNodes: ITreeNode[]) => void | Promise<void>;
+  onDrop?: (event: Event, treeId: string, treeNodes: ITreeNode[], targetNode: object, moveType: string, isCopy: boolean) => void | Promise<void>;
   onExpand?: CallBackOnFn;
   onMouseDown?: CallBackOnFn;
   onMouseUp?: CallBackOnFn;
   onNodeCreated?: CallBackOnFn;
   onRemove?: CallBackOnFn;
-  onRename?: (event: Event, treeId: string, treeNode: IJSON, isCancel: boolean) => void;
+  onRename?: (event: Event, treeId: string, treeNode: ITreeNode, isCancel: boolean) => void | Promise<void>;
   onRightClick?: CallBackOnFn;
 }
 
@@ -97,7 +133,7 @@ interface IData {
 }
 
 
-type removeFnType<T> = (treeId: string, treeNode: object) => T;
+type removeFnType<T> = (treeId: string, treeNode: ITreeNode) => T;
 
 interface IEdit {
   drag?: {
@@ -122,7 +158,7 @@ interface IEdit {
 }
 
 
-type dblClickExpandFn<T> = (treeId: string, treeNode: object) => T;
+type dblClickExpandFn<T> = (treeId: string, treeNode: ITreeNode) => T;
 
 interface IView {
   addDiyDom?: dblClickExpandFn<void>;
@@ -150,50 +186,50 @@ interface ISetting {
 }
 
 
-type filterFnType = (node: IJSON) => boolean;
+type filterFnType = (node: ITreeNode) => boolean;
 
 interface IzTreeObj {
   setting: ISetting;
-  addNodes: (parentNode: object, index?: number, newNodes?: IJSON[] | IJSON, isSilentBoolean?: boolean) => IJSON[];
+  addNodes: (parentNode: object, index?: number, newNodes?: ITreeNode[] | ITreeNode, isSilentBoolean?: boolean) => ITreeNode[];
   cancelEditName: (newName?: string) => void;
-  cancelSelectedNode: (treeNode?: object) => void;
+  cancelSelectedNode: (treeNode?: ITreeNode) => void;
   checkAllNodes: (checked: boolean) => void;
-  checkNode: (treeNode: IJSON, checked?: boolean, checkTypeFlag?: boolean, callbackFlag?: boolean) => void;
-  copyNode: (targetNode: object, treeNode: IJSON, moveType: string, isSilent: boolean) => IJSON;
+  checkNode: (treeNode: ITreeNode, checked?: boolean, checkTypeFlag?: boolean, callbackFlag?: boolean) => void;
+  copyNode: (targetNode: object, treeNode: ITreeNode, moveType: string, isSilent: boolean) => ITreeNode;
   destroy: () => void;
-  editName: (treeNode: IJSON) => void;
+  editName: (treeNode: ITreeNode) => void;
   expandAll: (expandFlag: boolean) => boolean | null;
-  expandNode: (treeNode: IJSON, expandFlag?: boolean, sonSign?: boolean, focus?: boolean, callbackFlag?: boolean) => boolean | null;
-  getChangeCheckedNodes: () => IJSON[];
-  getCheckedNodes: (checked?: boolean) => IJSON[];
+  expandNode: (treeNode: ITreeNode, expandFlag?: boolean, sonSign?: boolean, focus?: boolean, callbackFlag?: boolean) => boolean | null;
+  getChangeCheckedNodes: () => ITreeNode[];
+  getCheckedNodes: (checked?: boolean) => ITreeNode[];
   getNodeByParam: (key: string, value: any, parentNode?: object) => object;
-  getNodeByTId: (tId: string) => object;
-  getNodeIndex: (treeNode: IJSON) => number;
-  getNodes: () => IJSON[];
-  getNodesByFilter: (filter: filterFnType, isSingle?: boolean, parentNode?: IJSON, invokeParam?: any) => object;
+  getNodeByTId: (tId: string) => ITreeNode;
+  getNodeIndex: (treeNode: ITreeNode) => number;
+  getNodes: () => ITreeNode[];
+  getNodesByFilter: (filter: filterFnType, isSingle?: boolean, parentNode?: ITreeNode, invokeParam?: any) => object;
   getNodesByParam: (key: string, value: any, parentNode?: object) => object;
   getNodesByParamFuzzy: (key: string, value: string, parentNode?: object) => object;
   getSelectedNodes: () => any;
-  hideNode: (treeNode: IJSON) => void;
-  hideNodes: (treeNodes: IJSON[]) => void;
-  moveNode: (targetNode: object, treeNode: IJSON, moveType: string, isSilent?: boolean) => IJSON;
-  reAsyncChildNodes: (parentNode: IJSON, reloadType: string, isSilent?: boolean, callback?: any) => void;
-  reAsyncChildNodesPromise: (parentNode: IJSON, reloadType: string, isSilent?: boolean) => any; // ps: return Promise object
+  hideNode: (treeNode: ITreeNode) => void;
+  hideNodes: (treeNodes: ITreeNode[]) => void;
+  moveNode: (targetNode: object, treeNode: ITreeNode, moveType: string, isSilent?: boolean) => ITreeNode;
+  reAsyncChildNodes: (parentNode: ITreeNode, reloadType: string, isSilent?: boolean, callback?: any) => void;
+  reAsyncChildNodesPromise: (parentNode: ITreeNode, reloadType: string, isSilent?: boolean) => any; // ps: return Promise object
   refresh: () => void;
-  removeChildNodes: (parentNode: IJSON) => IJSON[];
-  removeNode: (treeNode: IJSON, callbackFlag?: boolean) => void;
-  selectNode: (treeNode: IJSON, addFlag?: boolean, isSilent?: boolean) => void;
-  setChkDisabled: (treeNode: IJSON, disabled?: boolean, inheritParent?: boolean, inheritChildren?: boolean) => void;
+  removeChildNodes: (parentNode: ITreeNode) => ITreeNode[];
+  removeNode: (treeNode: ITreeNode, callbackFlag?: boolean) => void;
+  selectNode: (treeNode: ITreeNode, addFlag?: boolean, isSilent?: boolean) => void;
+  setChkDisabled: (treeNode: ITreeNode, disabled?: boolean, inheritParent?: boolean, inheritChildren?: boolean) => void;
   setEditable: (editable: boolean) => void;
-  showNode: (treeNode: IJSON) => void;
-  showNodes: (treeNodes: IJSON[]) => void;
-  transformToArray: (treeNodes: IJSON[] | IJSON) => IJSON[];
-  transformTozTreeNodes: (simpleNodes: IJSON[] | IJSON) => IJSON[];
-  updateNode: (treeNode: IJSON, checkTypeFlag?: boolean) => void;
+  showNode: (treeNode: ITreeNode) => void;
+  showNodes: (treeNodes: ITreeNode[]) => void;
+  transformToArray: (treeNodes: ITreeNode[] | ITreeNode) => ITreeNode[];
+  transformTozTreeNodes: (simpleNodes: ITreeNode[] | ITreeNode) => ITreeNode[];
+  updateNode: (treeNode: ITreeNode, checkTypeFlag?: boolean) => void;
 }
 
 interface IzTree {
-  init?: (dom: any, setting: ISetting, zNodes: IJSON[] | object) => IzTreeObj;
+  init?: (dom: any, setting: ISetting, zNodes: ITreeNode[] | object) => IzTreeObj;
   getZTreeObj?: (treeId: string) => IzTreeObj;
   destroy?: (treeId: string) => void;
   _z?: any;
