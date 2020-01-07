@@ -51,14 +51,14 @@ type DataType = 'text' | 'json' | 'jsonp' | 'html' | 'xml' | 'script';
 interface IAsync {
   autoParam?: string[];
   contentType?: ApplicationType;
-  dataFilter?: (treeId: string, parentNode: object, responseData: IJSON[] | IJSON | string) => IJSON[] | IJSON;
+  dataFilter?: (treeId: string, parentNode: ITreeNode, responseData: IJSON[] | IJSON | string) => IJSON[] | IJSON;
   dataType?: DataType;
   enable?: boolean;
   otherParam?: string[] | IJSON;
   type?: AjaxType;
   headers?: object;
   xhrFields?: object;
-  url: (treeId: string, treeNode: object) => string | string;
+  url: (treeId: string, treeNode: ITreeNode) => string | string;
 }
 
 
