@@ -216,7 +216,7 @@ website:    http://code.google.com/p/jquerytree/
   display: inline-block;
 }
 .ztree li span.button.root_close::before {
-  content: "\f115";
+  content: "\f054";
   padding-top: 10px;
   padding-left: 2px;
   display: inline-block;

@@ -1,5 +1,6 @@
 /*
- * JQuery zTree core v3.5.41
+ * JQuery zTree core
+ * v3.5.42
  * http://treejs.cn/
  *
  * Copyright (c) 2010 Hunter.z
@@ -7,8 +8,9 @@
  * Licensed same as jquery - MIT License
  * http://www.opensource.org/licenses/mit-license.php
  *
- * Date: 2020-01-06
+ * Date: 2020-01-19
  */
+
 (function ($) {
   var settings = {}, roots = {}, caches = {},
     //default consts of core
@@ -1357,7 +1359,7 @@
           var icon = (isParent && node.iconOpen && node.iconClose) ? (node.open ? node.iconOpen : node.iconClose) : node[setting.data.key.icon];
           if (icon) icoStyle.push("background:url(", icon, ") 0 0 no-repeat;");
           if (setting.view.showIcon == false || !tools.apply(setting.view.showIcon, [setting.treeId, node], true)) {
-            icoStyle.push("width:0px;height:0px;");
+            icoStyle.push("display:none;");
           }
         }
         return icoStyle.join('');
@@ -1429,7 +1431,7 @@
         if (!dom) {
           return;
         }
-        // support IE 7/8
+        // support IE 7 / 8
         if (typeof Element === 'undefined' || typeof HTMLElement === 'undefined') {
           var contRect = setting.treeObj.get(0).getBoundingClientRect(),
             findMeRect = dom.getBoundingClientRect();

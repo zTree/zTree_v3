@@ -1,6 +1,6 @@
 jQuery Tree Plugin ---- zTree  
 ============
-last verson :  3.5.41
+last verson :  3.5.42
 
 
 **Donate to zTree** : http://www.treejs.cn/v3/donate.php
@@ -11,10 +11,6 @@ zTree API : http://www.treejs.cn/v3/api.php
 
 zTree Demo : http://www.treejs.cn/v3/demo.php
 
-### INSTALL
-```
-npm install @ztree/ztree_v3
-```
 
 Introduction of zTree (简介)
 ============

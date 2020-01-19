@@ -14,6 +14,11 @@
 </font>
 
 
+*2020.01.19* v3.5.42
+   * merge PullRequest(fixed 'HTMLElement undefined' error)     Thanks @ChangJin0520
+   * merge PullRequest(Add TypeScript type definition)     Thanks @Itroads
+   * fixed awesomeStyle    Thanks @Jermyk93
+
 *2020.01.06* v3.5.41
    * [修改] 修正 API
 
