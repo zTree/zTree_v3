@@ -30,7 +30,7 @@
 
 			var focusSelectedNode = function()
 			{
-				if( ( selectedNodes = zTree.getSelectedNodes() ) && selectedNodes )
+				if( ( selectedNodes = zTree.getSelectedNodes() ) && selectedNodes.length )
 				{
 					$("#" + selectedNodes[0].tId ).focus();
 				}
@@ -39,7 +39,7 @@
 			$(element).bind( 'keydown', function( e )
 				{
 					var selectedNodes = zTree.getSelectedNodes();
-					var selectedNode = selectedNodes ? selectedNodes[0] : null;
+					var selectedNode = selectedNodes.length ? selectedNodes[0] : null;
 
 					var processSpace = function()
 					{
@@ -170,52 +170,72 @@
 						}
 					}
 
-					if ( [32,33,34,35,36,37,38,39,40].includes(e.keyCode) )
+					var processLetter = function( keyCode )
 					{
-						// console.log('before');
-						// console.log(document.activeElement);
+						if ( ! Array.from( {length: 26}, (v, i) => i + 65 ).includes( keyCode & 95 ) ) return false;
 
-						switch ( e.keyCode )
+						var nodes = zTree.transformToArray(rootNodes);
+						nodes = nodes.filter( node => 
 						{
-							case 32: /* Toggle parent nodes */
-								processSpace();
-								return;
+							return 'accesskey' in node &&  node.accesskey.length && ( node.accesskey.charCodeAt(0) & 95 ) == keyCode;
+						} );
+						
+						if ( ! nodes.length ) return false;
+						
+						var selectedNodes = zTree.getSelectedNodes();
+						if ( ! selectedNodes.length ) return false;
 
-							case 36: /* Home - go to the root node */
-								processHome();
-								break;
+						if ( selectedNodes[0] == nodes[0] ) return false;
 
-							case 35: /* End - go to the last node */ 
-								processEnd();
-								break;
+						zTree.selectNode( nodes[0] );
 
-							case 33: /* PageUp */
-								// Do nothing
-								break;
+						return true;
+					}
 
-							case 34: /* PageDown */ 
-								// Do nothing
-								break;
+					// console.log('before');
+					// console.log(document.activeElement);
 
-							case 37: /* Left */
-								processOut();
-								break;
+					switch ( e.keyCode )
+					{
+						case 32: /* Toggle parent nodes */
+							processSpace();
+							return;
 
-							case 38: /* Up */
-								processUp();
-								break;
+						case 36: /* Home - go to the root node */
+							processHome();
+							break;
 
-							case 39: /* Right */
-								processIn();
-								break;
+						case 35: /* End - go to the last node */ 
+							processEnd();
+							break;
 
-							case 40: /* Down */ 
-								processDown();
-								break;
+						case 33: /* PageUp */
+							// Do nothing
+							break;
 
-							default:
-								return;
-						}
+						case 34: /* PageDown */ 
+							// Do nothing
+							break;
+
+						case 37: /* Left */
+							processOut();
+							break;
+
+						case 38: /* Up */
+							processUp();
+							break;
+
+						case 39: /* Right */
+							processIn();
+							break;
+
+						case 40: /* Down */ 
+							processDown();
+							break;
+
+						default:
+							if ( ! processLetter( e.keyCode & 95 ) ) return;
+							break;
 					}
 
 					// console.log('after');
