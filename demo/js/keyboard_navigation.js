@@ -25,6 +25,11 @@
 	 */
 	$.fn.zTreeKeyboardNavigation = function(zTree, element)
 		{
+			if (typeof element === 'string' || element instanceof String)
+			{
+				element = $(element);
+			}
+
 			var rootNodes = zTree.getNodes();
 			if ( ! rootNodes ) return;
 
