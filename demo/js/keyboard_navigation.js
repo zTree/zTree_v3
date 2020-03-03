@@ -14,6 +14,13 @@
 ( function ($) 
 {
 	/**
+	 * Dummy function to provide a placeholder for the destroy function
+	 */
+	$.fn.zTreeKeyboardNavigationDestroy = function()
+	{
+	}
+
+	/**
 	 * Creates a function that adds keyboard navigation:
 	 * Home: home key (keycode 36)				Goes to the first root element is visible
 	 * End: end key (keycode 35)				Goes to the last leaf node and will expand nodes and scroll the element into view
@@ -22,8 +29,11 @@
 	 * Up: up cursor key (keycode 37)			Goes to the prior visible node at the same level
 	 * Previous: left cursor key (keycode 38)	Goes to the prior visible node following the hierarchy
 	 * Toggle: space key (keycode 32)			Toggles the expand/collapse state of a parent node
+	 * @param {IxTreeObj} zTree
+	 * @param {string|JQuery<HTMLElement} element
+	 * @param {IJSON[]} selectedNodes
 	 */
-	$.fn.zTreeKeyboardNavigation = function(zTree, element)
+	$.fn.zTreeKeyboardNavigation = function(zTree, element, selectedNodes = null )
 		{
 			if (typeof element === 'string' || element instanceof String)
 			{
@@ -41,7 +51,18 @@
 				}
 			}
 
-			$(element).bind( 'keydown', function( e )
+			// Clear the previous event handler (there may be none)
+			$.fn.zTreeKeyboardNavigationDestroy();
+
+			/**
+			 * Make it possible to destroy (remove the event handlers)
+			 */
+			$.fn.zTreeKeyboardNavigationDestroy = function()
+			{
+				$(element).off( 'keydown' );
+			}
+
+			$(element).on( 'keydown', function( e )
 				{
 					var selectedNodes = zTree.getSelectedNodes();
 					var selectedNode = selectedNodes.length ? selectedNodes[0] : null;
@@ -248,8 +269,16 @@
 					focusSelectedNode();
 				} );
 
+			if ( selectedNodes && selectedNodes.length )
+			{
+				zTree.selectNode( selectedNodes[0] );
+				focusSelectedNode();
+			}
+			else
+			{
 			$(element).trigger({ type : 'keydown', which : 36, keyCode: 36 });
-			focusSelectedNode();
+			}
+
 		}
 
 } )(jQuery);
