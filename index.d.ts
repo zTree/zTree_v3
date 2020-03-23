@@ -58,7 +58,7 @@ interface IAsync {
   type?: AjaxType;
   headers?: object;
   xhrFields?: object;
-  url: (treeId: string, treeNode: ITreeNode) => string | string;
+  url: ((treeId: string, treeNode: ITreeNode) => string) | string;
 }
 
 
@@ -206,10 +206,10 @@ interface IzTreeObj {
   getNodeByTId: (tId: string) => ITreeNode;
   getNodeIndex: (treeNode: ITreeNode) => number;
   getNodes: () => ITreeNode[];
-  getNodesByFilter: (filter: filterFnType, isSingle?: boolean, parentNode?: ITreeNode, invokeParam?: any) => object;
+  getNodesByFilter: (filter: filterFnType, isSingle?: boolean, parentNode?: ITreeNode, invokeParam?: any) => any;
   getNodesByParam: (key: string, value: any, parentNode?: object) => object;
   getNodesByParamFuzzy: (key: string, value: string, parentNode?: object) => object;
-  getSelectedNodes: () => any;
+  getSelectedNodes: (isTure: boolean) => any;
   hideNode: (treeNode: ITreeNode) => void;
   hideNodes: (treeNodes: ITreeNode[]) => void;
   moveNode: (targetNode: object, treeNode: ITreeNode, moveType: string, isSilent?: boolean) => ITreeNode;
@@ -226,6 +226,7 @@ interface IzTreeObj {
   transformToArray: (treeNodes: ITreeNode[] | ITreeNode) => ITreeNode[];
   transformTozTreeNodes: (simpleNodes: ITreeNode[] | ITreeNode) => ITreeNode[];
   updateNode: (treeNode: ITreeNode, checkTypeFlag?: boolean) => void;
+  updateNodeIconSkin: (treeNode: ITreeNode) => void;
 }
 
 interface IzTree {
