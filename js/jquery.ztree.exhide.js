@@ -1,6 +1,6 @@
 /*
  * JQuery zTree exHideNodes
- * v3.5.42
+ * v3.5.43
  * http://treejs.cn/
  *
  * Copyright (c) 2010 Hunter.z
@@ -8,7 +8,7 @@
  * Licensed same as jquery - MIT License
  * http://www.opensource.org/licenses/mit-license.php
  *
- * Date: 2020-01-19
+ * Date: 2020-04-04
  */
 
 (function ($) {

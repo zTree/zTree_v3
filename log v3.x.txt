@@ -14,8 +14,14 @@
 </font>
 
 
+*2020.04.04* v3.5.43
+  * fixed TypeScript type definition  Thanks @UtillYou 
+  * Update demo 'super/keyboard_navigation.html' Thanks @bseddon
+  * Update demo 'core/searchNodes.html' Thanks @bseddon
+  * add setting.view.nodeClasses Thanks @bseddon
+
 *2020.03.02* v3.5.42
-  * add demo 'Keyboard Navigation'  Thanks @bseddon
+  * add demo 'super/keyboard_navigation.html'  Thanks @bseddon
 
 *2020.01.19* v3.5.42
    * merge PullRequest(fixed 'HTMLElement undefined' error)     Thanks @ChangJin0520

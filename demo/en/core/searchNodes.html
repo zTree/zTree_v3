@@ -3,17 +3,20 @@
 <HEAD>
 	<TITLE> ZTREE DEMO - getNodeByParam / getNodesByParam / getNodesByParamFuzzy</TITLE>
 	<meta http-equiv="content-type" content="text/html; charset=UTF-8">
+	<link rel="stylesheet" href="http://maxcdn.bootstrapcdn.com/font-awesome/4.3.0/css/font-awesome.min.css">
 	<link rel="stylesheet" href="../../../css/demo.css" type="text/css">
 	<link rel="stylesheet" href="../../../css/zTreeStyle/zTreeStyle.css" type="text/css">
 	<script type="text/javascript" src="../../../js/jquery-1.4.4.min.js"></script>
 	<script type="text/javascript" src="../../../js/jquery.ztree.core.js"></script>
-	<script src="https://use.fontawesome.com/952447aaab.js"></script>
 	<!--  <script type="text/javascript" src="../../../js/jquery.ztree.excheck.js"></script>
 	  <script type="text/javascript" src="../../../js/jquery.ztree.exedit.js"></script>-->
 	<style>
+		.ztree li span {
+			position: relative;
+		}
 		.ztree li > a.highlight_alt
 		{
-			color: #00A600 !important;
+			color: #00A600;
 			font-weight: bold;
 		}
 		.ztree li > a.highlight span.node_name:before,
@@ -23,10 +26,9 @@
 			font-family: FontAwesome;
 			color: green;
 			font-size: 14px;
-			margin-right: 4px;
 			position: absolute;
-			background-color: white;
-			margin-left: -9px;
+			left: 100%;
+			margin-left: 8px;
 		}
 		.ztree li > a.highlight span.node_name:before
 		{
@@ -38,7 +40,7 @@
 		}
 		.ztree li > a.highlight.hiddennodes span.node_name:before
 		{
-			content: '\f058\f00e';
+			content: '\f058  \f00e';
 		}
 	</style>
 	<SCRIPT type="text/javascript">
@@ -55,28 +57,28 @@
 				},
 				simpleData: {
 					enable: true
-				}
+				}				
 			},
 			view: {
 				fontCss: getFontCss,
-				nodeClasses: getNodeClasses
+				// nodeClasses: getNodeClasses
 			}
 		};
 
 		var zNodes =[
-			{ id:1, pId:0, name:"search node demo 1", t:"id=1", open:true},
-			{ id:11, pId:1, name:"can search 'name'", t:"id=11"},
-			{ id:12, pId:1, name:"can search 'level'", t:"id=12"},
-			{ id:13, pId:1, name:"can search 'id'", t:"id=13"},
-			{ id:14, pId:1, name:"can search other attr", t:"id=14"},
-			{ id:2, pId:0, name:"search node demo 2", t:"id=2", open:true},
-			{ id:21, pId:2, name:"can search single node", t:"id=21"},
-			{ id:22, pId:2, name:"can search nodes array", t:"id=22"},
-			{ id:23, pId:2, name:"search me", t:"id=23"},
-			{ id:3, pId:0, name:"search node demo 3", t:"id=3", open:true },
-			{ id:31, pId:3, name:"My id is : 31", t:"id=31"},
-			{ id:32, pId:31, name:"My id is : 32", t:"id=32"},
-			{ id:33, pId:32, name:"My id is : 33", t:"id=33"}
+			{ id:1, pId:0, name:"节点搜索演示 1", t:"id=1", open:true},
+			{ id:11, pId:1, name:"关键字可以是名字", t:"id=11"},
+			{ id:12, pId:1, name:"关键字可以是level", t:"id=12"},
+			{ id:13, pId:1, name:"关键字可以是id", t:"id=13"},
+			{ id:14, pId:1, name:"关键字可以是各种属性", t:"id=14"},
+			{ id:2, pId:0, name:"节点搜索演示 2", t:"id=2", open:true},
+			{ id:21, pId:2, name:"可以只搜索一个节点", t:"id=21"},
+			{ id:22, pId:2, name:"可以搜索节点集合", t:"id=22"},
+			{ id:23, pId:2, name:"搜我吧", t:"id=23"},
+			{ id:3, pId:0, name:"节点搜索演示 3", t:"id=3", open:true },
+			{ id:31, pId:3, name:"我的 id 是: 31", t:"id=31"},
+			{ id:32, pId:31, name:"我的 id 是: 32", t:"id=32"},
+			{ id:33, pId:32, name:"我的 id 是: 33", t:"id=33"}
 		];
 
 		function focusKey(e) {
@@ -94,8 +96,7 @@
 			lastValue = "";
 			searchNode(e);
 		}
-		function clickButton(e, treeId, treeNode)
-		{
+		function clickButton(e, treeId, treeNode) {
 			if ( $("#styleNodesByCSS").attr('checked') ) return;
 			updateNodes(false, treeNode);
 			updateNodes(true, treeNode)
@@ -188,18 +189,34 @@
 					? ( (!!treeNode.hiddenNodes) 
 						? {add:['highlight','highlight_alt','hiddennodes']} 
 						: {add:['highlight','highlight_alt']} 
-					  )
+						)
 					: {add:['hiddennodes','highlight_alt']} 
-				  );
+					);
 			return classes;
 		}
 		function filter(node) {
 			return !node.isParent && node.isFirstNode;
 		}
 
+		function resetTree(e) {
+			if ($("#styleNodesByCSS").attr('checked')) {
+				delete setting.view.nodeClasses;
+				setting.view.fontCss = getFontCss;
+			} else {
+				delete setting.view.fontCss;
+				setting.view.nodeClasses = getNodeClasses;
+			}
+			initTree();
+			clickRadio(e);
+		}
+
+		function initTree() {
+			$.fn.zTree.init($("#treeDemo"), setting, zNodes);
+		}
+
 		var key;
 		$(document).ready(function(){
-			$.fn.zTree.init($("#treeDemo"), setting, zNodes);
+			initTree();
 			key = $("#key");
 			key.bind("focus", focusKey)
 			.bind("blur", blurKey)
@@ -212,8 +229,8 @@
 			$("#getNodesByParam").bind("change", clickRadio);
 			$("#getNodesByParamFuzzy").bind("change", clickRadio);
 			$("#getNodesByFilter").bind("change", clickRadio);
-			$("#styleNodesByCSS").bind("change", clickRadio);
-			$("#styleNodesByClasses").bind("change", clickRadio);
+			$("#styleNodesByCSS").bind("change", resetTree);
+			$("#styleNodesByClasses").bind("change", resetTree);
 			// $(".ztree li > span.button").bind("click", clickButton);
 		});
 		//-->
@@ -242,7 +259,8 @@
 						<input type="radio" id="getNodesByParamFuzzy" name="funType" class="radio" style="margin-left:36px;" checked /><span>getNodesByParamFuzzy (only string)</span><br/>
 						<input type="radio" id="getNodesByFilter" name="funType" class="radio" style="margin-left:36px;" /><span>getNodesByFilter (see source: function filter)</span><br/>
 						<input type="radio" id="styleNodesByCSS" name="styleType" class="radio" style="margin-left:36px;" checked /><span>styleNodesByCSS (see source: function filter)</span><br/>
-						<input type="radio" id="styleNodesByClasses" name="styleType" class="radio" style="margin-left:36px;" /><span>styleNodesByClasses (see source: function filter)</span><br/>
+						style:&nbsp; <input type="radio" id="styleNodesByCSS" name="styleType" class="radio first" checked /><span>styleNodesByCSS</span><br/>
+						<input type="radio" id="styleNodesByClasses" name="styleType" class="radio" style="margin-left:36px;" /><span>styleNodesByClasses</span><br/>
 					</p>
 				</li>
 				</ul>
