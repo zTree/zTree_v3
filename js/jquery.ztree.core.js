@@ -67,6 +67,7 @@
         dblClickExpand: true,
         expandSpeed: "fast",
         fontCss: {},
+		nodeClasses: {},
         nameIsHTML: false,
         selectedMulti: true,
         showIcon: true,
@@ -1323,11 +1324,12 @@
         var title = data.nodeTitle(setting, node),
           url = view.makeNodeUrl(setting, node),
           fontcss = view.makeNodeFontCss(setting, node),
+		  nodeClasses = view.makeNodeClasses(setting, node),
           fontStyle = [];
         for (var f in fontcss) {
           fontStyle.push(f, ":", fontcss[f], ";");
         }
-        html.push("<a id='", node.tId, consts.id.A, "' class='", consts.className.LEVEL, node.level, "' treeNode", consts.id.A, " onclick=\"", (node.click || ''),
+        html.push("<a id='", node.tId, consts.id.A, "' class='", consts.className.LEVEL, node.level, ( 'add' in nodeClasses && nodeClasses.add ? ' ' + nodeClasses.add.join(' ') : '' ), "' treeNode", consts.id.A, " onclick=\"", (node.click || ''),
           "\" ", ((url != null && url.length > 0) ? "href='" + url + "'" : ""), " target='", view.makeNodeTarget(node), "' style='", fontStyle.join(''),
           "'");
         if (tools.apply(setting.view.showTitle, [setting.treeId, node], setting.view.showTitle) && title) {
@@ -1338,6 +1340,10 @@
       makeNodeFontCss: function (setting, node) {
         var fontCss = tools.apply(setting.view.fontCss, [setting.treeId, node], setting.view.fontCss);
         return (fontCss && ((typeof fontCss) != "function")) ? fontCss : {};
+      },
+      makeNodeClasses: function (setting, node) {
+        var classes = tools.apply(setting.view.nodeClasses, [setting.treeId, node], setting.view.nodeClasses);
+        return (classes && ((typeof classes) != "function")) ? classes : {add:[], remove:[]};
       },
       makeNodeIcoClass: function (setting, node) {
         var icoCss = ["ico"];
@@ -1639,6 +1645,16 @@
           fontCss = view.makeNodeFontCss(setting, treeNode);
         if (fontCss) {
           aObj.css(fontCss);
+        }
+      },
+      setNodeClasses: function (setting, treeNode) {
+        var aObj = $$(treeNode, consts.id.A, setting),
+          classes = view.makeNodeClasses(setting, treeNode);
+        if ('add' in classes && classes.add.length) {
+          aObj.addClass(classes.add.join(' '));
+        }
+        if ('remove' in classes && classes.remove.length) {
+          aObj.removeClass(classes.remove.join(' '));
         }
       },
       setNodeLineIcos: function (setting, node) {
@@ -1966,6 +1982,7 @@
             view.setNodeUrl(setting, node);
             view.setNodeLineIcos(setting, node);
             view.setNodeFontCss(setting, node);
+            view.setNodeClasses(setting, node);
           }
         }
       };

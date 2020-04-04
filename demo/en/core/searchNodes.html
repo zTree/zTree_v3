@@ -7,11 +7,48 @@
 	<link rel="stylesheet" href="../../../css/zTreeStyle/zTreeStyle.css" type="text/css">
 	<script type="text/javascript" src="../../../js/jquery-1.4.4.min.js"></script>
 	<script type="text/javascript" src="../../../js/jquery.ztree.core.js"></script>
+	<script src="https://use.fontawesome.com/952447aaab.js"></script>
 	<!--  <script type="text/javascript" src="../../../js/jquery.ztree.excheck.js"></script>
 	  <script type="text/javascript" src="../../../js/jquery.ztree.exedit.js"></script>-->
+	<style>
+		.ztree li > a.highlight_alt
+		{
+			color: #00A600 !important;
+			font-weight: bold;
+		}
+		.ztree li > a.highlight span.node_name:before,
+		.ztree li > a.highlight_hiddennodes span.node_name:before,
+		.ztree li > a.hiddennodes span.node_name:before 
+		{
+			font-family: FontAwesome;
+			color: green;
+			font-size: 14px;
+			margin-right: 4px;
+			position: absolute;
+			background-color: white;
+			margin-left: -9px;
+		}
+		.ztree li > a.highlight span.node_name:before
+		{
+			content: '\f058';
+		}
+		.ztree li > a.hiddennodes span.node_name:before 
+		{
+			content: '\f00e';
+		}
+		.ztree li > a.highlight.hiddennodes span.node_name:before
+		{
+			content: '\f058\f00e';
+		}
+	</style>
 	<SCRIPT type="text/javascript">
 		<!--
 		var setting = {
+			callback:
+			{
+				onCollapse: clickButton,
+				onExpand: clickButton
+			},
 			data: {
 				key: {
 					title: "t"
@@ -21,7 +58,8 @@
 				}
 			},
 			view: {
-				fontCss: getFontCss
+				fontCss: getFontCss,
+				nodeClasses: getNodeClasses
 			}
 		};
 
@@ -51,10 +89,16 @@
 				key.addClass("empty");
 			}
 		}
-		var lastValue = "", nodeList = [], fontCss = {};
+		var lastValue = "", nodeList = [], fontCss = {}, nodeClasses = [];
 		function clickRadio(e) {
 			lastValue = "";
 			searchNode(e);
+		}
+		function clickButton(e, treeId, treeNode)
+		{
+			if ( $("#styleNodesByCSS").attr('checked') ) return;
+			updateNodes(false, treeNode);
+			updateNodes(true, treeNode)
 		}
 		function searchNode(e) {
 			var zTree = $.fn.zTree.getZTreeObj("treeDemo");
@@ -75,8 +119,8 @@
 				}
 				if (lastValue === value) return;
 				lastValue = value;
-				if (value === "") return;
 				updateNodes(false);
+				if (value === "") return;
 
 				if ($("#getNodeByParam").attr("checked")) {
 					var node = zTree.getNodeByParam(keyType, value);
@@ -97,15 +141,57 @@
 			updateNodes(true);
 
 		}
-		function updateNodes(highlight) {
+		function updateNodes(highlight, node = null) {
 			var zTree = $.fn.zTree.getZTreeObj("treeDemo");
-			for( var i=0, l=nodeList.length; i<l; i++) {
+			var applyClasses = $("#styleNodesByClasses").attr('checked');
+			var expanded = node && node.open;
+
+			// If expanding a node then it MUST be a parent
+			// in which case it cannot be hiding matched nodes
+			if ( applyClasses && expanded )
+			{
+				node.hiddenNodes = false;
+				zTree.updateNode(node);
+			}
+
+			for( var i=0, l=nodeList.length; i<l; i++ )
+			{
 				nodeList[i].highlight = highlight;
+				nodeList[i].hiddenNodes = false;
+				if ( applyClasses && highlight )
+				{
+					// Make parent nodes of matched nodes show the 
+					// existence of hidden nodes if the parent is closed.
+					var node = nodeList[i];
+					while( true )
+					{
+						if ( ! node.parentTId ) break;
+						var parentNode = zTree.getNodeByTId( node.parentTId );
+						if ( parentNode.isParent && parentNode.open ) break;
+						parentNode.hiddenNodes = true;
+						zTree.updateNode( parentNode );
+						node = parentNode;
+					}
+				}
 				zTree.updateNode(nodeList[i]);
 			}
 		}
 		function getFontCss(treeId, treeNode) {
-			return (!!treeNode.highlight) ? {color:"#A60000", "font-weight":"bold"} : {color:"#333", "font-weight":"normal"};
+			return $("#styleNodesByCSS").attr('checked') 
+				? ((!!treeNode.highlight) ? {color:"#A60000", "font-weight":"bold"} : {color:"#333", "font-weight":"normal"})
+				: {color:"#333", "font-weight":"normal"};
+		}
+		function getNodeClasses(treeId, treeNode) {
+			var classes = $("#styleNodesByCSS").attr('checked') || ! ( !!treeNode.highlight || !!treeNode.hiddenNodes )
+				? {remove: ['highlight','highlight_alt','hiddennodes','highlight_hiddennodes']}
+				: ( !!treeNode.highlight
+					? ( (!!treeNode.hiddenNodes) 
+						? {add:['highlight','highlight_alt','hiddennodes']} 
+						: {add:['highlight','highlight_alt']} 
+					  )
+					: {add:['hiddennodes','highlight_alt']} 
+				  );
+			return classes;
 		}
 		function filter(node) {
 			return !node.isParent && node.isFirstNode;
@@ -126,6 +212,9 @@
 			$("#getNodesByParam").bind("change", clickRadio);
 			$("#getNodesByParamFuzzy").bind("change", clickRadio);
 			$("#getNodesByFilter").bind("change", clickRadio);
+			$("#styleNodesByCSS").bind("change", clickRadio);
+			$("#styleNodesByClasses").bind("change", clickRadio);
+			// $(".ztree li > span.button").bind("click", clickButton);
 		});
 		//-->
 	</SCRIPT>
@@ -152,6 +241,8 @@
 						<input type="radio" id="getNodesByParam" name="funType" class="radio" style="margin-left:36px;" /><span>getNodesByParam</span><br/>
 						<input type="radio" id="getNodesByParamFuzzy" name="funType" class="radio" style="margin-left:36px;" checked /><span>getNodesByParamFuzzy (only string)</span><br/>
 						<input type="radio" id="getNodesByFilter" name="funType" class="radio" style="margin-left:36px;" /><span>getNodesByFilter (see source: function filter)</span><br/>
+						<input type="radio" id="styleNodesByCSS" name="styleType" class="radio" style="margin-left:36px;" checked /><span>styleNodesByCSS (see source: function filter)</span><br/>
+						<input type="radio" id="styleNodesByClasses" name="styleType" class="radio" style="margin-left:36px;" /><span>styleNodesByClasses (see source: function filter)</span><br/>
 					</p>
 				</li>
 				</ul>
