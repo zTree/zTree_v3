@@ -47,6 +47,14 @@ type ApplicationType = 'application/x-www-form-urlencoded' | 'application/json';
 type AjaxType = 'get' | 'post';
 type DataType = 'text' | 'json' | 'jsonp' | 'html' | 'xml' | 'script';
 
+/**
+ * Defines a class to be returned by the zTree view.nodeClasses function
+ */
+interface INodeClasses
+{
+	add: string[];
+	remove: string[];
+}
 
 interface IAsync {
   autoParam?: string[];
@@ -167,6 +175,7 @@ interface IView {
   dblClickExpand?: boolean | dblClickExpandFn<boolean>;
   expandSpeed?: string | number;
   fontCss?: IJSON | dblClickExpandFn<IJSON>;
+  nodeClasses?: INodeClasses | dblClickExpandFn<INodeClasses>;
   nameIsHTML?: boolean;
   removeHoverDom?: dblClickExpandFn<void>;
   selectedMulti?: boolean;
