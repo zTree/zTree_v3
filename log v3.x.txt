@@ -13,7 +13,9 @@
 
 </font>
 
-
+*2020.04.29* v3.5.44
+* update TypeScript type definition  Thanks @bseddon 
+  
 *2020.04.04* v3.5.43
   * fixed TypeScript type definition  Thanks @UtillYou 
   * Update demo 'super/keyboard_navigation.html' Thanks @bseddon
