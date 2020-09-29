@@ -5,13 +5,12 @@ last verson :  3.5.44
 
 **Donate to zTree** : http://www.treejs.cn/v3/donate.php
 
-
 zTree API : http://www.treejs.cn/v3/api.php
-
 
 zTree Demo : http://www.treejs.cn/v3/demo.php
 
-**Install**：
+Install
+============
 ```
 npm install @ztree/ztree_v3
 ```
