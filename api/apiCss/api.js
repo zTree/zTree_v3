@@ -147,7 +147,12 @@ var apiContent = {
 			{id:5202, pId:520, t:"idKey", name:"idKey : \"id\",", iconSkin:"core", showAPI:true},
 			{id:5203, pId:520, t:"pIdKey", name:"pIdKey : \"pId\",", iconSkin:"core", showAPI:true},
 			{id:5204, pId:520, t:"rootPId", name:"rootPId : null", iconSkin:"core", showAPI:true},
-			{id:521, pId:50, name:"}"},
+			{id:521, pId:50, name:"},"},
+
+			{id:530, pId:50, t:"render", name:"render : {", open:true},
+			{id:5301, pId:530, t:"name", name:"name : null,", iconSkin:"core", showAPI:true},
+			{id:5302, pId:530, t:"title", name:"title : null", iconSkin:"core", showAPI:true},
+			{id:531, pId:50, name:"}"},
 			{id:51, pId:1, name:"},"},
 			{id:52, pId:1, name:""},
 

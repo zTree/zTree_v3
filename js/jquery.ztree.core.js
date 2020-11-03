@@ -84,6 +84,10 @@
           url: "url",
           icon: "icon"
         },
+        render: {
+          name: null,
+          title: null,
+        },
         simpleData: {
           enable: false,
           idKey: "id",
@@ -646,11 +650,19 @@
         if (typeof newName !== 'undefined') {
           node[key] = newName;
         }
-        return "" + node[key];
+        var rawName = "" + node[key];
+        if($.isFunction(setting.data.render.name)){
+          return setting.data.render.name.call(this,rawName,node);
+        }
+        return rawName;
       },
       nodeTitle: function (setting, node) {
         var t = setting.data.key.title === "" ? setting.data.key.name : setting.data.key.title;
-        return "" + node[t];
+        var rawTitle = "" + node[t];
+        if($.isFunction(setting.data.render.title)){
+          return setting.data.render.title.call(this,rawTitle,node);
+        }
+        return rawTitle;
       },
       removeNodeCache: function (setting, node) {
         var children = data.nodeChildren(setting, node);
