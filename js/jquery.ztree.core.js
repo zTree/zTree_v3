@@ -1,6 +1,6 @@
 /*
  * JQuery zTree core
- * v3.5.44
+ * v3.5.45
  * http://treejs.cn/
  *
  * Copyright (c) 2010 Hunter.z
@@ -8,7 +8,7 @@
  * Licensed same as jquery - MIT License
  * http://www.opensource.org/licenses/mit-license.php
  *
- * Date: 2020-04-29
+ * Date: 2020-11-03
  */
 
 (function ($) {
@@ -651,7 +651,7 @@
           node[key] = newName;
         }
         var rawName = "" + node[key];
-        if($.isFunction(setting.data.render.name)){
+        if(typeof setting.data.render.name === 'function') {
           return setting.data.render.name.call(this,rawName,node);
         }
         return rawName;
@@ -659,7 +659,7 @@
       nodeTitle: function (setting, node) {
         var t = setting.data.key.title === "" ? setting.data.key.name : setting.data.key.title;
         var rawTitle = "" + node[t];
-        if($.isFunction(setting.data.render.title)){
+        if(typeof setting.data.render.title === 'function') {
           return setting.data.render.title.call(this,rawTitle,node);
         }
         return rawTitle;

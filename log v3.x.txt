@@ -13,6 +13,9 @@
 
 </font>
 
+*2020.11.03* v3.5.45
+* Support attribute('name' & 'title') dynamic rendering using custom function  Thanks @imyuyu 
+
 *2020.04.29* v3.5.44
 * update TypeScript type definition  Thanks @bseddon 
   

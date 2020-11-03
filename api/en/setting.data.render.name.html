@@ -5,30 +5,30 @@
       ><span class="path">setting.data.render.</span>name
     </h2>
     <h3>
-      概述<span class="h3_info"
-        >[ 依赖 <span class="highlight_green">jquery.ztree.core</span> 核心 js
+      Overview<span class="h3_info"
+        >[ depends on <span class="highlight_green">jquery.ztree.core</span> js
         ]</span
       >
     </h3>
     <div class="desc">
       <p></p>
       <div class="longdesc">
-        <p>用于使用自定义的方法动态渲染节点名称</p>
-        <p>默认值：null</p>
+        <p>Used to dynamically render node name using custom methods</p>
+        <p>Default: null</p>
         <p class="highlight_red">v3.5.45+</p>
       </div>
     </div>
-    <h3>Function 参数说明</h3>
+    <h3>Function Parameter Descriptions</h3>
     <div class="desc">
       <h4><b>name</b><span>String</span></h4>
-      <p>对应 zTree 利用 setting.key.name 获取到的节点名称</p>
+      <p>Node name obtained by setting.key.name</p>
       <h4 class="topLine"><b>treeNode</b><span>JSON</span></h4>
-      <p>待渲染节点的 JSON 数据对象</p>
-      <p class="highlight_red">针对根进行渲染时，treeNode = null</p>
-      <h4 class="topLine"><b>返回值</b><span>Boolean</span></h4>
-      <p>返回值是 渲染后的节点名称</p>
+      <p>JSON data object of the target node</p>
+      <p class="highlight_red">When will render the root, treeNode = null</p>
+      <h4 class="topLine"><b>Return</b><span>Boolean</span></h4>
+      <p>Return the name of the node you need to display</p>
     </div>
-    <h3>setting & function 举例</h3>
+    <h3>Examples of setting & function</h3>
     <pre xmlns=""><code>
 	var setting = {
 		data: {

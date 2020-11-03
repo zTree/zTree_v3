@@ -1,6 +1,6 @@
 /*
  * JQuery zTree exedit
- * v3.5.44
+ * v3.5.45
  * http://treejs.cn/
  *
  * Copyright (c) 2010 Hunter.z
@@ -8,7 +8,7 @@
  * Licensed same as jquery - MIT License
  * http://www.opensource.org/licenses/mit-license.php
  *
- * Date: 2020-04-29
+ * Date: 2020-11-03
  */
 
 (function ($) {
