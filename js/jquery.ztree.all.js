@@ -1,6 +1,6 @@
 /*
  * JQuery zTree core
- * v3.5.45
+ * v3.5.46
  * http://treejs.cn/
  *
  * Copyright (c) 2010 Hunter.z
@@ -8,7 +8,7 @@
  * Licensed same as jquery - MIT License
  * http://www.opensource.org/licenses/mit-license.php
  *
- * Date: 2020-11-03
+ * Date: 2020-11-21
  */
 
 (function ($) {
@@ -1343,8 +1343,9 @@
         }
         html.push("<a id='", node.tId, consts.id.A, "' class='", consts.className.LEVEL, node.level,
           nodeClasses.add ? ' ' + nodeClasses.add.join(' ') : '', 
-          "' treeNode", consts.id.A, " onclick=\"", (node.click || ''),
-          "\" ", ((url != null && url.length > 0) ? "href='" + url + "'" : ""), " target='", view.makeNodeTarget(node), "' style='", fontStyle.join(''),
+          "' treeNode", consts.id.A,
+          node.click ? " onclick=\"" + node.click + "\"" : "",
+          ((url != null && url.length > 0) ? " href='" + url + "'" : ""), " target='", view.makeNodeTarget(node), "' style='", fontStyle.join(''),
           "'");
         if (tools.apply(setting.view.showTitle, [setting.treeId, node], setting.view.showTitle) && title) {
           html.push("title='", title.replace(/'/g, "&#39;").replace(/</g, '&lt;').replace(/>/g, '&gt;'), "'");
@@ -2018,7 +2019,7 @@
 })(jQuery);
 /*
  * JQuery zTree excheck
- * v3.5.45
+ * v3.5.46
  * http://treejs.cn/
  *
  * Copyright (c) 2010 Hunter.z
@@ -2026,7 +2027,7 @@
  * Licensed same as jquery - MIT License
  * http://www.opensource.org/licenses/mit-license.php
  *
- * Date: 2020-11-03
+ * Date: 2020-11-21
  */
 
 (function ($) {
@@ -2670,7 +2671,7 @@
 })(jQuery);
 /*
  * JQuery zTree exedit
- * v3.5.45
+ * v3.5.46
  * http://treejs.cn/
  *
  * Copyright (c) 2010 Hunter.z
@@ -2678,7 +2679,7 @@
  * Licensed same as jquery - MIT License
  * http://www.opensource.org/licenses/mit-license.php
  *
- * Date: 2020-11-03
+ * Date: 2020-11-21
  */
 
 (function ($) {

@@ -13,6 +13,9 @@
 
 </font>
 
+*2020.11.21* v3.5.46
+* Add 'onClick' handler only if it's not empty  Thanks @afilippov1985 
+
 *2020.11.03* v3.5.45
 * Support attribute('name' & 'title') dynamic rendering using custom function  Thanks @imyuyu 
 
