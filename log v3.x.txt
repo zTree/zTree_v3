@@ -13,6 +13,10 @@
 
 </font>
 
+*2021.10.24* v3.5.47
+* fixed issue: moveNode will fixed the level className about childNodes;
+* fixed issue: showNodeFocus should operate the A dom;
+
 *2020.11.21* v3.5.46
 * Add 'onClick' handler only if it's not empty  Thanks @afilippov1985 
 

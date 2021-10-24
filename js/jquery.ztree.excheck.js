@@ -1,6 +1,5 @@
 /*
- * JQuery zTree excheck
- * v3.5.46
+ * JQuery zTree excheck * v3.5.47
  * http://treejs.cn/
  *
  * Copyright (c) 2010 Hunter.z
@@ -10,7 +9,6 @@
  *
  * Date: 2020-11-21
  */
-
 (function ($) {
   //default consts of excheck
   var _consts = {

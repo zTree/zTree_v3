@@ -1,6 +1,6 @@
 jQuery Tree Plugin ---- zTree  
 ============
-last verson :  3.5.46
+last version :  3.5.47
 
 
 **Donate to zTree** : http://www.treejs.cn/v3/donate.php
@@ -26,7 +26,7 @@ Introduction of zTree (简介)
 * zTree is a free tree plug-in and uses the MIT license. 
 (zTree 是开源免费的软件, 使用 MIT 许可证)
 
-* The code of zTree v3.x has been seperated according to the various functions. You can only load the code you need. 
+* The code of zTree v3.x has been separated according to the various functions. You can only load the code you need. 
 (zTree v3.x 将核心代码按照功能进行了分割，不需要的代码可以不用加载)
 * zTree v3.x uses delay loading technique, which can easily load tens of thousands of nodes in seconds even in IE6 browser. 
 (采用了 延迟加载 技术，上万节点轻松加载，即使在 IE6 下也能基本做到秒杀)
@@ -36,7 +36,7 @@ Introduction of zTree (简介)
 (支持 JSON 数据)
 * Support for static and asynchronous data loading node. 
 (支持静态 和 Ajax 异步加载节点数据)
-* Replace the skin / custom icon flexibllly. 
+* Replace the skin / custom icon flexibly. 
 (支持任意更换皮肤 / 自定义图标)
 * Support extremely flexible checkbox or radio selection function. 
 (支持极其灵活的 checkbox 或 radio 选择功能)

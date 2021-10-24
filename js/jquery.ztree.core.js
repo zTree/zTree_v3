@@ -1,6 +1,5 @@
 /*
- * JQuery zTree core
- * v3.5.46
+ * JQuery zTree core * v3.5.47
  * http://treejs.cn/
  *
  * Copyright (c) 2010 Hunter.z
@@ -10,7 +9,6 @@
  *
  * Date: 2020-11-21
  */
-
 (function ($) {
   var settings = {}, roots = {}, caches = {},
     //default consts of core
@@ -1853,7 +1851,7 @@
           return expandFlag;
 
           function showNodeFocus() {
-            var a = $$(node, setting).get(0);
+            var a = $$(node, consts.id.A, setting).get(0);
             if (a && focus !== false) {
               view.scrollIntoView(setting, a);
             }

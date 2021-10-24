@@ -1,6 +1,6 @@
+
 /*
- * JQuery zTree core
- * v3.5.46
+ * JQuery zTree core * v3.5.47
  * http://treejs.cn/
  *
  * Copyright (c) 2010 Hunter.z
@@ -10,7 +10,6 @@
  *
  * Date: 2020-11-21
  */
-
 (function ($) {
   var settings = {}, roots = {}, caches = {},
     //default consts of core
@@ -1853,7 +1852,7 @@
           return expandFlag;
 
           function showNodeFocus() {
-            var a = $$(node, setting).get(0);
+            var a = $$(node, consts.id.A, setting).get(0);
             if (a && focus !== false) {
               view.scrollIntoView(setting, a);
             }
@@ -2018,8 +2017,7 @@
     consts = zt.consts;
 })(jQuery);
 /*
- * JQuery zTree excheck
- * v3.5.46
+ * JQuery zTree excheck * v3.5.47
  * http://treejs.cn/
  *
  * Copyright (c) 2010 Hunter.z
@@ -2029,7 +2027,6 @@
  *
  * Date: 2020-11-21
  */
-
 (function ($) {
   //default consts of excheck
   var _consts = {
@@ -2670,8 +2667,7 @@
   }
 })(jQuery);
 /*
- * JQuery zTree exedit
- * v3.5.46
+ * JQuery zTree exedit * v3.5.47
  * http://treejs.cn/
  *
  * Copyright (c) 2010 Hunter.z
@@ -2681,7 +2677,6 @@
  *
  * Date: 2020-11-21
  */
-
 (function ($) {
   //default consts of exedit
   var _consts = {
@@ -2918,7 +2913,10 @@
       setSonNodeLevel: function (setting, parentNode, node) {
         if (!node) return;
         var children = data.nodeChildren(setting, node);
+        var oldLevel = node.level;
         node.level = (parentNode) ? parentNode.level + 1 : 0;
+        view.repairNodeLevelClass(setting, node, oldLevel);
+        
         if (!children) return;
         for (var i = 0, l = children.length; i < l; i++) {
           if (children[i]) data.setSonNodeLevel(setting, node, children[i]);
@@ -3731,11 +3729,11 @@
           tmp_ulObj.css("display", "none");
 
         } else if (oldNeighbor) {
-          //old neigbor node
+          //old neighbor node
           view.setNodeLineIcos(setting, oldNeighbor);
         }
 
-        //new neigbor node
+        //new neighbor node
         if (newNeighbor) {
           view.setNodeLineIcos(setting, newNeighbor);
         }
