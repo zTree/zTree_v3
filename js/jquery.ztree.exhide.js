@@ -1,5 +1,6 @@
 /*
- * JQuery zTree exHideNodes * v3.5.47
+ * JQuery zTree exHideNodes
+ * v3.5.48
  * http://treejs.cn/
  *
  * Copyright (c) 2010 Hunter.z
@@ -9,6 +10,7 @@
  *
  * Date: 2020-11-21
  */
+
 (function ($) {
   var _setting = {
     data: {

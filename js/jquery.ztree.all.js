@@ -1,6 +1,6 @@
-
 /*
- * JQuery zTree core * v3.5.47
+ * JQuery zTree core
+ * v3.5.48
  * http://treejs.cn/
  *
  * Copyright (c) 2010 Hunter.z
@@ -10,6 +10,7 @@
  *
  * Date: 2020-11-21
  */
+
 (function ($) {
   var settings = {}, roots = {}, caches = {},
     //default consts of core
@@ -2017,7 +2018,8 @@
     consts = zt.consts;
 })(jQuery);
 /*
- * JQuery zTree excheck * v3.5.47
+ * JQuery zTree excheck
+ * v3.5.48
  * http://treejs.cn/
  *
  * Copyright (c) 2010 Hunter.z
@@ -2027,6 +2029,7 @@
  *
  * Date: 2020-11-21
  */
+
 (function ($) {
   //default consts of excheck
   var _consts = {
@@ -2667,7 +2670,8 @@
   }
 })(jQuery);
 /*
- * JQuery zTree exedit * v3.5.47
+ * JQuery zTree exedit
+ * v3.5.48
  * http://treejs.cn/
  *
  * Copyright (c) 2010 Hunter.z
@@ -2677,6 +2681,7 @@
  *
  * Date: 2020-11-21
  */
+
 (function ($) {
   //default consts of exedit
   var _consts = {

@@ -13,7 +13,7 @@
 
 </font>
 
-*2021.10.24* v3.5.47
+*2021.10.24* v3.5.48
 * fixed issue: moveNode will fixed the level className about childNodes;
 * fixed issue: showNodeFocus should operate the A dom;
 
