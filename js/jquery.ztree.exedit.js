@@ -1,6 +1,6 @@
 /*
  * JQuery zTree exedit
- * v3.5.48
+ * ${version}
  * http://treejs.cn/
  *
  * Copyright (c) 2010 Hunter.z
@@ -8,7 +8,7 @@
  * Licensed same as jquery - MIT License
  * http://www.opensource.org/licenses/mit-license.php
  *
- * Date: 2020-11-21
+ * Date: ${publish_date}
  */
 
 (function ($) {
@@ -250,7 +250,7 @@
         var oldLevel = node.level;
         node.level = (parentNode) ? parentNode.level + 1 : 0;
         view.repairNodeLevelClass(setting, node, oldLevel);
-        
+
         if (!children) return;
         for (var i = 0, l = children.length; i < l; i++) {
           if (children[i]) data.setSonNodeLevel(setting, node, children[i]);

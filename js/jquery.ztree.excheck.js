@@ -1,6 +1,6 @@
 /*
  * JQuery zTree excheck
- * v3.5.48
+ * ${version}
  * http://treejs.cn/
  *
  * Copyright (c) 2010 Hunter.z
@@ -8,7 +8,7 @@
  * Licensed same as jquery - MIT License
  * http://www.opensource.org/licenses/mit-license.php
  *
- * Date: 2020-11-21
+ * Date: ${publish_date}
  */
 
 (function ($) {

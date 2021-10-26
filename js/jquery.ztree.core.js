@@ -1,6 +1,6 @@
 /*
  * JQuery zTree core
- * v3.5.48
+ * ${version}
  * http://treejs.cn/
  *
  * Copyright (c) 2010 Hunter.z
@@ -8,7 +8,7 @@
  * Licensed same as jquery - MIT License
  * http://www.opensource.org/licenses/mit-license.php
  *
- * Date: 2020-11-21
+ * Date: ${publish_date}
  */
 
 (function ($) {
@@ -1342,7 +1342,7 @@
           fontStyle.push(f, ":", fontcss[f], ";");
         }
         html.push("<a id='", node.tId, consts.id.A, "' class='", consts.className.LEVEL, node.level,
-          nodeClasses.add ? ' ' + nodeClasses.add.join(' ') : '', 
+          nodeClasses.add ? ' ' + nodeClasses.add.join(' ') : '',
           "' treeNode", consts.id.A,
           node.click ? " onclick=\"" + node.click + "\"" : "",
           ((url != null && url.length > 0) ? " href='" + url + "'" : ""), " target='", view.makeNodeTarget(node), "' style='", fontStyle.join(''),
