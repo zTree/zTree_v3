@@ -5,7 +5,7 @@
 	<meta http-equiv="content-type" content="text/html; charset=UTF-8">
 	<link rel="stylesheet" href="../../../css/demo.css" type="text/css">
 	<link rel="stylesheet" href="../../../css/zTreeStyle/zTreeStyle.css" type="text/css">
-	<script type="text/javascript" src="../../../js/jquery-1.4.4.min.js"></script>
+	<script type="text/javascript" src="../../../node_modules/jquery/dist/jquery.min.js"></script>
 	<script type="text/javascript" src="../../../js/jquery.ztree.core.js"></script>
 	<script type="text/javascript" src="../../../js/jquery.ztree.excheck.js"></script>
 	<!--
@@ -49,7 +49,7 @@
 			{ id:223, pId:22, name:"禁止勾选 2-2-3", doCheck:false},
 			{ id:23, pId:2, name:"禁止勾选 2-3", doCheck:false}
 		];
-		
+
 		var code, log, className = "dark";
 		function beforeCheck(treeId, treeNode) {
 			className = (className === "dark" ? "":"dark");
@@ -58,7 +58,7 @@
 		}
 		function onCheck(e, treeId, treeNode) {
 			showLog("[ "+getTime()+" onCheck ]&nbsp;&nbsp;&nbsp;&nbsp;" + treeNode.name );
-		}		
+		}
 		function showLog(str) {
 			if (!log) log = $("#log");
 			log.append("<li class='"+className+"'>"+str+"</li>");

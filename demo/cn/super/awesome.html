@@ -5,10 +5,10 @@
     <meta http-equiv="content-type" content="text/html; charset=UTF-8">
 <!-- Include font-awesome here, CDN is ok, or locally installed by bower to your project -->
     <link rel="stylesheet" href="http://maxcdn.bootstrapcdn.com/font-awesome/4.3.0/css/font-awesome.min.css">
-    
+
     <link rel="stylesheet" href="../../../css/demo.css" type="text/css">
     <link rel="stylesheet" href="../../../css/awesomeStyle/awesome.css" type="text/css">
-    <script type="text/javascript" src="../../../js/jquery-1.4.4.min.js"></script>
+    <script type="text/javascript" src="../../../node_modules/jquery/dist/jquery.min.js"></script>
     <script type="text/javascript" src="../../../js/jquery.ztree.core.js"></script>
     <script type="text/javascript" src="../../../js/jquery.ztree.excheck.js"></script>
     <script type="text/javascript" src="../../../js/jquery.ztree.exedit.js"></script>
@@ -73,7 +73,7 @@
 		}
         $(document).ready(function(){
             $.fn.zTree.init($("#treeDemo"), setting, zNodes);
-			setCheck();			
+			setCheck();
 			$("#r1").bind("change", setCheck);
 			$("#r2").bind("change", setCheck);
 			$("#disablechk").bind("change", setCheck);
@@ -115,7 +115,7 @@
                     <li> <i class="fa fa-car"></i> &lt;= 小汽车图标 (如果 fontawesome 样式被正常加载，你可以正常看到)</li>
                     <li class="highlight_red">引入 适配 zTree 的 样式文件: 'css/awesomeStyle'</li>
                     <li>感谢 mikkelking 提供这个 Demo. （仅供参考）</li>
-                    
+
                     <li><p>Mode: <br/>
                             <label ><input type="radio" id="r1" class="radio first" name="r" value="checkbox" checked />
                                 Checkbox</label>
@@ -130,6 +130,6 @@
         </ul>
     </div>
 </div>
- 
+
 </BODY>
 </HTML>

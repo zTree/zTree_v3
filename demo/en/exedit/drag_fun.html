@@ -5,7 +5,7 @@
 	<meta http-equiv="content-type" content="text/html; charset=UTF-8">
 	<link rel="stylesheet" href="../../../css/demo.css" type="text/css">
 	<link rel="stylesheet" href="../../../css/zTreeStyle/zTreeStyle.css" type="text/css">
-	<script type="text/javascript" src="../../../js/jquery-1.4.4.min.js"></script>
+	<script type="text/javascript" src="../../../node_modules/jquery/dist/jquery.min.js"></script>
 	<script type="text/javascript" src="../../../js/jquery.ztree.core.js"></script>
 	<script type="text/javascript" src="../../../js/jquery.ztree.excheck.js"></script>
 	<script type="text/javascript" src="../../../js/jquery.ztree.exedit.js"></script>
@@ -54,7 +54,7 @@
 					aObj.addClass(curType);
 				} else {
 					aObj.addClass(curType);
-				}			
+				}
 			}
 		}
 
@@ -78,7 +78,7 @@
 			curSrcNode = treeNode;
 			if (!treeNode) return;
 
-			curSrcNode.isCur = true;			
+			curSrcNode.isCur = true;
 			zTree.cancelSelectedNode();
 			fontCss(curSrcNode);
 		}
@@ -129,7 +129,7 @@
 			delete targetNode.isCur;
 			zTree.selectNode(targetNode);
 		}
-		
+
 		$(document).ready(function(){
 			$.fn.zTree.init($("#treeDemo"), setting, zNodes);
 			$("#copy").bind("click", copy);
