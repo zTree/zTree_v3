@@ -1042,7 +1042,7 @@
         view.makeUlHtml(setting, node, html, childHtml.join(''));
         nObj.append(html.join(''));
       },
-      asyncNode: function (setting, node, isSilent, callback) {
+      asyncNode: function (setting, node, isSilent, callback, isSync) {
         var i, l;
         var isParent = data.nodeIsParent(setting, node);
         if (node && !isParent) {
@@ -1083,6 +1083,7 @@
 
         var _tmpV = data.getRoot(setting)._ver;
         $.ajax({
+          async: !isSync,
           contentType: setting.async.contentType,
           cache: false,
           type: setting.async.type,
@@ -1340,7 +1341,7 @@
           fontStyle.push(f, ":", fontcss[f], ";");
         }
         html.push("<a id='", node.tId, consts.id.A, "' class='", consts.className.LEVEL, node.level,
-          nodeClasses.add ? ' ' + nodeClasses.add.join(' ') : '', 
+          nodeClasses.add ? ' ' + nodeClasses.add.join(' ') : '',
           "' treeNode", consts.id.A,
           node.click ? " onclick=\"" + node.click + "\"" : "",
           ((url != null && url.length > 0) ? " href='" + url + "'" : ""), " target='", view.makeNodeTarget(node), "' style='", fontStyle.join(''),
@@ -1804,7 +1805,7 @@
           }
 
           if (tools.canAsync(setting, parentNode)) {
-            view.asyncNode(setting, parentNode, isSilent, addCallback);
+            view.asyncNode(setting, parentNode, isSilent, addCallback, true);
           } else {
             addCallback();
           }
