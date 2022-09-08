@@ -803,15 +803,13 @@
         var setting = data.getSetting(e.data.treeId);
         if (!tools.uCanDo(setting, e)) return true;
         var results = event.doProxy(e),
-          r = true, x = false;
+          r = true;
         for (var i = 0, l = results.length; i < l; i++) {
           var proxyResult = results[i];
           if (proxyResult.nodeEventCallback) {
-            x = true;
             r = proxyResult.nodeEventCallback.apply(proxyResult, [e, proxyResult.node]) && r;
           }
           if (proxyResult.treeEventCallback) {
-            x = true;
             r = proxyResult.treeEventCallback.apply(proxyResult, [e, proxyResult.node]) && r;
           }
         }
