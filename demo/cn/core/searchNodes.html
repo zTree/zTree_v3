@@ -6,7 +6,7 @@
 	<link rel="stylesheet" href="http://maxcdn.bootstrapcdn.com/font-awesome/4.3.0/css/font-awesome.min.css">
 	<link rel="stylesheet" href="../../../css/demo.css" type="text/css">
 	<link rel="stylesheet" href="../../../css/zTreeStyle/zTreeStyle.css" type="text/css">
-	<script type="text/javascript" src="../../../js/jquery-1.4.4.min.js"></script>
+	<script type="text/javascript" src="../../../node_modules/jquery/dist/jquery.min.js"></script>
 	<script type="text/javascript" src="../../../js/jquery.ztree.core.js"></script>
 	<!--  <script type="text/javascript" src="../../../js/jquery.ztree.excheck.js"></script>
 		<script type="text/javascript" src="../../../js/jquery.ztree.exedit.js"></script>-->
@@ -21,7 +21,7 @@
 		}
 		.ztree li > a.highlight span.node_name:before,
 		.ztree li > a.highlight_hiddennodes span.node_name:before,
-		.ztree li > a.hiddennodes span.node_name:before 
+		.ztree li > a.hiddennodes span.node_name:before
 		{
 			font-family: FontAwesome;
 			color: green;
@@ -34,7 +34,7 @@
 		{
 			content: '\f058';
 		}
-		.ztree li > a.hiddennodes span.node_name:before 
+		.ztree li > a.hiddennodes span.node_name:before
 		{
 			content: '\f00e';
 		}
@@ -57,7 +57,7 @@
 				},
 				simpleData: {
 					enable: true
-				}				
+				}
 			},
 			view: {
 				fontCss: getFontCss,
@@ -161,7 +161,7 @@
 				nodeList[i].hiddenNodes = false;
 				if ( applyClasses && highlight )
 				{
-					// Make parent nodes of matched nodes show the 
+					// Make parent nodes of matched nodes show the
 					// existence of hidden nodes if the parent is closed.
 					var node = nodeList[i];
 					while( true )
@@ -178,7 +178,7 @@
 			}
 		}
 		function getFontCss(treeId, treeNode) {
-			return $("#styleNodesByCSS").attr('checked') 
+			return $("#styleNodesByCSS").attr('checked')
 				? ((!!treeNode.highlight) ? {color:"#A60000", "font-weight":"bold"} : {color:"#333", "font-weight":"normal"})
 				: {color:"#333", "font-weight":"normal"};
 		}
@@ -186,11 +186,11 @@
 			var classes = $("#styleNodesByCSS").attr('checked') || ! ( !!treeNode.highlight || !!treeNode.hiddenNodes )
 				? {remove: ['highlight','highlight_alt','hiddennodes','highlight_hiddennodes']}
 				: ( !!treeNode.highlight
-					? ( (!!treeNode.hiddenNodes) 
-						? {add:['highlight','highlight_alt','hiddennodes']} 
-						: {add:['highlight','highlight_alt']} 
+					? ( (!!treeNode.hiddenNodes)
+						? {add:['highlight','highlight_alt','hiddennodes']}
+						: {add:['highlight','highlight_alt']}
 						)
-					: {add:['hiddennodes','highlight_alt']} 
+					: {add:['hiddennodes','highlight_alt']}
 					);
 			return classes;
 		}

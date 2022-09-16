@@ -161,3 +161,12 @@ pip-log.txt
 
 # Mac crap
 .DS_Store
+
+# concatenated files
+*.all.js
+
+# minified files
+*.min.js
+
+# npm modules
+node_modules

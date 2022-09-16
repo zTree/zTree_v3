@@ -3,11 +3,11 @@
 <HEAD>
     <TITLE> ZTREE DEMO - Simple Data</TITLE>
     <meta http-equiv="content-type" content="text/html; charset=UTF-8">
-    
+
     <link rel="stylesheet" href="../../../css/demo.css" type="text/css">
-    
+
     <link href="../../../css/zTreeStyle/zTreeStyle.css" rel="stylesheet" type="text/css"/>
-    <script type="text/javascript" src="../../../js/jquery-1.4.4.min.js"></script>
+    <script type="text/javascript" src="../../../node_modules/jquery/dist/jquery.min.js"></script>
     <script type="text/javascript" src="../../../js/jquery.ztree.core.js"></script>
     <script type="text/javascript" src="../../../js/jquery.ztree.excheck.js"></script>
     <script type="text/javascript" src="../../../js/jquery.ztree.exedit.js"></script>
@@ -72,7 +72,7 @@
 		}
         $(document).ready(function(){
             $.fn.zTree.init($("#treeDemo"), setting, zNodes);
-			setCheck();			
+			setCheck();
 			$("#r1").bind("change", setCheck);
 			$("#r2").bind("change", setCheck);
 			$("#disablechk").bind("change", setCheck);
@@ -109,7 +109,7 @@
     <div class="right">
         <ul class="info">
             <li class="title"><h2>1, Explanation of zTree Style</h2>
-                    
+
             </li>
                    <li><p>Mode: <br/>
                             <label ><input type="radio" id="r1" class="radio first" name="r" value="checkbox" checked />

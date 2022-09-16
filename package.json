@@ -14,6 +14,13 @@
     "type": "git",
     "url": "git+https://github.com/zTree/zTree_v3.git"
   },
+  "scripts": {
+    "prod": "node build.js",
+    "prepublishOnly": "npm run prod"
+  },
+  "devDependencies": {
+    "terser": "5.9.0"
+  },
   "dependencies": {
     "jquery": ">=1.4.4"
   },
