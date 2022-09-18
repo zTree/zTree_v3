@@ -1043,7 +1043,6 @@
         nObj.append(html.join(''));
       },
       asyncNode: function (setting, node, isSilent, callback) {
-        var i, l;
         var isParent = data.nodeIsParent(setting, node);
         if (node && !isParent) {
           tools.apply(callback);
@@ -1056,80 +1055,98 @@
         }
         if (node) {
           node.isAjaxing = true;
-          var icoObj = $$(node, consts.id.ICON, setting);
-          icoObj.attr({"style": "", "class": consts.className.BUTTON + " " + consts.className.ICO_LOADING});
+          if (setting.async.loadingIcon === false) {
+            var icoObj = $$(node, consts.id.ICON, setting);
+            icoObj.attr({"style": "", "class": consts.className.BUTTON + " " + consts.className.ICO_LOADING});
+          }
         }
 
-        var tmpParam = {};
-        var autoParam = tools.apply(setting.async.autoParam, [setting.treeId, node], setting.async.autoParam);
-        for (i = 0, l = autoParam.length; node && i < l; i++) {
-          var pKey = autoParam[i].split("="), spKey = pKey;
-          if (pKey.length > 1) {
-            spKey = pKey[1];
-            pKey = pKey[0];
+        if (setting.async.url) {
+          // compatible for ajax
+          var i, l;
+          var tmpParam = {};
+          var autoParam = tools.apply(setting.async.autoParam, [setting.treeId, node], setting.async.autoParam);
+          for (i = 0, l = autoParam.length; node && i < l; i++) {
+            var pKey = autoParam[i].split("="), spKey = pKey;
+            if (pKey.length > 1) {
+              spKey = pKey[1];
+              pKey = pKey[0];
+            }
+            tmpParam[spKey] = node[pKey];
           }
-          tmpParam[spKey] = node[pKey];
-        }
-        var otherParam = tools.apply(setting.async.otherParam, [setting.treeId, node], setting.async.otherParam);
-        if (tools.isArray(otherParam)) {
-          for (i = 0, l = otherParam.length; i < l; i += 2) {
-            tmpParam[otherParam[i]] = otherParam[i + 1];
+          var otherParam = tools.apply(setting.async.otherParam, [setting.treeId, node], setting.async.otherParam);
+          if (tools.isArray(otherParam)) {
+            for (i = 0, l = otherParam.length; i < l; i += 2) {
+              tmpParam[otherParam[i]] = otherParam[i + 1];
+            }
+          } else {
+            for (var p in otherParam) {
+              tmpParam[p] = otherParam[p];
+            }
           }
-        } else {
-          for (var p in otherParam) {
-            tmpParam[p] = otherParam[p];
-          }
+
+          setting.async.load = function (treeId, node) {
+            var deferred = $.Deferred();
+            $.ajax({
+              contentType: setting.async.contentType,
+              cache: false,
+              type: setting.async.type,
+              url: tools.apply(setting.async.url, [treeId, node], setting.async.url),
+              data: setting.async.contentType.indexOf('application/json') > -1 ? JSON.stringify(tmpParam) : tmpParam,
+              dataType: setting.async.dataType,
+              headers: setting.async.headers,
+              xhrFields: setting.async.xhrFields,
+              success: function (msg) {
+                var newNodes = [];
+                try {
+                  if (!msg || msg.length == 0) {
+                    newNodes = [];
+                  } else if (typeof msg == "string") {
+                    newNodes = eval("(" + msg + ")");
+                  } else {
+                    newNodes = msg;
+                  }
+                } catch (err) {
+                  newNodes = msg;
+                }
+
+                deferred.resolve(newNodes);
+              },
+              error: function (XMLHttpRequest, textStatus, errorThrown) {
+                deferred.reject([XMLHttpRequest, textStatus, errorThrown]);
+              }
+            });
+
+            return deferred.promise();
+          };
         }
 
         var _tmpV = data.getRoot(setting)._ver;
-        $.ajax({
-          contentType: setting.async.contentType,
-          cache: false,
-          type: setting.async.type,
-          url: tools.apply(setting.async.url, [setting.treeId, node], setting.async.url),
-          data: setting.async.contentType.indexOf('application/json') > -1 ? JSON.stringify(tmpParam) : tmpParam,
-          dataType: setting.async.dataType,
-          headers: setting.async.headers,
-          xhrFields: setting.async.xhrFields,
-          success: function (msg) {
-            if (_tmpV != data.getRoot(setting)._ver) {
-              return;
-            }
-            var newNodes = [];
-            try {
-              if (!msg || msg.length == 0) {
-                newNodes = [];
-              } else if (typeof msg == "string") {
-                newNodes = eval("(" + msg + ")");
-              } else {
-                newNodes = msg;
-              }
-            } catch (err) {
-              newNodes = msg;
-            }
-
-            if (node) {
-              node.isAjaxing = null;
-              node.zAsync = true;
-            }
-            view.setNodeLineIcos(setting, node);
-            if (newNodes && newNodes !== "") {
-              newNodes = tools.apply(setting.async.dataFilter, [setting.treeId, node, newNodes], newNodes);
-              view.addNodes(setting, node, -1, !!newNodes ? tools.clone(newNodes) : [], !!isSilent);
-            } else {
-              view.addNodes(setting, node, -1, [], !!isSilent);
-            }
-            setting.treeObj.trigger(consts.event.ASYNC_SUCCESS, [setting.treeId, node, msg]);
-            tools.apply(callback);
-          },
-          error: function (XMLHttpRequest, textStatus, errorThrown) {
-            if (_tmpV != data.getRoot(setting)._ver) {
-              return;
-            }
-            if (node) node.isAjaxing = null;
-            view.setNodeLineIcos(setting, node);
-            setting.treeObj.trigger(consts.event.ASYNC_ERROR, [setting.treeId, node, XMLHttpRequest, textStatus, errorThrown]);
+        setting.async.load(setting.treeId, node).then(function (newNodes) {
+          if (_tmpV != data.getRoot(setting)._ver) {
+            return;
           }
+
+          if (node) {
+            node.isAjaxing = null;
+            node.zAsync = true;
+          }
+          view.setNodeLineIcos(setting, node);
+          if (newNodes && newNodes !== "") {
+            newNodes = tools.apply(setting.async.dataFilter, [setting.treeId, node, newNodes], newNodes);
+            view.addNodes(setting, node, -1, !!newNodes ? tools.clone(newNodes) : [], !!isSilent);
+          } else {
+            view.addNodes(setting, node, -1, [], !!isSilent);
+          }
+          setting.treeObj.trigger(consts.event.ASYNC_SUCCESS, [setting.treeId, node, newNodes]);
+          tools.apply(callback);
+        }, function (errors) {
+          if (_tmpV != data.getRoot(setting)._ver) {
+            return;
+          }
+          if (node) node.isAjaxing = null;
+          view.setNodeLineIcos(setting, node);
+          setting.treeObj.trigger(consts.event.ASYNC_ERROR, [setting.treeId, node].concat(errors));
         });
         return true;
       },
@@ -1340,7 +1357,7 @@
           fontStyle.push(f, ":", fontcss[f], ";");
         }
         html.push("<a id='", node.tId, consts.id.A, "' class='", consts.className.LEVEL, node.level,
-          nodeClasses.add ? ' ' + nodeClasses.add.join(' ') : '', 
+          nodeClasses.add ? ' ' + nodeClasses.add.join(' ') : '',
           "' treeNode", consts.id.A,
           node.click ? " onclick=\"" + node.click + "\"" : "",
           ((url != null && url.length > 0) ? " href='" + url + "'" : ""), " target='", view.makeNodeTarget(node), "' style='", fontStyle.join(''),
@@ -2004,7 +2021,7 @@
       var children = data.nodeChildren(setting, root);
       if (children && children.length > 0) {
         view.createNodes(setting, 0, children, null, -1);
-      } else if (setting.async.enable && setting.async.url && setting.async.url !== '') {
+      } else if (setting.async.enable && (setting.async.url || setting.async.load)) {
         view.asyncNode(setting);
       }
       return zTreeTools;
