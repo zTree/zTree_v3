@@ -33,6 +33,15 @@
 	 * @param {string|JQuery<HTMLElement} element
 	 * @param {IJSON[]} selectedNodes
 	 */
+	const ToogleParentNode = 32;
+	const PageUp           = 33:
+	const PageDown         = 34;
+	const End              = 35;
+	const Home             = 36;
+	const Left             = 37;
+	const Up               = 38;
+	const Right            = 39:
+	const Down             = 40;
 	$.fn.zTreeKeyboardNavigation = function(zTree, element, selectedNodes = null )
 		{
 			if (typeof element === 'string' || element instanceof String)
@@ -223,39 +232,39 @@
 
 					switch ( e.keyCode )
 					{
-						case 32: /* Toggle parent nodes */
+						case ToogleParentNode: /* Toggle parent nodes */
 							processSpace();
 							return;
 
-						case 36: /* Home - go to the root node */
+						case Home: /* Home - go to the root node */
 							processHome();
 							break;
 
-						case 35: /* End - go to the last node */ 
+						case End: /* End - go to the last node */ 
 							processEnd();
 							break;
 
-						case 33: /* PageUp */
+						case PageUp:
 							// Do nothing
 							break;
 
-						case 34: /* PageDown */ 
+						case PageDown: 
 							// Do nothing
 							break;
 
-						case 37: /* Left */
+						case Left:
 							processOut();
 							break;
 
-						case 38: /* Up */
+						case Up: 
 							processUp();
 							break;
 
-						case 39: /* Right */
+						case Right:
 							processIn();
 							break;
 
-						case 40: /* Down */ 
+						case Down:
 							processDown();
 							break;
 
