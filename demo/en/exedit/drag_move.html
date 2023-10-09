@@ -1,0 +1,119 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <title>ZTREE DEMO - drag move</title>
+    <meta http-equiv="content-type" content="text/html; charset=UTF-8" />
+    <link rel="stylesheet" href="../../../css/demo.css" type="text/css" />
+    <link
+      rel="stylesheet"
+      href="../../../css/zTreeStyle/zTreeStyle.css"
+      type="text/css"
+    />
+    <script
+      type="text/javascript"
+      src="../../../js/jquery-1.4.4.min.js"
+    ></script>
+    <script
+      type="text/javascript"
+      src="../../../js/jquery.ztree.core.js"
+    ></script>
+    <script
+      type="text/javascript"
+      src="../../../js/jquery.ztree.excheck.js"
+    ></script>
+    <script
+      type="text/javascript"
+      src="../../../js/jquery.ztree.exedit.js"
+    ></script>
+    <script type="text/javascript">
+      var setting = {
+        edit: {
+          enable: true,
+          showRemoveBtn: false,
+          showRenameBtn: false,
+          drag: {
+            isMove: true,
+            prev: true,
+            inner: true,
+            next: true,
+          }
+        },
+        data: {
+          simpleData: {
+            enable: true,
+          },
+        },
+        callback: {
+          onDragMove: onDragMove,
+          beforeDrop: beforeDrop,
+        },
+      }
+
+      var zNodes = [
+        { id: 1, pId: 0, name: 'can drag 1', open: true },
+        { id: 11, pId: 1, name: 'can drag 1-1' },
+        { id: 12, pId: 1, name: 'can drag 1-2', open: true },
+        { id: 121, pId: 12, name: 'can drag 1-2-1' },
+        { id: 122, pId: 12, name: 'can drag 1-2-2' },
+        { id: 123, pId: 12, name: 'can drag 1-2-3' },
+        { id: 13, pId: 1, name: "can't drag 1-3", open: true, drag: false },
+        { id: 131, pId: 13, name: "can't drag 1-3-1", drag: false },
+        { id: 132, pId: 13, name: "can't drag 1-3-2", drag: false },
+        { id: 133, pId: 13, name: 'can drag 1-3-3' },
+        { id: 2, pId: 0, name: 'can drag 2', open: true },
+        { id: 21, pId: 2, name: 'can drag 2-1' },
+        {
+          id: 22,
+          pId: 2,
+          name: "can't drag onto me 2-2",
+          open: true,
+          drop: false,
+        },
+        { id: 221, pId: 22, name: 'can drag 2-2-1' },
+        { id: 222, pId: 22, name: 'can drag 2-2-2' },
+        { id: 223, pId: 22, name: 'can drag 2-2-3' },
+        { id: 23, pId: 2, name: 'can drag 2-3' },
+      ]
+      function onDragMove(e, treeId, treeNodes, targetNode, moveType) {
+        if (targetNode) {
+          var moveTypeTextMap = {
+            inner: 'inside',
+            prev: 'before',
+            next: 'behind',
+          }
+          var hintHtml = [
+            '<span style="font-size: 22px;color: #999;font-weight: 200;">',
+              '<span>move to【</span>',
+              '<span>】' + moveTypeTextMap[moveType] + '</span>',
+              '<span style="color: #4591f7;font-weight: 400;">',
+                targetNode.name,
+              '</span>',
+            '</span>'
+          ].join('')
+          $('#hint').html(hintHtml)
+        }
+      }
+      function beforeDrop() {
+        $('#hint').html('')
+      }
+
+      $(document).ready(function() {
+        $.fn.zTree.init($('#treeDemo'), setting, zNodes)
+      })
+    </script>
+  </head>
+
+  <body>
+    <h1>Basic control of dragging nodes</h1>
+    <h6>[ File path: exedit/drag_move.html ]</h6>
+    <div class="content_wrap">
+      <div class="zTreeDemoBackground left">
+        <ul id="treeDemo" class="ztree"></ul>
+      </div>
+      <div class="right drag-move">
+        <h3>targetNode and moveType：</h3>
+        <div id="hint"></div>
+      </div>
+    </div>
+  </body>
+</html>

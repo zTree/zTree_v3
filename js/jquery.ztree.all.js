@@ -2772,8 +2772,8 @@
         tools.apply(setting.callback.onDrag, [srcEvent, treeId, treeNodes]);
       });
 
-      o.bind(c.DRAGMOVE, function (event, srcEvent, treeId, treeNodes) {
-        tools.apply(setting.callback.onDragMove, [srcEvent, treeId, treeNodes]);
+      o.bind(c.DRAGMOVE, function (event, srcEvent, treeId, treeNodes, targetNode, moveType) {
+        tools.apply(setting.callback.onDragMove, [srcEvent, treeId, treeNodes, targetNode, moveType]);
       });
 
       o.bind(c.DROP, function (event, srcEvent, treeId, treeNodes, targetNode, moveType, isCopy) {
@@ -3286,8 +3286,8 @@
             }
             preTmpTargetNodeId = tmpTargetNodeId;
             preTmpMoveType = moveType;
-
-            setting.treeObj.trigger(consts.event.DRAGMOVE, [event, setting.treeId, nodes]);
+            var dragTargetNode = tmpTargetNodeId == null ? null : data.getNodeCache(targetSetting,tmpTargetNodeId);
+            setting.treeObj.trigger(consts.event.DRAGMOVE, [event, setting.treeId, nodes, dragTargetNode, moveType]);
           }
           return false;
         }
